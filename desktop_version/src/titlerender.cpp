@@ -1517,7 +1517,7 @@ void gamerenderonlyanimateentities(Game& game, entityclass& obj, UtilityClass& h
 	}
 }
 
-void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help, const float alpha)
+void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help, const float alpha, const float deltatime)
 {
 
 
@@ -1527,7 +1527,7 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
 
         if(!game.colourblindmode)
 		{
-        dwgfx.drawbackground(map.background, map);
+        dwgfx.drawbackground(map.background, map, deltatime);
 		}
 		else
 		{

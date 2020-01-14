@@ -148,7 +148,7 @@ public:
 
 	void setcolreal(Uint32 t);
 
-	void drawbackground(int t, mapclass& map);
+	void drawbackground(int t, mapclass& map, const float deltatime);
 	void drawtile3( int x, int y, int t, int off );
 	void drawentcolours( int x, int y, int t);
 	void drawtile2( int x, int y, int t, int r, int g, int b );
@@ -263,7 +263,19 @@ public:
 	bool showcutscenebars;
 	int cutscenebarspos;
 
-	std::vector<SDL_Rect> stars;
+	struct RectFloat {
+		operator SDL_Rect() const {
+			SDL_Rect rect;
+			rect.x = x;
+			rect.y = y;
+			rect.w = w;
+			rect.h = h;
+			return rect;
+		}
+		float x, y;
+		float w, h;
+	};
+	std::vector<RectFloat> stars;
 	std::vector<int> starsspeed;
 
 	int spcol, spcoldel;

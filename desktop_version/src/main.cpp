@@ -258,7 +258,8 @@ int main(int argc, char *argv[])
         NETWORK_update();
 
         //framerate limit to 30
-		accumulator += time - timePrev;
+		const float deltatime = time - timePrev;
+		accumulator += deltatime;
 		while (accumulator >= game.gameframerate) {
 			accumulator -= game.gameframerate;
 
@@ -489,7 +490,7 @@ int main(int argc, char *argv[])
 				towerrender(graphics, game, map, obj, help);
 			}
 			else {
-				gamerender(graphics, map, game, obj, help, alpha);
+				gamerender(graphics, map, game, obj, help, alpha, deltatime);
 			}
 			gameScreen.FlipScreen();
 		}

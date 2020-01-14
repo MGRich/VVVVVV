@@ -42,7 +42,7 @@ Graphics::Graphics()
     //Background inits
     for (int i = 0; i < 50; i++)
     {
-        SDL_Rect s = {Sint16(fRandom() * 320), Sint16(fRandom() * 240), 2, 2};
+		RectFloat s = {Sint16(fRandom() * 320), Sint16(fRandom() * 240), 2, 2};
         int s2 = 4+(fRandom()*4);
         stars.push_back(s);
         starsspeed.push_back(s2);
@@ -1930,7 +1930,7 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
     }
 }
 
-void Graphics::drawbackground( int t, mapclass& map )
+void Graphics::drawbackground( int t, mapclass& map, const float deltatime )
 {
     int temp = 0;
 
@@ -1952,7 +1952,7 @@ void Graphics::drawbackground( int t, mapclass& map )
             {
                 FillRect(backBuffer,stars[i], getRGB(0x55,0x55,0x55));
             }
-            stars[i].x -= Sint16(starsspeed[i]);
+            stars[i].x -= Sint16(starsspeed[i]) / 30.f * deltatime;
             if (stars[i].x < -10)
             {
                 stars[i].x += 340;
