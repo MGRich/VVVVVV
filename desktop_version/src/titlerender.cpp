@@ -1506,6 +1506,17 @@ void gamecompleterender2(Graphics& dwgfx, Game& game, entityclass& obj, UtilityC
     //dwgfx.backbuffer.unlock();
 }
 
+void gamerenderonlyanimateentities(Game& game, entityclass& obj, UtilityClass& help) {
+	if (!game.blackout) {
+		if (!game.completestop) {
+			for (int i = 0; i < obj.nentity; i++) {
+				//Animate the entities
+				obj.animateentities(i, game, help);
+			}
+		}
+	}
+}
+
 void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help, const float alpha)
 {
 
@@ -1555,8 +1566,8 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
                     obj.entities[i].onroof--;
                 }
 
-                //Animate the entities
-                obj.animateentities(i, game, help);
+                //Don't animate the entities
+                //obj.animateentities(i, game, help);
             }
         }
 

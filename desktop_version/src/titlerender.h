@@ -22,6 +22,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
 
 void towerrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, UtilityClass& help);
 
+void gamerenderonlyanimateentities(Game& game, entityclass& obj, UtilityClass& help);
 void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help, const float alpha);
 
 void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, UtilityClass& help);
@@ -31,5 +32,6 @@ void teleporterrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& o
 void gamecompleterender(Graphics& dwgfx, Game& game, entityclass& obj, UtilityClass& help, mapclass& map);
 
 void gamecompleterender2(Graphics& dwgfx, Game& game, entityclass& obj, UtilityClass& help);
+
 
 #endif /* TITLERENDERER_H */
