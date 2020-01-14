@@ -244,288 +244,245 @@ int main(int argc, char *argv[])
     game.infocus = true;
     key.isActive = true;
 
+	// > 30fps variables
+	Uint32 accumulator = 0;
+
     while(!key.quitProgram)
     {
 		//gameScreen.ClearScreen(0x00);
 
+		timePrev = time;
         time = SDL_GetTicks();
 
         // Update network per frame.
         NETWORK_update();
 
         //framerate limit to 30
-        Uint32 timetaken = time - timePrev;
-        if(game.gamestate==EDITORMODE)
-		{
-          if (timetaken < 24)
-          {
-              volatile Uint32 delay = 24 - timetaken;
-              SDL_Delay( delay );
-              time = SDL_GetTicks();
-          }
-          timePrev = time;
+		accumulator += time - timePrev;
+		while (accumulator >= game.gameframerate) {
+			accumulator -= game.gameframerate;
 
-        }else{
-          if (timetaken < game.gameframerate)
-          {
-              volatile Uint32 delay = game.gameframerate - timetaken;
-              SDL_Delay( delay );
-              time = SDL_GetTicks();
-          }
-          timePrev = time;
-
-        }
+			key.Poll();
+			if (key.toggleFullscreen) {
+				if (!gameScreen.isWindowed) {
+					//SDL_WM_GrabInput(SDL_GRAB_ON);
+					SDL_ShowCursor(SDL_DISABLE);
+					SDL_ShowCursor(SDL_ENABLE);
+				}
+				else {
+					SDL_ShowCursor(SDL_ENABLE);
+				}
 
 
+				if (game.gamestate == EDITORMODE) {
+					SDL_ShowCursor(SDL_ENABLE);
+				}
 
-        key.Poll();
-		if(key.toggleFullscreen)
-		{
-			if(!gameScreen.isWindowed)
-			{
-				//SDL_WM_GrabInput(SDL_GRAB_ON);
-				SDL_ShowCursor(SDL_DISABLE);
-				SDL_ShowCursor(SDL_ENABLE);
-			}
-			else
-			{
-				SDL_ShowCursor(SDL_ENABLE);
-			}
-
-
-			if(game.gamestate == EDITORMODE)
-			{
-				SDL_ShowCursor(SDL_ENABLE);
-			}
-
-			gameScreen.toggleFullScreen();
-			game.fullscreen = !game.fullscreen;
-			key.toggleFullscreen = false;
+				gameScreen.toggleFullScreen();
+				game.fullscreen = !game.fullscreen;
+				key.toggleFullscreen = false;
 
 				key.keymap.clear(); //we lost the input due to a new window.
 				game.press_left = false;
 				game.press_right = false;
 				game.press_action = true;
 				game.press_map = false;
-			printf("Error: failed: %s\n", SDL_GetError());
+				printf("Error: failed: %s\n", SDL_GetError());
 
 
 
+
+			}
+			/*if(key.quitProgram)
+			{
+				music.playef(2);
+			}*/
+
+			game.infocus = key.isActive;
+			if (!game.infocus) {
+				if (game.getGlobalSoundVol() > 0) {
+					game.setGlobalSoundVol(0);
+				}
+				FillRect(graphics.backBuffer, 0x00000000);
+				graphics.bprint(5, 110, "Game paused", 196 - help.glow, 255 - help.glow, 196 - help.glow, true);
+				graphics.bprint(5, 120, "[click to resume]", 196 - help.glow, 255 - help.glow, 196 - help.glow, true);
+				graphics.bprint(5, 230, "Press M to mute in game", 164 - help.glow, 196 - help.glow, 164 - help.glow, true);
+				graphics.render();
+				//We are minimised, so lets put a bit of a delay to save CPU
+				SDL_Delay(100);
+			}
+			else {
+				switch (game.gamestate) {
+				case PRELOADER:
+					//Render
+					preloaderrender(graphics, game, help);
+					break;
+				case EDITORMODE:
+					graphics.flipmode = false;
+					//Input
+					editorinput(key, graphics, game, map, obj, help, music);
+					//Render
+					editorrender(key, graphics, game, map, obj, help);
+					////Logic
+					editorlogic(key, graphics, game, obj, music, map, help);
+					break;
+				case TITLEMODE:
+					//Input
+					titleinput(key, graphics, map, game, obj, help, music);
+					//Render
+					titlerender(graphics, map, game, obj, help, music);
+					////Logic
+					titlelogic(graphics, game, obj, help, music, map);
+					break;
+				case GAMEMODE:
+					if (map.towermode) {
+						gameinput(key, graphics, game, map, obj, help, music);
+
+						//if(game.recording==1)
+						//{
+						// ///recordinput(key, graphics, game, map, obj, help, music);
+						//}
+						//else
+						//{
+						//}
+						towerrender(graphics, game, map, obj, help);
+						towerlogic(graphics, game, obj, music, map, help);
+
+					}
+					else {
+
+						if (game.recording == 1) {
+							//recordinput(key, dwgfx, game, map, obj, help, music);
+						}
+						else {
+							if (script.running) {
+								script.run(key, graphics, game, map, obj, help, music);
+							}
+
+							gameinput(key, graphics, game, map, obj, help, music);
+							//}
+							gamerender(graphics, map, game, obj, help);
+							gamelogic(graphics, game, obj, music, map, help);
+
+
+						}
+						break;
+				case MAPMODE:
+					maprender(graphics, game, map, obj, help);
+					if (game.recording == 1) {
+						//recordinput(key, dwgfx, game, map, obj, help, music); //will implement this later if it's actually needed
+					}
+					else {
+						mapinput(key, graphics, game, map, obj, help, music);
+					}
+					maplogic(graphics, game, obj, music, map, help);
+					break;
+				case TELEPORTERMODE:
+					teleporterrender(graphics, game, map, obj, help);
+					if (game.recording == 1) {
+						//recordinput(key, graphics, game, map, obj, help, music);
+					}
+					else {
+						if (game.useteleporter) {
+							teleporterinput(key, graphics, game, map, obj, help, music);
+						}
+						else {
+							if (script.running) {
+								script.run(key, graphics, game, map, obj, help, music);
+							}
+							gameinput(key, graphics, game, map, obj, help, music);
+						}
+					}
+					maplogic(graphics, game, obj, music, map, help);
+					break;
+				case GAMECOMPLETE:
+					gamecompleterender(graphics, game, obj, help, map);
+					//Input
+					gamecompleteinput(key, graphics, game, map, obj, help, music);
+					//Logic
+					gamecompletelogic(graphics, game, obj, music, map, help);
+					break;
+				case GAMECOMPLETE2:
+					gamecompleterender2(graphics, game, obj, help);
+					//Input
+					gamecompleteinput2(key, graphics, game, map, obj, help, music);
+					//Logic
+					gamecompletelogic2(graphics, game, obj, music, map, help);
+					break;
+				case CLICKTOSTART:
+
+					//dwgfx.bprint(5, 115, "[Click to start]", 196 - help.glow, 196 - help.glow, 255 - help.glow, true);
+					//dwgfx.drawgui(help);
+					//dwgfx.render();
+					//dwgfx.backbuffer.unlock();
+
+					help.updateglow();
+					// if (key.click) {
+					//  dwgfx.textboxremove();
+					// }
+					// if (dwgfx.ntextbox == 0) {
+					//  //music.play(6);
+					//  map.ypos = (700-29) * 8;
+					//  map.bypos = map.ypos / 2;
+					//  map.cameramode = 0;
+
+					//  game.gamestate = TITLEMODE;
+					// }
+					break;
+				default:
+
+					break;
+					}
+
+				}
+
+			}
+
+			if (game.savemystats) {
+				game.savemystats = false;
+				game.savestats(map, graphics);
+			}
+
+			//Mute button
+			if (key.isDown(KEYBOARD_m) && game.mutebutton <= 0 && !ed.textentry && ed.scripthelppage != 1) {
+				game.mutebutton = 8;
+				if (game.muted) {
+					game.muted = false;
+				}
+				else {
+					game.muted = true;
+				}
+			}
+			if (game.mutebutton > 0) {
+				game.mutebutton--;
+			}
+
+			if (game.muted) {
+				//if (game.globalsound == 1)
+				//{
+				game.globalsound = 0;
+				Mix_VolumeMusic(0);
+				Mix_Volume(-1, 0);
+				//}
+			}
+
+			if (!game.muted && game.globalsound == 0) {
+				game.globalsound = 1;
+				Mix_VolumeMusic(MIX_MAX_VOLUME);
+				Mix_Volume(-1, MIX_MAX_VOLUME);
+			}
+
+			if (key.resetWindow) {
+				key.resetWindow = false;
+				gameScreen.ResizeScreen(-1, -1);
+			}
+
+			music.processmusic();
+			graphics.processfade();
+			game.gameclock();
+			gameScreen.FlipScreen();
 
 		}
-		/*if(key.quitProgram)
-		{
-			music.playef(2);
-		}*/
-
-        game.infocus = key.isActive;
-        if(!game.infocus)
-        {
-            if(game.getGlobalSoundVol()> 0)
-            {
-                game.setGlobalSoundVol(0);
-            }
-            FillRect(graphics.backBuffer, 0x00000000);
-            graphics.bprint(5, 110, "Game paused", 196 - help.glow, 255 - help.glow, 196 - help.glow, true);
-            graphics.bprint(5, 120, "[click to resume]", 196 - help.glow, 255 - help.glow, 196 - help.glow, true);
-            graphics.bprint(5, 230, "Press M to mute in game", 164 - help.glow, 196 - help.glow, 164 - help.glow, true);
-            graphics.render();
-            //We are minimised, so lets put a bit of a delay to save CPU
-            SDL_Delay(100);
-        }
-        else
-        {
-            switch(game.gamestate)
-            {
-            case PRELOADER:
-                //Render
-                preloaderrender(graphics, game, help);
-                break;
-            case EDITORMODE:
-				graphics.flipmode = false;
-                //Input
-                editorinput(key, graphics, game, map, obj, help, music);
-                //Render
-                editorrender(key, graphics, game, map, obj, help);
-                ////Logic
-                editorlogic(key, graphics, game, obj, music, map, help);
-                break;
-            case TITLEMODE:
-                //Input
-                titleinput(key, graphics, map, game, obj, help, music);
-                //Render
-                titlerender(graphics, map, game, obj, help, music);
-                ////Logic
-                titlelogic(graphics, game, obj, help, music, map);
-                break;
-            case GAMEMODE:
-                if (map.towermode)
-                {
-					gameinput(key, graphics, game, map, obj, help, music);
-
-                    //if(game.recording==1)
-                    //{
-                    // ///recordinput(key, graphics, game, map, obj, help, music);
-                    //}
-                    //else
-                    //{
-                    //}
-                    towerrender(graphics, game, map, obj, help);
-                    towerlogic(graphics, game,  obj,  music, map, help);
-
-                }
-                else
-                {
-
-                    if (game.recording == 1)
-                    {
-                        //recordinput(key, dwgfx, game, map, obj, help, music);
-                    }
-                    else
-                    {
-                        if (script.running)
-                        {
-                            script.run(key, graphics, game, map, obj, help, music);
-                        }
-
-                        gameinput(key, graphics, game, map, obj, help, music);
-                        //}
-                        gamerender(graphics,map, game,  obj, help);
-                        gamelogic(graphics, game,obj, music, map,  help);
-
-
-                    }
-                    break;
-                case MAPMODE:
-                    maprender(graphics, game, map, obj, help);
-                    if (game.recording == 1)
-                    {
-                        //recordinput(key, dwgfx, game, map, obj, help, music); //will implement this later if it's actually needed
-                    }
-                    else
-                    {
-                        mapinput(key, graphics, game, map, obj, help, music);
-                    }
-                    maplogic(graphics, game, obj ,music , map, help );
-                    break;
-                case TELEPORTERMODE:
-                    teleporterrender(graphics, game, map, obj, help);
-                    if (game.recording == 1)
-                    {
-                        //recordinput(key, graphics, game, map, obj, help, music);
-                    }
-                    else
-                    {
-                        if(game.useteleporter)
-                        {
-                            teleporterinput(key, graphics, game, map, obj, help, music);
-                        }
-                        else
-                        {
-                            if (script.running)
-                            {
-                                script.run(key, graphics, game, map, obj, help, music);
-                            }
-                            gameinput(key, graphics, game, map, obj, help, music);
-                        }
-                    }
-                    maplogic(graphics, game,  obj, music, map, help);
-                    break;
-                case GAMECOMPLETE:
-                    gamecompleterender(graphics, game, obj, help, map);
-                    //Input
-                    gamecompleteinput(key, graphics, game, map, obj, help, music);
-                    //Logic
-                    gamecompletelogic(graphics, game,  obj, music, map, help);
-                    break;
-                case GAMECOMPLETE2:
-                    gamecompleterender2(graphics, game, obj, help);
-                    //Input
-                    gamecompleteinput2(key, graphics, game, map, obj, help, music);
-                    //Logic
-                    gamecompletelogic2(graphics, game,  obj, music, map, help);
-                    break;
-                case CLICKTOSTART:
-
-                    //dwgfx.bprint(5, 115, "[Click to start]", 196 - help.glow, 196 - help.glow, 255 - help.glow, true);
-                    //dwgfx.drawgui(help);
-                    //dwgfx.render();
-                    //dwgfx.backbuffer.unlock();
-
-                    help.updateglow();
-                    // if (key.click) {
-                    //  dwgfx.textboxremove();
-                    // }
-                    // if (dwgfx.ntextbox == 0) {
-                    //  //music.play(6);
-                    //  map.ypos = (700-29) * 8;
-                    //  map.bypos = map.ypos / 2;
-                    //  map.cameramode = 0;
-
-                    //  game.gamestate = TITLEMODE;
-                    // }
-                    break;
-                default:
-
-                break;
-                }
-
-            }
-
-        }
-
-        if (game.savemystats)
-        {
-            game.savemystats = false;
-            game.savestats(map, graphics);
-        }
-
-        //Mute button
-        if (key.isDown(KEYBOARD_m) && game.mutebutton<=0 && !ed.textentry && ed.scripthelppage != 1)
-        {
-            game.mutebutton = 8;
-            if (game.muted)
-            {
-                game.muted = false;
-            }
-            else
-            {
-                game.muted = true;
-            }
-        }
-        if(game.mutebutton>0)
-        {
-            game.mutebutton--;
-        }
-
-        if (game.muted)
-        {
-            //if (game.globalsound == 1)
-            //{
-                game.globalsound = 0;
-                Mix_VolumeMusic(0) ;
-                Mix_Volume(-1,0);
-            //}
-        }
-
-        if (!game.muted && game.globalsound == 0)
-        {
-            game.globalsound = 1;
-            Mix_VolumeMusic(MIX_MAX_VOLUME) ;
-            Mix_Volume(-1,MIX_MAX_VOLUME);
-        }
-
-		if(key.resetWindow)
-		{
-			key.resetWindow = false;
-			gameScreen.ResizeScreen(-1, -1);
-		}
-
-        music.processmusic();
-        graphics.processfade();
-        game.gameclock();
-        gameScreen.FlipScreen();
-
         //SDL_FillRect( SDL_GetVideoSurface(), NULL, 0 );
     }
 
