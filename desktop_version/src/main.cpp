@@ -345,7 +345,6 @@ int main(int argc, char *argv[])
 						//else
 						//{
 						//}
-						towerrender(graphics, game, map, obj, help);
 						towerlogic(graphics, game, obj, music, map, help);
 
 					}
@@ -361,7 +360,6 @@ int main(int argc, char *argv[])
 
 							gameinput(key, graphics, game, map, obj, help, music);
 							//}
-							gamerender(graphics, map, game, obj, help);
 							gamelogic(graphics, game, obj, music, map, help);
 
 
@@ -480,9 +478,20 @@ int main(int argc, char *argv[])
 			music.processmusic();
 			graphics.processfade();
 			game.gameclock();
-			gameScreen.FlipScreen();
-
+			if (game.gamestate != GAMEMODE) {
+				gameScreen.FlipScreen();
+			}
 		}
+		if (game.gamestate == GAMEMODE) {
+			if (map.towermode) {
+				towerrender(graphics, game, map, obj, help);
+			}
+			else {
+				gamerender(graphics, map, game, obj, help);
+			}
+			gameScreen.FlipScreen();
+		}
+
         //SDL_FillRect( SDL_GetVideoSurface(), NULL, 0 );
     }
 
