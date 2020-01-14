@@ -1658,72 +1658,60 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
                 {
                     setcol(obj.entities[i].colour, help);
 
-                    tpoint.x = obj.entities[i].xp;
-                    tpoint.y = obj.entities[i].yp;
+					tpoint.x = obj.entities[i].oldxp + alpha * (obj.entities[i].xp - obj.entities[i].oldxp);
+					tpoint.y = obj.entities[i].oldyp + alpha * (obj.entities[i].yp - obj.entities[i].oldyp);
                     //
                     drawRect = sprites_rect;
                     drawRect.x += tpoint.x;
                     drawRect.y += tpoint.y;
                     BlitSurfaceColoured(flipsprites[obj.entities[i].drawframe],NULL, backBuffer, &drawRect, ct);
 
-                    tpoint.x = obj.entities[i].xp+32;
-                    tpoint.y = obj.entities[i].yp;
                     //
                     drawRect = sprites_rect;
-                    drawRect.x += tpoint.x;
+                    drawRect.x += tpoint.x + 32;
                     drawRect.y += tpoint.y;
                     BlitSurfaceColoured(flipsprites[obj.entities[i].drawframe +1],NULL, backBuffer, &drawRect, ct);
 
-                    tpoint.x = obj.entities[i].xp;
-                    tpoint.y = obj.entities[i].yp+32;
                     //
                     drawRect = sprites_rect;
                     drawRect.x += tpoint.x;
-                    drawRect.y += tpoint.y;
+                    drawRect.y += tpoint.y + 32;
                     BlitSurfaceColoured(flipsprites[obj.entities[i].drawframe+ 12],NULL, backBuffer, &drawRect, ct);
 
-                    tpoint.x = obj.entities[i].xp+32;
-                    tpoint.y = obj.entities[i].yp+32;
                     //
                     drawRect = sprites_rect;
-                    drawRect.x += tpoint.x;
-                    drawRect.y += tpoint.y;
+                    drawRect.x += tpoint.x + 32;
+                    drawRect.y += tpoint.y + 32;
                     BlitSurfaceColoured(flipsprites[obj.entities[i].drawframe+ 13],NULL, backBuffer, &drawRect, ct);
                 }
                 else
                 {
                     setcol(obj.entities[i].colour, help);
 
-                    tpoint.x = obj.entities[i].xp;
-                    tpoint.y = obj.entities[i].yp;
+					tpoint.x = obj.entities[i].oldxp + alpha * (obj.entities[i].xp - obj.entities[i].oldxp);
+					tpoint.y = obj.entities[i].oldyp + alpha * (obj.entities[i].yp - obj.entities[i].oldyp);
 
                     drawRect = sprites_rect;
                     drawRect.x += tpoint.x;
                     drawRect.y += tpoint.y;
                     BlitSurfaceColoured(sprites[obj.entities[i].drawframe],NULL, backBuffer, &drawRect, ct);
 
-                    tpoint.x = obj.entities[i].xp+32;
-                    tpoint.y = obj.entities[i].yp;
                     //
                     drawRect = sprites_rect;
-                    drawRect.x += tpoint.x;
+                    drawRect.x += tpoint.x + 32;
                     drawRect.y += tpoint.y;
                     BlitSurfaceColoured(sprites[obj.entities[i].drawframe+1],NULL, backBuffer, &drawRect, ct);
 
-                    tpoint.x = obj.entities[i].xp;
-                    tpoint.y = obj.entities[i].yp+32;
                     //
                     drawRect = sprites_rect;
                     drawRect.x += tpoint.x;
-                    drawRect.y += tpoint.y;
+                    drawRect.y += tpoint.y + 32;
                     BlitSurfaceColoured(sprites[obj.entities[i].drawframe+12],NULL, backBuffer, &drawRect, ct);
 
-                    tpoint.x = obj.entities[i].xp+32;
-                    tpoint.y = obj.entities[i].yp+32;
                     //
                     drawRect = sprites_rect;
-                    drawRect.x += tpoint.x;
-                    drawRect.y += tpoint.y;
+                    drawRect.x += tpoint.x + 32;
+                    drawRect.y += tpoint.y + 32;
                     BlitSurfaceColoured(sprites[obj.entities[i].drawframe + 13],NULL, backBuffer, &drawRect, ct);
                 }
             }
