@@ -1827,8 +1827,8 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
         entities[k].rule = 0; //Playable character
         entities[k].tile = 0;
         entities[k].colour = 0;
-        entities[k].xp = xp;
-        entities[k].yp = yp;
+		entities[k].oldxp = entities[k].xp = xp;
+        entities[k].oldyp = entities[k].yp = yp;
         entities[k].cx = 6;
         entities[k].cy = 2;
         entities[k].w = 12;
@@ -1841,8 +1841,8 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
         break;
     case 1: //Simple enemy, bouncing about like a spastic
         entities[k].rule = 1;
-        entities[k].xp = xp;
-        entities[k].yp = yp;
+        entities[k].oldxp = entities[k].xp = xp;
+        entities[k].oldyp = entities[k].yp = yp;
         entities[k].behave = vx;
         entities[k].para = vy;
         entities[k].w = 16;
@@ -1932,8 +1932,8 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
           if (gridmatch(p1, p2, p3, p4, -32, -40, 352, 264)) entities[k].tile = 27;
         }
 
-        entities[k].xp = xp;
-        entities[k].yp = yp;
+        entities[k].oldxp = entities[k].xp = xp;
+        entities[k].oldyp = entities[k].yp = yp;
         entities[k].w = 32;
         entities[k].h = 8;
 
@@ -2002,8 +2002,8 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
             if (game.roomx == 50 && game.roomy == 52) entities[k].tile = 22;
         }
 
-        entities[k].xp = xp;
-        entities[k].yp = yp;
+        entities[k].oldxp = entities[k].xp = xp;
+        entities[k].oldyp = entities[k].yp = yp;
         entities[k].cy = -1;
         entities[k].w = 32;
         entities[k].h = 10;
@@ -2019,8 +2019,8 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
         entities[k].type = 3;
         entities[k].size = 1;
         entities[k].tile = 10;
-        entities[k].xp = xp;
-        entities[k].yp = yp;
+        entities[k].oldxp = entities[k].xp = xp;
+        entities[k].oldyp = entities[k].yp = yp;
         entities[k].cy = -1;
         entities[k].w = 8;
         entities[k].h = 10;
@@ -2036,8 +2036,8 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
         entities[k].type = 4;
         entities[k].size = 0;
         entities[k].tile = 11;
-        entities[k].xp = xp;
-        entities[k].yp = yp;
+        entities[k].oldxp = entities[k].xp = xp;
+        entities[k].oldyp = entities[k].yp = yp;
         entities[k].w = 16;
         entities[k].h = 16;
         entities[k].behave = vx;
@@ -2050,8 +2050,8 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
         entities[k].type = 5;  //Particles
         entities[k].colour = 1;
         entities[k].size = 3;
-        entities[k].xp = xp;
-        entities[k].yp = yp;
+        entities[k].oldxp = entities[k].xp = xp;
+        entities[k].oldyp = entities[k].yp = yp;
         entities[k].vx = vx;
         entities[k].vy = vy;
 
@@ -2062,8 +2062,8 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
         entities[k].type = 5;  //Particles
         entities[k].colour = 2;
         entities[k].size = 3;
-        entities[k].xp = xp;
-        entities[k].yp = yp;
+        entities[k].oldxp = entities[k].xp = xp;
+        entities[k].oldyp = entities[k].yp = yp;
         entities[k].vx = vx;
         entities[k].vy = vy;
 
@@ -2074,8 +2074,8 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
         entities[k].type = 6;
         entities[k].size = 4;
         entities[k].tile = 48;
-        entities[k].xp = xp;
-        entities[k].yp = yp;
+        entities[k].oldxp = entities[k].xp = xp;
+        entities[k].oldyp = entities[k].yp = yp;
         entities[k].w = 8;
         entities[k].h = 8;
         entities[k].onentity = 1;
@@ -2090,8 +2090,8 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
         entities[k].type = 7;
         entities[k].size = 0;
         entities[k].tile = 22;
-        entities[k].xp = xp;
-        entities[k].yp = yp;
+        entities[k].oldxp = entities[k].xp = xp;
+        entities[k].oldyp = entities[k].yp = yp;
         entities[k].w = 16;
         entities[k].h = 16;
         entities[k].colour = 3;
@@ -2107,8 +2107,8 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
         entities[k].type = 8;
         entities[k].size = 0;
         entities[k].tile = 20 + vx;
-        entities[k].xp = xp;
-        entities[k].yp = yp;
+        entities[k].oldxp = entities[k].xp = xp;
+        entities[k].oldyp = entities[k].yp = yp;
         entities[k].w = 16;
         entities[k].h = 16;
         entities[k].colour = 4;
@@ -2132,8 +2132,8 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
         entities[k].type = 9;
         entities[k].size = 5;
         entities[k].life = 0;
-        entities[k].xp = xp;
-        entities[k].yp = yp;
+        entities[k].oldxp = entities[k].xp = xp;
+        entities[k].oldyp = entities[k].yp = yp;
         entities[k].w = vx;
         entities[k].h = 1;
         entities[k].onentity = 1;
@@ -2143,8 +2143,8 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
         entities[k].type = 10;
         entities[k].size = 6;
         entities[k].life = 0;
-        entities[k].xp = xp;
-        entities[k].yp = yp;
+        entities[k].oldxp = entities[k].xp = xp;
+        entities[k].oldyp = entities[k].yp = yp;
         entities[k].w = 1;
         entities[k].h = vx;
         //entities[k].colour = 0;
@@ -2155,8 +2155,8 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
         entities[k].type = 11;
         entities[k].size = 0;
         entities[k].tile = 18;
-        entities[k].xp = xp;
-        entities[k].yp = yp;
+        entities[k].oldxp = entities[k].xp = xp;
+        entities[k].oldyp = entities[k].yp = yp;
         entities[k].w = 16;
         entities[k].h = 16;
         entities[k].colour = 10;
@@ -2171,8 +2171,8 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
         entities[k].type = 100;
         entities[k].size = 7;
         entities[k].tile = 1; //inactive
-        entities[k].xp = xp;
-        entities[k].yp = yp;
+        entities[k].oldxp = entities[k].xp = xp;
+        entities[k].oldyp = entities[k].yp = yp;
         entities[k].w = 96;
         entities[k].h = 96;
         entities[k].colour = 100;
@@ -2191,8 +2191,8 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
         entities[k].type = 12; //A special case!
         entities[k].tile = 144;
         entities[k].colour = 13; //144 for sad :(
-        entities[k].xp = xp;
-        entities[k].yp = yp;
+        entities[k].oldxp = entities[k].xp = xp;
+        entities[k].oldyp = entities[k].yp = yp;
         entities[k].cx = 6;
         entities[k].cy = 2;
         entities[k].w = 12;
@@ -2208,8 +2208,8 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
         entities[k].type = 12; //A special case!
         entities[k].tile = 144+6;
         entities[k].colour = 14; //144 for sad (upside down+12):(
-        entities[k].xp = xp;
-        entities[k].yp = yp;
+        entities[k].oldxp = entities[k].xp = xp;
+        entities[k].oldyp = entities[k].yp = yp;
         entities[k].cx = 6;
         entities[k].cy = 2;
         entities[k].w = 12;
@@ -2225,8 +2225,8 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
         entities[k].type = 12; //A special case!
         entities[k].tile = 144;
         entities[k].colour = 16; //144 for sad :(
-        entities[k].xp = xp;
-        entities[k].yp = yp;
+        entities[k].oldxp = entities[k].xp = xp;
+        entities[k].oldyp = entities[k].yp = yp;
         entities[k].cx = 6;
         entities[k].cy = 2;
         entities[k].w = 12;
@@ -2250,8 +2250,8 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
         {
             entities[k].tile = 144;
         }
-        entities[k].xp = xp;
-        entities[k].yp = yp;
+        entities[k].oldxp = entities[k].xp = xp;
+        entities[k].oldyp = entities[k].yp = yp;
         entities[k].cx = 6;
         entities[k].cy = 2;
         entities[k].w = 12;
@@ -2273,8 +2273,8 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
         entities[k].type = 12; //A special case!
         entities[k].tile = 0;
         entities[k].colour = 6; //54 for sad :(
-        entities[k].xp = xp;
-        entities[k].yp = yp;
+        entities[k].oldxp = entities[k].xp = xp;
+        entities[k].oldyp = entities[k].yp = yp;
         entities[k].cx = 6;
         entities[k].cy = 2;
         entities[k].w = 12;
@@ -2290,8 +2290,8 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
         entities[k].type = 13;
         entities[k].size = 0;
         entities[k].tile = 16 + vx;
-        entities[k].xp = xp;
-        entities[k].yp = yp;
+        entities[k].oldxp = entities[k].xp = xp;
+        entities[k].oldyp = entities[k].yp = yp;
         entities[k].w = 16;
         entities[k].h = 16;
         entities[k].colour = 4;
@@ -2309,8 +2309,8 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
         entities[k].type = 13;
         entities[k].size = 0;
         entities[k].tile = 16 + vx;
-        entities[k].xp = xp;
-        entities[k].yp = yp;
+        entities[k].oldxp = entities[k].xp = xp;
+        entities[k].oldyp = entities[k].yp = yp;
         entities[k].w = 16;
         entities[k].h = 16;
         entities[k].colour = 4;
@@ -2328,8 +2328,8 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
         entities[k].type = 7;
         entities[k].size = 0;
         entities[k].tile = 22;
-        entities[k].xp = xp;
-        entities[k].yp = yp;
+        entities[k].oldxp = entities[k].xp = xp;
+        entities[k].oldyp = entities[k].yp = yp;
         entities[k].w = 16;
         entities[k].h = 16;
         entities[k].colour = 3;
@@ -2344,8 +2344,8 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
         //Given a different behavior, these enemies are especially for SWN mode and disappear outside the screen.
         entities[k].rule = 1;
         entities[k].type = 23;
-        entities[k].xp = xp;
-        entities[k].yp = yp;
+        entities[k].oldxp = entities[k].xp = xp;
+        entities[k].oldyp = entities[k].yp = yp;
         entities[k].behave = vx;
         entities[k].para = vy;
         entities[k].w = 16;
@@ -2393,8 +2393,8 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
         {
             entities[k].tile = 144;
         }
-        entities[k].xp = xp;
-        entities[k].yp = yp;
+        entities[k].oldxp = entities[k].xp = xp;
+        entities[k].oldyp = entities[k].yp = yp;
         entities[k].cx = 6;
         entities[k].cy = 2;
         entities[k].w = 12;
@@ -2420,8 +2420,8 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
         entities[k].rule = 3;
         entities[k].type = 15;
         entities[k].size = 0;
-        entities[k].xp = xp;
-        entities[k].yp = yp;
+        entities[k].oldxp = entities[k].xp = xp;
+        entities[k].oldyp = entities[k].yp = yp;
         entities[k].w = 16;
         entities[k].h = 16;
         entities[k].colour = 4;
@@ -2613,8 +2613,8 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
         entities[k].type = 51;
         entities[k].size = 6;
         entities[k].life = 0;
-        entities[k].xp = xp;
-        entities[k].yp = yp;
+        entities[k].oldxp = entities[k].xp = xp;
+        entities[k].oldyp = entities[k].yp = yp;
         entities[k].w = 1;
         entities[k].h = vx;
         //entities[k].colour = 0;
@@ -2626,8 +2626,8 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
         entities[k].type = 52;
         entities[k].size = 6;
         entities[k].life = 0;
-        entities[k].xp = xp;
-        entities[k].yp = yp;
+        entities[k].oldxp = entities[k].xp = xp;
+        entities[k].oldyp = entities[k].yp = yp;
         entities[k].w = 1;
         entities[k].h = vx;
         //entities[k].colour = 0;
@@ -2639,8 +2639,8 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
         entities[k].type = 53;
         entities[k].size = 5;
         entities[k].life = 0;
-        entities[k].xp = xp;
-        entities[k].yp = yp;
+        entities[k].oldxp = entities[k].xp = xp;
+        entities[k].oldyp = entities[k].yp = yp;
         entities[k].w = vx;
         entities[k].h = 1;
         entities[k].onentity = 1;
@@ -2651,8 +2651,8 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
         entities[k].type = 54;
         entities[k].size = 5;
         entities[k].life = 0;
-        entities[k].xp = xp;
-        entities[k].yp = yp;
+        entities[k].oldxp = entities[k].xp = xp;
+        entities[k].oldyp = entities[k].yp = yp;
         entities[k].w = vx;
         entities[k].h = 1;
         entities[k].onentity = 1;
@@ -2669,8 +2669,8 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
           entities[k].tile = 0;
         }
         entities[k].colour = crewcolour(int(vy));
-        entities[k].xp = xp;
-        entities[k].yp = yp;
+        entities[k].oldxp = entities[k].xp = xp;
+        entities[k].oldyp = entities[k].yp = yp;
         entities[k].cx = 6;
         entities[k].cy = 2;
         entities[k].w = 12;
@@ -2690,8 +2690,8 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
       case 56: //Custom enemy
         entities[k].rule = 1;
         entities[k].type = 1;
-        entities[k].xp = xp;
-        entities[k].yp = yp;
+        entities[k].oldxp = entities[k].xp = xp;
+        entities[k].oldyp = entities[k].yp = yp;
         entities[k].behave = vx;
         entities[k].para = vy;
         entities[k].w = 16;

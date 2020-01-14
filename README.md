@@ -29,15 +29,19 @@ Starfield background uses deltatime
 
 Animation frames are now updated in fixed timestep instead of in the render function
 
+Creation of entities sets the old position variables to avoid initial zip
+
 What doesn't work
 -
 Tutorial messages
 
-Room transitions don't update the old position resulting in entities zipping across the screen
+Entities have player sprite until the first fixed timestep after they are created
 
 Death/trinkets causes anything interpolated to jitter
 
 Moving platforms cause player to jitter when on them
+
+Nothing is interpolated in The Tower
 
 Many more things that have not been tested yet
 
