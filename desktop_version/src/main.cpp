@@ -482,12 +482,13 @@ int main(int argc, char *argv[])
 				gameScreen.FlipScreen();
 			}
 		}
+		const float alpha = static_cast<float>(accumulator) / game.gameframerate;
 		if (game.gamestate == GAMEMODE) {
 			if (map.towermode) {
 				towerrender(graphics, game, map, obj, help);
 			}
 			else {
-				gamerender(graphics, map, game, obj, help);
+				gamerender(graphics, map, game, obj, help, alpha);
 			}
 			gameScreen.FlipScreen();
 		}

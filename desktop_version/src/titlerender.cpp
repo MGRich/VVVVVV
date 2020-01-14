@@ -1506,7 +1506,7 @@ void gamecompleterender2(Graphics& dwgfx, Game& game, entityclass& obj, UtilityC
     //dwgfx.backbuffer.unlock();
 }
 
-void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help)
+void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help, const float alpha)
 {
 
 
@@ -1560,7 +1560,7 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
             }
         }
 
-        dwgfx.drawentities(map, obj, help);
+        dwgfx.drawentities(map, obj, help, alpha);
     }
 
     /*for(int i=0; i<obj.nblocks; i++){

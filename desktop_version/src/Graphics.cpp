@@ -1397,7 +1397,7 @@ void Graphics::drawtrophytext( entityclass& obj, UtilityClass& help )
     }
 }
 
-void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help )
+void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help, const float alpha)
 {
     //Update line colours!
     if (linedelay <= 0)
@@ -1426,8 +1426,9 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
                 // Sprites
                 if (flipmode)
                 {
-                    tpoint.x = obj.entities[i].xp;
-                    tpoint.y = obj.entities[i].yp;
+					// linearly interpolate between old position and current position
+                    tpoint.x = obj.entities[i].oldxp + alpha * (obj.entities[i].xp - obj.entities[i].oldxp);
+                    tpoint.y = obj.entities[i].oldyp + alpha * (obj.entities[i].yp - obj.entities[i].oldyp);
                     //
                     setcol(obj.entities[i].colour, help);
                     //flipsprites[obj.entities[i].drawframe].colorTransform(sprites_rect, ct);
@@ -1478,8 +1479,9 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
                 }
                 else
                 {
-                    tpoint.x = obj.entities[i].xp;
-                    tpoint.y = obj.entities[i].yp;
+					// linearly interpolate between old position and current position
+					tpoint.x = obj.entities[i].oldxp + alpha * (obj.entities[i].xp - obj.entities[i].oldxp);
+					tpoint.y = obj.entities[i].oldyp + alpha * (obj.entities[i].yp - obj.entities[i].oldyp);
                     //
                     setcol(obj.entities[i].colour, help);
                     //sprites[obj.entities[i].drawframe].colorTransform(sprites_rect, ct);

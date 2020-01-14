@@ -126,7 +126,7 @@ public:
 
 	bool Hitest(SDL_Surface* surface1, point p1, int col, SDL_Surface* surface2, point p2, int col2);
 
-	void drawentities(mapclass& map, entityclass& obj, UtilityClass& help);
+	void drawentities(mapclass& map, entityclass& obj, UtilityClass& help, const float alpha);
 
 	void drawtrophytext(entityclass&, UtilityClass& help);
 
