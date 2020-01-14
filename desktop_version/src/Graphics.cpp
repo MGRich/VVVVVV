@@ -1544,8 +1544,9 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
             else if (obj.entities[i].size == 2)
             {
                 // Special: Moving platform, 4 tiles
-                tpoint.x = obj.entities[i].xp;
-                tpoint.y = obj.entities[i].yp;
+				// linearly interpolate between old position and current position
+				tpoint.x = obj.entities[i].oldxp + alpha * (obj.entities[i].xp - obj.entities[i].oldxp);
+				tpoint.y = obj.entities[i].oldyp + alpha * (obj.entities[i].yp - obj.entities[i].oldyp);
                 drawRect = tiles_rect;
                 drawRect.x += tpoint.x;
                 drawRect.y += tpoint.y;
@@ -1610,8 +1611,9 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
             else if (obj.entities[i].size == 8)    // Special: Moving platform, 8 tiles
             {
 				//TODO check this is correct game breaking moving paltform
-                tpoint.x = obj.entities[i].xp;
-                tpoint.y = obj.entities[i].yp;
+				// linearly interpolate between old position and current position
+				tpoint.x = obj.entities[i].oldxp + alpha * (obj.entities[i].xp - obj.entities[i].oldxp);
+				tpoint.y = obj.entities[i].oldyp + alpha * (obj.entities[i].yp - obj.entities[i].oldyp);
                 drawRect = sprites_rect;
                 drawRect.x += tpoint.x;
                 drawRect.y += tpoint.y;
