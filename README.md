@@ -1,22 +1,50 @@
-This is the source code to VVVVVV, version 2.0+. For more context about this release, see the [announcement](http://distractionware.com/blog/2020/01/vvvvvv-is-now-open-source/) on Terry's blog!
+Why
+-
+Because it looks nice
 
-License
--------
-VVVVVV's source code is made available under a custom license. See [LICENSE.md](LICENSE.md) for more details.
+How
+-
+There are two methods that could be used.
 
-In general, if you're interested in creating something that falls outside the license terms, get in touch with Terry and we'll talk about it!
 
-Authors
--------
-- Created by [Terry Cavanagh](http://distractionware.com/)
-- Room Names by [Bennett Foddy](http://www.foddy.net)
-- Music by [Magnus Pålsson](http://souleye.madtracker.net/)
-- Metal Soundtrack by [FamilyJules](http://familyjules7x.com/)
-- 2.0 Update (C++ Port) by [Simon Roth](http://www.machinestudios.co.uk)
-- 2.2 Update (SDL2/PhysicsFS/Steamworks port) by [Ethan Lee](http://www.flibitijibibo.com/)
-- Beta Testing by Sam Kaplan and Pauli Kohberger
-- Ending Picture by Pauli Kohberger
+1) Changing all the fixed timestep functions to use different variables. For example, multiplying the an entity's velocity by 0.5 when calculating the new position allows for the game to run at 60fps without speeding up. Some integers would need to be changed to floats as well.
 
-Versions
-------------
-There are two versions of the VVVVVV source code available - the [desktop version](https://github.com/TerryCavanagh/VVVVVV/tree/master/desktop_version) (based on the C++ port, and currently live on Steam), and the [mobile version](https://github.com/TerryCavanagh/VVVVVV/tree/master/mobile_version) (based on a fork of the original flash source code, and currently live on iOS and Android).
+2) Using linear interpolation so that the game is updated at 30fps, but is rendered at above 30fps.
+
+I am using Method 2, as method 1 involves too many variables for me to find.
+
+Method 2 has a disadvantage of 1/30th of a second worth of latency.
+
+Exterpolation could maybe be used instead to solve this at the disadvantage of wrong predictions.
+
+What works
+-
+Sprite entities use linear interpolation
+
+"Really big sprite" entities use linear interpolation
+
+Moving platform entities use linear interpolation
+
+Starfield background uses deltatime
+
+Animation frames are now updated in fixed timestep instead of in the render function
+
+What doesn't work
+-
+Tutorial messages
+
+Room transitions don't update the old position resulting in entities zipping across the screen
+
+Death/trinkets causes anything interpolated to jitter
+
+Moving platforms cause player to jitter when on them
+
+Many more things that have not been tested yet
+
+What's been tested
+-
+Up to the first save point
+
+When are you going to update it
+-
+I am busy working on University stuff but if I have free time and feel like I want to update it then I will
