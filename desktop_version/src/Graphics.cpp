@@ -1730,19 +1730,17 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
                 {
                     setcol(obj.entities[i].colour, help);
 
-                    tpoint.x = obj.entities[i].xp;
-                    tpoint.y = obj.entities[i].yp;
+					tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha);
+					tpoint.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha);
                     //
                     drawRect = sprites_rect;
                     drawRect.x += tpoint.x;
                     drawRect.y += tpoint.y;
                     BlitSurfaceColoured(flipsprites[obj.entities[i].drawframe],NULL, backBuffer, &drawRect, ct);
 
-                    tpoint.x = obj.entities[i].xp+32;
-                    tpoint.y = obj.entities[i].yp;
                     //
                     drawRect = sprites_rect;
-                    drawRect.x += tpoint.x;
+                    drawRect.x += tpoint.x + 32;
                     drawRect.y += tpoint.y;
                     BlitSurfaceColoured(flipsprites[obj.entities[i].drawframe+1],NULL, backBuffer, &drawRect, ct);
                 }
@@ -1750,19 +1748,17 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
                 {
                     setcol(obj.entities[i].colour, help);
 
-                    tpoint.x = obj.entities[i].xp;
-                    tpoint.y = obj.entities[i].yp;
+					tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha);
+					tpoint.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha);
                     //
                     drawRect = sprites_rect;
                     drawRect.x += tpoint.x;
                     drawRect.y += tpoint.y;
                     BlitSurfaceColoured(sprites[obj.entities[i].drawframe],NULL, backBuffer, &drawRect, ct);
 
-                    tpoint.x = obj.entities[i].xp+32;
-                    tpoint.y = obj.entities[i].yp;
                     //
                     drawRect = sprites_rect;
-                    drawRect.x += tpoint.x;
+                    drawRect.x += tpoint.x + 32;
                     drawRect.y += tpoint.y;
                     BlitSurfaceColoured(sprites[obj.entities[i].drawframe+1],NULL, backBuffer, &drawRect, ct);
                 }
