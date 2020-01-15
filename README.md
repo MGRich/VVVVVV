@@ -39,6 +39,8 @@ The Tower, and entities inside the tower are interpolated. The background is int
 
 Entities drawframe is set to entities tile apon creation, this stops them having the sprite of the player for the first frame.
 
+Gravitron entities are interpolated, and their old position is updated when getting the enemies offscreen
+
 What doesn't work
 -
 Death/trinkets causes entities that are interpolated to jitter
@@ -61,7 +63,7 @@ All of Space Station 1
 All of Space Station 2
 All of The Laboratory
 All of The Tower
-Half of the Warp Zone
+All of the Warp Zone
 The Elephant (seems to "flash" as quickly as possible, might try changing to "flash" at a fixed framerate to make each colour stand out more for longer)
 
 When are you going to update it

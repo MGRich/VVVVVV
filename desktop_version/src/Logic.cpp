@@ -623,7 +623,9 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
             else if (obj.entities[i].type == 23 && game.swnmode && game.deathseq<15)
             {
                 //if playing SWN, get the enemies offscreen.
+				obj.entities[i].oldxp = obj.entities[i].xp;
                 obj.entities[i].xp += obj.entities[i].vx*5;
+				obj.entities[i].oldyp = obj.entities[i].yp;
                 obj.entities[i].yp += obj.entities[i].vy*5;
             }
         }

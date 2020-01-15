@@ -1778,8 +1778,9 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
                 if (flipmode)
                 {
                     //forget this for a minute;
-                    tpoint.x = obj.entities[i].xp;
-                    tpoint.y = obj.entities[i].yp;
+					// linearly interpolate between old position and current position
+					tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha);
+					tpoint.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha);
                     setcol(obj.entities[i].colour, help);
                     //
 
@@ -1832,8 +1833,9 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
                 }
                 else
                 {
-                    tpoint.x = obj.entities[i].xp;
-                    tpoint.y = obj.entities[i].yp;
+					// linearly interpolate between old position and current position
+					tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha);
+					tpoint.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha);
                     setcol(obj.entities[i].colour, help);
                     //
                     drawRect = sprites_rect;
