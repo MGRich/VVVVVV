@@ -240,7 +240,8 @@ int main(int argc, char *argv[])
 		*/
     //End hack here ----
 
-    volatile Uint32 time, timePrev = 0;
+	volatile Uint32 time = 0;
+	volatile Uint32 timePrev = 0;
     game.infocus = true;
     key.isActive = true;
 
