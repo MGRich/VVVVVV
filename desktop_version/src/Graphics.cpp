@@ -2428,7 +2428,7 @@ void Graphics::drawtowermap(mapclass& map, const float alpha)
     {
         for (int i = 0; i < 40; i++)
         {
-			int yposinterpolated = static_cast<int>(lerp(map.oldypos, map.ypos, alpha));
+			int yposinterpolated = static_cast<int>(ceil(lerp(map.oldypos, map.ypos, alpha)));
             temp = map.tower.at(i, j, yposinterpolated);
             if (temp > 0) drawtile3(i * 8, (j * 8) - (yposinterpolated % 8), temp, map.colstate);
         }
