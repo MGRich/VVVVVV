@@ -433,12 +433,14 @@ void towerlogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& musi
                         if (obj.entities[i].xp <= -10)
                         {
                             obj.entities[i].xp += 320;
+                            obj.entities[i].oldxp += 320;
                         }
                         else
                         {
                             if (obj.entities[i].xp > 310)
                             {
                                 obj.entities[i].xp -= 320;
+                                obj.entities[i].oldxp -= 320;
                             }
                         }
                     }
@@ -1066,12 +1068,14 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
                       if (obj.entities[i].xp <= -10)
                       {
                           obj.entities[i].xp += 320;
+                          obj.entities[i].oldxp += 320;
                       }
                       else
                       {
                           if (obj.entities[i].xp > 310)
                           {
                               obj.entities[i].xp -= 320;
+                              obj.entities[i].oldxp -= 320;
                           }
                       }
                   }
@@ -1112,12 +1116,14 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
                           if (obj.entities[i].xp <= -80)
                           {
                               obj.entities[i].xp += 400;
+                              obj.entities[i].oldxp += 400;
                           }
                           else
                           {
                               if (obj.entities[i].xp > 320)
                               {
                                   obj.entities[i].xp -= 400;
+                                  obj.entities[i].oldxp -= 400;
                               }
                           }
                       }
@@ -1126,12 +1132,14 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
                           if (obj.entities[i].xp <= -10)
                           {
                               obj.entities[i].xp += 320;
+                              obj.entities[i].oldxp += 320;
                           }
                           else
                           {
                               if (obj.entities[i].xp > 310)
                               {
                                   obj.entities[i].xp -= 320;
+                                  obj.entities[i].oldxp -= 320;
                               }
                           }
                       }
@@ -1179,12 +1187,14 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
                       if (obj.entities[i].xp <= -30)
                       {
                           obj.entities[i].xp += 350;
+                          obj.entities[i].oldxp += 350;
                       }
                       else
                       {
                           if (obj.entities[i].xp > 320)
                           {
                               obj.entities[i].xp -= 350;
+                              obj.entities[i].oldxp -= 350;
                           }
                       }
                   }

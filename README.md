@@ -33,7 +33,7 @@ Creation of entities sets the old position variables to avoid initial zip
 
 Message Boxes are only updated during fixed timesteps
 
-
+Screen wrapping does not "zip", it updates the old position
 
 What doesn't work
 -
