@@ -169,9 +169,9 @@ public:
 
 	void drawrect(int x, int y, int w, int h, int r, int g, int b);
 
-	void drawtowermap(mapclass& map);
+	void drawtowermap(mapclass& map, const float alpha);
 
-	void drawtowermap_nobackground(mapclass& map);
+	void drawtowermap_nobackground(mapclass& map, const float alpha);
 
 	void drawtowerspikes(mapclass& map);
 

@@ -128,6 +128,9 @@ void gamecompletelogic2(Graphics& dwgfx, Game& game, entityclass& obj,  musiccla
 
 void towerlogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music, mapclass& map, UtilityClass& help)
 {
+	map.oldypos = map.ypos;
+	printf("oldypos: %f\n", map.oldypos);
+
     //Logic for the tower level
     map.updatetowerglow();
     help.updateglow();

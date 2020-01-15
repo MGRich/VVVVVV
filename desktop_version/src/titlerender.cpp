@@ -2701,11 +2701,11 @@ void towerrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, U
     if (!game.colourblindmode)
     {
         dwgfx.drawtowerbackground(map);
-        dwgfx.drawtowermap(map);
+        dwgfx.drawtowermap(map, alpha);
     }
     else
     {
-        dwgfx.drawtowermap_nobackground(map);
+        dwgfx.drawtowermap_nobackground(map, alpha);
     }
 
     dwgfx.drawtowerentities(map, obj, help, alpha);

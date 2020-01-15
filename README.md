@@ -35,6 +35,8 @@ Message Boxes are only updated during fixed timesteps
 
 Screen wrapping does not "zip", it updates the old position
 
+The Tower and entities inside the tower are interpolated
+
 What doesn't work
 -
 Entities have player sprite until the first fixed timestep after they are created
@@ -43,7 +45,6 @@ Death/trinkets causes anything interpolated to jitter
 
 Moving platforms cause player to jitter when on them
 
-Nothing is interpolated in The Tower
 The Tower background moves too fast
 
 Many more things that have not been tested yet
