@@ -2662,7 +2662,38 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
     //dwgfx.backbuffer.unlock();
 }
 
-void towerrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, UtilityClass& help)
+void towerrenderfixed(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, UtilityClass& help) {
+	if (!game.completestop) {
+		for (int i = 0; i < obj.nentity; i++) {
+			//Is this entity on the ground? (needed for jumping)
+			if (obj.entitycollidefloor(map, i)) {
+				obj.entities[i].onground = 2;
+			}
+			else {
+				obj.entities[i].onground--;
+			}
+
+			if (obj.entitycollideroof(map, i)) {
+				obj.entities[i].onroof = 2;
+			}
+			else {
+				obj.entities[i].onroof--;
+			}
+
+			//Animate the entities
+			obj.animateentities(i, game, help);
+		}
+	}
+
+	dwgfx.drawguifixed();
+
+	if (game.flashlight > 0 && !game.noflashingmode) {
+		game.flashlight--;
+		dwgfx.flashlight();
+	}
+}
+
+void towerrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, UtilityClass& help, const float alpha)
 {
 
     FillRect(dwgfx.backBuffer, 0x000000);
@@ -2677,35 +2708,7 @@ void towerrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, U
         dwgfx.drawtowermap_nobackground(map);
     }
 
-    if(!game.completestop)
-    {
-        for (int i = 0; i < obj.nentity; i++)
-        {
-            //Is this entity on the ground? (needed for jumping)
-            if (obj.entitycollidefloor(map, i))
-            {
-                obj.entities[i].onground = 2;
-            }
-            else
-            {
-                obj.entities[i].onground--;
-            }
-
-            if (obj.entitycollideroof(map, i))
-            {
-                obj.entities[i].onroof = 2;
-            }
-            else
-            {
-                obj.entities[i].onroof--;
-            }
-
-            //Animate the entities
-            obj.animateentities(i, game, help);
-        }
-    }
-
-    dwgfx.drawtowerentities(map, obj, help);
+    dwgfx.drawtowerentities(map, obj, help, alpha);
 
     dwgfx.drawtowerspikes(map);
 
@@ -2717,7 +2720,6 @@ void towerrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, U
       }*/
     dwgfx.cutscenebars();
 
-	dwgfx.drawguifixed();
     dwgfx.drawgui(help);
     if (dwgfx.flipmode)
     {
@@ -2808,12 +2810,6 @@ void towerrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, U
     if (game.test)
     {
         dwgfx.Print(5, 5, game.teststring, 196, 196, 255, false);
-    }
-
-    if (game.flashlight > 0 && !game.noflashingmode)
-    {
-        game.flashlight--;
-        dwgfx.flashlight();
     }
 
     dwgfx.render();

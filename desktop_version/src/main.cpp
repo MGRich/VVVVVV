@@ -346,6 +346,7 @@ int main(int argc, char *argv[])
 						//else
 						//{
 						//}
+						towerrenderfixed(graphics, game, map, obj, help);
 						towerlogic(graphics, game, obj, music, map, help);
 
 					}
@@ -487,7 +488,7 @@ int main(int argc, char *argv[])
 		const float alpha = static_cast<float>(accumulator) / game.gameframerate;
 		if (game.gamestate == GAMEMODE) {
 			if (map.towermode) {
-				towerrender(graphics, game, map, obj, help);
+				towerrender(graphics, game, map, obj, help, alpha);
 			}
 			else {
 				gamerender(graphics, map, game, obj, help, alpha, deltatime);

@@ -175,7 +175,7 @@ public:
 
 	void drawtowerspikes(mapclass& map);
 
-	void drawtowerentities(mapclass& map, entityclass& obj, UtilityClass& help);
+	void drawtowerentities(mapclass& map, entityclass& obj, UtilityClass& help, const float alpha);
 
 	bool onscreen(int t);
 

@@ -4,6 +4,10 @@
 #include "Map.h"
 #include "Screen.h"
 
+float lerp(const float v0, const float v1, const float alpha) {
+	return v0 + alpha * (v1 - v0);
+}
+
 Graphics::Graphics()
 {
     flipmode = false;
@@ -1432,8 +1436,8 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
                 if (flipmode)
                 {
 					// linearly interpolate between old position and current position
-                    tpoint.x = obj.entities[i].oldxp + alpha * (obj.entities[i].xp - obj.entities[i].oldxp);
-                    tpoint.y = obj.entities[i].oldyp + alpha * (obj.entities[i].yp - obj.entities[i].oldyp);
+					tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha);
+					tpoint.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha);
                     //
                     setcol(obj.entities[i].colour, help);
                     //flipsprites[obj.entities[i].drawframe].colorTransform(sprites_rect, ct);
@@ -1485,8 +1489,8 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
                 else
                 {
 					// linearly interpolate between old position and current position
-					tpoint.x = obj.entities[i].oldxp + alpha * (obj.entities[i].xp - obj.entities[i].oldxp);
-					tpoint.y = obj.entities[i].oldyp + alpha * (obj.entities[i].yp - obj.entities[i].oldyp);
+					tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha);
+					tpoint.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha);
                     //
                     setcol(obj.entities[i].colour, help);
                     //sprites[obj.entities[i].drawframe].colorTransform(sprites_rect, ct);
@@ -1550,8 +1554,8 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
             {
                 // Special: Moving platform, 4 tiles
 				// linearly interpolate between old position and current position
-				tpoint.x = obj.entities[i].oldxp + alpha * (obj.entities[i].xp - obj.entities[i].oldxp);
-				tpoint.y = obj.entities[i].oldyp + alpha * (obj.entities[i].yp - obj.entities[i].oldyp);
+				tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha);
+				tpoint.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha);
                 drawRect = tiles_rect;
                 drawRect.x += tpoint.x;
                 drawRect.y += tpoint.y;
@@ -1617,8 +1621,8 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
             {
 				//TODO check this is correct game breaking moving paltform
 				// linearly interpolate between old position and current position
-				tpoint.x = obj.entities[i].oldxp + alpha * (obj.entities[i].xp - obj.entities[i].oldxp);
-				tpoint.y = obj.entities[i].oldyp + alpha * (obj.entities[i].yp - obj.entities[i].oldyp);
+				tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha);
+				tpoint.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha);
                 drawRect = sprites_rect;
                 drawRect.x += tpoint.x;
                 drawRect.y += tpoint.y;
@@ -1663,8 +1667,8 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
                 {
                     setcol(obj.entities[i].colour, help);
 
-					tpoint.x = obj.entities[i].oldxp + alpha * (obj.entities[i].xp - obj.entities[i].oldxp);
-					tpoint.y = obj.entities[i].oldyp + alpha * (obj.entities[i].yp - obj.entities[i].oldyp);
+					tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha);
+					tpoint.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha);
                     //
                     drawRect = sprites_rect;
                     drawRect.x += tpoint.x;
@@ -1693,8 +1697,8 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
                 {
                     setcol(obj.entities[i].colour, help);
 
-					tpoint.x = obj.entities[i].oldxp + alpha * (obj.entities[i].xp - obj.entities[i].oldxp);
-					tpoint.y = obj.entities[i].oldyp + alpha * (obj.entities[i].yp - obj.entities[i].oldyp);
+					tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha);
+					tpoint.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha);
 
                     drawRect = sprites_rect;
                     drawRect.x += tpoint.x;
@@ -2445,7 +2449,7 @@ void Graphics::drawtowermap_nobackground( mapclass& map )
     }
 }
 
-void Graphics::drawtowerentities( mapclass& map, entityclass& obj, UtilityClass& help )
+void Graphics::drawtowerentities(mapclass& map, entityclass& obj, UtilityClass& help, const float alpha)
 {
     //Update line colours!
     if (linedelay <= 0)
@@ -2468,8 +2472,8 @@ void Graphics::drawtowerentities( mapclass& map, entityclass& obj, UtilityClass&
             if (obj.entities[i].size == 0)        // Sprites
             {
 				trinketcolset = false;
-                tpoint.x = obj.entities[i].xp;
-                tpoint.y = obj.entities[i].yp-map.ypos;
+				tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha);
+				tpoint.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha) - map.ypos;
                 setcol(obj.entities[i].colour, help);
                 setRect(trect, tpoint.x, tpoint.y, sprites_rect.w, sprites_rect.h);
                 BlitSurfaceColoured(sprites[obj.entities[i].drawframe], NULL, backBuffer, &trect, ct);
@@ -2504,8 +2508,8 @@ void Graphics::drawtowerentities( mapclass& map, entityclass& obj, UtilityClass&
             else if (obj.entities[i].size == 2)
             {
                 // Special: Moving platform, 4 tiles
-                tpoint.x = obj.entities[i].xp;
-                tpoint.y = obj.entities[i].yp-map.ypos;
+				tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha);
+				tpoint.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha) - map.ypos;
                 setRect(trect,tiles_rect.w, tiles_rect.h, tpoint.x, tpoint.y);
                 BlitSurfaceColoured(tiles[obj.entities[i].drawframe], NULL, backBuffer, &trect, ct);
                 tpoint.x += 8;
