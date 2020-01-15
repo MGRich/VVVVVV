@@ -47,7 +47,7 @@ Graphics::Graphics()
         stars.push_back(s);
         starsspeed.push_back(s2);
 
-        SDL_Rect bb;
+        RectFloat bb;
         int bvx = 0;
         int bvy = 0;
         if(fRandom()*100 > 50)
@@ -55,14 +55,14 @@ Graphics::Graphics()
             bvx = 9 - (fRandom() * 19);
             if (bvx > -6 && bvx < 6) bvx = 6;
             bvx = bvx * 1.5;
-            setRect(bb, fRandom() * 320, fRandom() * 240, 32, 12);
+			setRect(bb, fRandom() * 320, fRandom() * 240, 32, 12);
         }
         else
         {
             bvy = 9 - (fRandom() * 19);
             if (bvy > -6 && bvy < 6) bvy = 6;
             bvy = bvy * 1.5;
-            setRect(bb, fRandom() * 320, fRandom() * 240, 12, 32) ;
+			setRect(bb, fRandom() * 320, fRandom() * 240, 12, 32);
         }
         float bint = 0.5 + ((fRandom() * 100) / 200);
         backboxes.push_back(bb);
@@ -2105,8 +2105,8 @@ void Graphics::drawbackground( int t, mapclass& map, const float deltatime )
             backboxrect.h = backboxes[i].h - 2;
             FillRect(backBuffer,backboxrect, bcol2);
 
-            backboxes[i].x += backboxvx[i];
-            backboxes[i].y += backboxvy[i];
+            backboxes[i].x += backboxvx[i] / 30.f * deltatime;
+            backboxes[i].y += backboxvy[i] / 30.f * deltatime;
             if (backboxes[i].x < -40)
             {
                 backboxes[i].x = 320;
@@ -2130,28 +2130,34 @@ void Graphics::drawbackground( int t, mapclass& map, const float deltatime )
         }
         break;
     case 3: //Warp zone (horizontal)
-        backoffset+=3;
-        if (backoffset >= 16) backoffset -= 16;
 
-        if (backgrounddrawn)
-        {
-            //TODO Scroll?
-            //towerbuffer.scroll( -3, 0);
-            ScrollSurface(towerbuffer, -3, 0 );
-            for (int j = 0; j < 15; j++)
-            {
-                temp = 680 + (rcol * 3);
-                drawtowertile(317 - backoffset, (j * 16), temp+40);  //20*16 = 320
-                drawtowertile(317 - backoffset + 8, (j * 16), temp + 41);
-                drawtowertile(317 - backoffset, (j * 16) + 8, temp + 80);
-                drawtowertile(317 - backoffset + 8, (j * 16) + 8, temp + 81);
-            }
-        }
-        else
-        {
+		// OVER 30 FPS MOD NOTES: I couldn't get this to work with the surface.
+		// I probably could get it to work with the surface given more time but
+		// I decided not to, at least not for now. For now the entire background
+		// is rendered each time which is more laggy.
+
+        backoffset += 3.f / 30.f * deltatime;
+        if (backoffset >= 16.f) backoffset -= 16.f;
+
+        //if (backgrounddrawn)
+        //{
+        //    //TODO Scroll?
+        //    //towerbuffer.scroll( -3, 0);
+        //    ScrollSurface(towerbuffer, -3.f / 30.f * deltatime, 0.f );
+        //    for (int j = 0; j < 15; j++)
+        //    {
+        //        temp = 680 + (rcol * 3);
+        //        drawtowertile(317 - backoffset, (j * 16), temp+40);  //20*16 = 320
+        //        drawtowertile(317 - backoffset + 8, (j * 16), temp + 41);
+        //        drawtowertile(317 - backoffset, (j * 16) + 8, temp + 80);
+        //        drawtowertile(317 - backoffset + 8, (j * 16) + 8, temp + 81);
+        //    }
+        //}
+        //else
+        //{
             //draw the whole thing for the first time!
-            backoffset = 0;
-            FillRect(towerbuffer, 0x000000);
+            //backoffset = 0;
+            //FillRect(towerbuffer, 0x000000);
             for (int j = 0; j < 15; j++)
             {
                 for (int i = 0; i < 21; i++)
@@ -2163,36 +2169,36 @@ void Graphics::drawbackground( int t, mapclass& map, const float deltatime )
                     drawtowertile((i * 16) - backoffset + 8, (j * 16) + 8, temp + 81);
                 }
             }
-            backgrounddrawn = true;
-        }
+            //backgrounddrawn = true;
+        //}
         //TODO this is why map breaks
 
         //backbuffer.copyPixels(towerbuffer, towerbuffer.rect, tl);
         BlitSurfaceStandard(towerbuffer, NULL, backBuffer, NULL);
         break;
     case 4: //Warp zone (vertical)
-        backoffset+=3;
-        if (backoffset >= 16) backoffset -= 16;
+        backoffset += 3.f / 30.f * deltatime;
+        if (backoffset >= 16.f) backoffset -= 16.f;
 
-        if (backgrounddrawn)
-        {
+        //if (backgrounddrawn)
+        //{
             //TODO scroll?!
             //towerbuffer.scroll(0, -3);
-			ScrollSurface(towerbuffer,0,-3);
-            for (int i = 0; i < 21; i++)
-            {
-                temp = 760 + (rcol * 3);
-                drawtowertile((i * 16), 237 - backoffset, temp + 40); //14*17=240 - 3
-                drawtowertile((i * 16) + 8, 237 - backoffset, temp + 41);
-                drawtowertile((i * 16), 237 - backoffset + 8, temp + 80);
-                drawtowertile((i * 16) + 8, 237 - backoffset + 8, temp + 81);
-            }
-        }
-        else
-        {
+			//ScrollSurface(towerbuffer, 0.f, -3.f / 30.f * deltatime);
+        //    for (int i = 0; i < 21; i++)
+        //    {
+        //        temp = 760 + (rcol * 3);
+        //        drawtowertile((i * 16), 237 - backoffset, temp + 40); //14*17=240 - 3
+        //        drawtowertile((i * 16) + 8, 237 - backoffset, temp + 41);
+        //        drawtowertile((i * 16), 237 - backoffset + 8, temp + 80);
+        //        drawtowertile((i * 16) + 8, 237 - backoffset + 8, temp + 81);
+        //    }
+        //}
+        //else
+        //{
             //draw the whole thing for the first time!
-            backoffset = 0;
-            FillRect(towerbuffer,0x000000 );
+            //backoffset = 0;
+            //FillRect(towerbuffer,0x000000 );
             for (j = 0; j < 15; j++)
             {
                 for (int i = 0; i < 21; i++)
@@ -2204,8 +2210,8 @@ void Graphics::drawbackground( int t, mapclass& map, const float deltatime )
                     drawtowertile((i * 16)+ 8, (j * 16)- backoffset + 8, temp + 81);
                 }
             }
-            backgrounddrawn = true;
-        }
+            //backgrounddrawn = true;
+        //}
 
         SDL_BlitSurface(towerbuffer,NULL, backBuffer,NULL);
         break;
@@ -2247,10 +2253,10 @@ void Graphics::drawbackground( int t, mapclass& map, const float deltatime )
 			warpfcol = RGBflip(0xFF, 0xFF, 0xFF);
         }
 
-        backoffset += 1;
-        if (backoffset >= 16)
+        backoffset += 1.f / 30.f * deltatime;
+        if (backoffset >= 16.f)
         {
-            backoffset -= 16;
+            backoffset -= 16.f;
             warpskip = (warpskip + 1) % 2;
         }
 
@@ -2281,7 +2287,7 @@ void Graphics::drawbackground( int t, mapclass& map, const float deltatime )
             {
                 FillRect(backBuffer, stars[i], getRGB(0x55, 0x55, 0x55));
             }
-            stars[i].y -= starsspeed[i];
+            stars[i].y -= starsspeed[i] / 30.f * deltatime;
             if (stars[i].y < -10)
             {
                 stars[i].y += 260;
@@ -2320,13 +2326,13 @@ void Graphics::drawbackground( int t, mapclass& map, const float deltatime )
             }
         }
         break;
-    default:
-        FillRect(backBuffer, 0x000000 );
+    //default:
+        //FillRect(backBuffer, 0x000000 );
         //TODO
         //backbuffer.copyPixels(backgrounds[t], bg_rect, tl);
-        BlitSurfaceStandard(backgrounds[t], NULL, backBuffer, &bg_rect);
+        //BlitSurfaceStandard(backgrounds[t], NULL, backBuffer, &bg_rect);
 
-        break;
+        //break;
     }
 }
 

@@ -25,13 +25,15 @@ Sprite entities use linear interpolation
 
 Moving platform entities use linear interpolation
 
-Starfield background uses deltatime
+All backgrounds (apart from The Tower) use deltatime, stars are stored using floats, Warp Zones no longer use surface (for now) thus less efficient
 
 Animation frames are now updated in fixed timestep instead of in the render function
 
 Creation of entities sets the old position variables to avoid initial zip
 
 Message Boxes are only updated during fixed timesteps
+
+
 
 What doesn't work
 -
@@ -42,6 +44,7 @@ Death/trinkets causes anything interpolated to jitter
 Moving platforms cause player to jitter when on them
 
 Nothing is interpolated in The Tower
+The Tower background moves too fast
 
 Many more things that have not been tested yet
 

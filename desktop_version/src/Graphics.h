@@ -240,7 +240,7 @@ public:
 	SDL_Rect footerrect;
 
 	int linestate, linedelay;
-	int backoffset;
+	float backoffset;
 	bool backgrounddrawn, foregrounddrawn;
 
 	int menuoffset;
@@ -264,23 +264,11 @@ public:
 	bool showcutscenebars;
 	int cutscenebarspos;
 
-	struct RectFloat {
-		operator SDL_Rect() const {
-			SDL_Rect rect;
-			rect.x = x;
-			rect.y = y;
-			rect.w = w;
-			rect.h = h;
-			return rect;
-		}
-		float x, y;
-		float w, h;
-	};
 	std::vector<RectFloat> stars;
 	std::vector<int> starsspeed;
 
 	int spcol, spcoldel;
-	std::vector<SDL_Rect> backboxes;
+	std::vector<RectFloat> backboxes;
 	std::vector<int> backboxvx;
 	std::vector<int> backboxvy;
 	std::vector<float> backboxint;
