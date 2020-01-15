@@ -37,10 +37,10 @@ Screen wrapping does not "zip", it updates the old position
 
 The Tower, and entities inside the tower are interpolated. The background is interpolated and doesn't use surface (see Warp Zones above)
 
+Entities drawframe is set to entities tile apon creation, this stops them having the sprite of the player for the first frame.
+
 What doesn't work
 -
-Entities have player sprite until the first fixed timestep after they are created
-
 Death/trinkets causes anything interpolated to jitter
 
 Moving platforms cause player to jitter when on them
@@ -49,7 +49,7 @@ Many more things that have not been tested yet
 
 What's been tested
 -
-Up to the first save point
+From the start of the game, straight to the end of The Tower
 
 When are you going to update it
 -

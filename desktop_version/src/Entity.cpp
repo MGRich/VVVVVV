@@ -2763,6 +2763,7 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
 
         break;
     }
+	entities[k].drawframe = entities[k].tile;
 }
 
 bool entityclass::updateentities( int i, UtilityClass& help, Game& game, musicclass& music )
