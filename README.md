@@ -23,6 +23,8 @@ Sprite entities use linear interpolation
 
 "Really big sprite" entities use linear interpolation
 
+2x1 entities (seemed to only be used in Boldly To Go) entities use linear interpolation
+
 Moving platform entities use linear interpolation
 
 All backgrounds (apart from The Tower) use deltatime, stars are stored using floats, Warp Zones no longer use surface (for now) thus less efficient
@@ -35,7 +37,7 @@ Message Boxes are only updated during fixed timesteps
 
 Screen wrapping does not "zip", it updates the old position
 
-The Tower, and entities inside the tower are interpolated. The background is interpolated and doesn't use surface (see Warp Zones above)
+The Tower, and entities inside the tower are interpolated, including gravity lines. The background is interpolated and doesn't use surface (see Warp Zones above)
 
 Entities drawframe is set to entities tile apon creation, this stops them having the sprite of the player for the first frame.
 
@@ -45,29 +47,32 @@ Death/Complete Stops update the old position of entities to avoid interpolation 
 
 The colour cycling for the final level are only updated during fixed timesteps
 
+Anomaly and Purest Unobtainium backgrounds are only updated during fixed timesteps
+
 What doesn't work
 -
 Moving platforms cause player to jitter when on them
 
 Threadmills are cause player to jitter when on them
 
-Many more things that have not been tested yet
+Changing colours happens at over 30fps when it should only happen at 30fps to make colours stand out more
 
-"Boldly to Go" has an enemy that is not interpolated
+Gravity lines flash too fast
+
+Anything that's not in gamestate GAMEMODE does not render over 30 fps
+
+"huge hero" in Secret Lab cutscene not interpolated, old position isn't updated during cutscene so can't easily use a lerp
 
 "The Cuckoo" and a few rooms after it have "Lies" that move downwards for 1 frame (along with clouds that move rightwards for 1 frame)
 
+Hardest room doesn't display
+
+and things that have not been tested yet might not work
+
 What's been tested
 -
-Half of Dimension VVVVVV
-All of DSS Souleye
-All of Space Station 1
-All of Space Station 2
-All of The Laboratory
-All of The Tower
-All of the Warp Zone
-The Elephant (seems to "flash" as quickly as possible, might try changing to "flash" at a fixed framerate to make each colour stand out more for longer)
-The start of the Final Level
+100% of the main game.
+The secret lab.
 
 When are you going to update it
 -
