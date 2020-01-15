@@ -107,6 +107,7 @@ public:
     float ypos;
     float oldypos;
     int bypos;
+    int oldbypos;
     int cameramode;
     int cameraseek, cameraseekframe;
     int resumedelay;

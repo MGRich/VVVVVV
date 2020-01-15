@@ -2609,8 +2609,7 @@ void Graphics::drawtowerbackgroundsolo( mapclass& map )
     }
 }
 
-void Graphics::drawtowerbackground( mapclass& map )
-{
+void Graphics::drawtowerbackground(mapclass& map, const float alpha) {
     //TODO
     int temp;
 
@@ -2618,38 +2617,39 @@ void Graphics::drawtowerbackground( mapclass& map )
 
     if (map.scrolldir == 1) map.tdrawback = true;
 
-    if (map.tdrawback)
-    {
+    //if (map.tdrawback)
+    //{
         //Draw the whole thing; needed for every colour cycle!
         for (j = 0; j < 30; j++)
         {
             for (int i = 0; i < 40; i++)
             {
-                temp = map.tower.backat(i, j, map.bypos);
-                drawtowertile3(i * 8, (j * 8) - (map.bypos % 8), temp, map.colstate);
+				int byposinterpolated = lerp(map.oldbypos, map.bypos, alpha);
+                temp = map.tower.backat(i, j, byposinterpolated);
+                drawtowertile3(i * 8, (j * 8) - (byposinterpolated % 8), temp, map.colstate);
             }
         }
 
         //backbuffer.copyPixels(towerbuffer, towerbuffer.rect, tl, null, null, false);
         SDL_BlitSurface(towerbuffer,NULL, backBuffer,NULL);
 
-        map.tdrawback = false;
-    }
-    else
-    {
-        //just update the bottom
-        //TODO SCOLL
-        //towerbuffer.scroll(0, -map.bscroll);
-        ScrollSurface(towerbuffer, 0, -map.bscroll);
-        for (int i = 0; i < 40; i++)
-        {
-            temp = map.tower.backat(i, 0, map.bypos);
-            drawtowertile3(i * 8, -(map.bypos % 8), temp, map.colstate);
-        }
+    //    map.tdrawback = false;
+    //}
+    //else
+    //{
+    //    //just update the bottom
+    //    //TODO SCOLL
+    //    //towerbuffer.scroll(0, -map.bscroll);
+    //    ScrollSurface(towerbuffer, 0, -map.bscroll);
+    //    for (int i = 0; i < 40; i++)
+    //    {
+    //        temp = map.tower.backat(i, 0, map.bypos);
+    //        drawtowertile3(i * 8, -(map.bypos % 8), temp, map.colstate);
+    //    }
 
-        //backbuffer.copyPixels(towerbuffer, towerbuffer.rect, tl, null, null, false);
-        SDL_BlitSurface(towerbuffer,NULL, backBuffer,NULL);
-    }
+    //    //backbuffer.copyPixels(towerbuffer, towerbuffer.rect, tl, null, null, false);
+    //    SDL_BlitSurface(towerbuffer,NULL, backBuffer,NULL);
+    //}
 }
 
 void Graphics::setcol( int t, UtilityClass& help )

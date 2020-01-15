@@ -184,7 +184,7 @@ public:
 
 	void menuoffrender();
 
-	void drawtowerbackground(mapclass& map);
+	void drawtowerbackground(mapclass& map, const float alpha);
 
 	void setcol(int t, UtilityClass& help);
 	void drawfinalmap(mapclass & map);

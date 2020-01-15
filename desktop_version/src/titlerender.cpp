@@ -2700,7 +2700,7 @@ void towerrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, U
 
     if (!game.colourblindmode)
     {
-        dwgfx.drawtowerbackground(map);
+        dwgfx.drawtowerbackground(map, alpha);
         dwgfx.drawtowermap(map, alpha);
     }
     else
