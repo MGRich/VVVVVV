@@ -1094,12 +1094,14 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
                       if (obj.entities[i].yp <= -12)
                       {
                           obj.entities[i].yp += 232;
+                          obj.entities[i].oldyp += 232;
                       }
                       else
                       {
                           if (obj.entities[i].yp > 226)
                           {
                               obj.entities[i].yp -= 232;
+                              obj.entities[i].oldyp -= 232;
                           }
                       }
                   }
@@ -1170,12 +1172,14 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
                   if (obj.entities[i].yp <= -12)
                   {
                       obj.entities[i].yp += 232;
+                      obj.entities[i].oldyp += 232;
                   }
                   else
                   {
                       if (obj.entities[i].yp > 226)
                       {
                           obj.entities[i].yp -= 232;
+                          obj.entities[i].oldyp -= 232;
                       }
                   }
                 }

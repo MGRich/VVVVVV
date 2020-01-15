@@ -41,15 +41,28 @@ Entities drawframe is set to entities tile apon creation, this stops them having
 
 What doesn't work
 -
-Death/trinkets causes anything interpolated to jitter
+Death/trinkets causes entities that are interpolated to jitter
 
 Moving platforms cause player to jitter when on them
 
+Threadmills are cause player to jitter when on them
+
 Many more things that have not been tested yet
+
+"Boldly to Go" has an enemy that is not interpolated
+
+"The Cuckoo" and a few rooms after it have "Lies" that move downwards for 1 frame (along with clouds that move rightwards for 1 frame)
 
 What's been tested
 -
-From the start of the game, straight to the end of The Tower
+Half of Dimension VVVVVV
+All of DSS Souleye
+All of Space Station 1
+All of Space Station 2
+All of The Laboratory
+All of The Tower
+Half of the Warp Zone
+The Elephant (seems to "flash" as quickly as possible, might try changing to "flash" at a fixed framerate to make each colour stand out more for longer)
 
 When are you going to update it
 -
