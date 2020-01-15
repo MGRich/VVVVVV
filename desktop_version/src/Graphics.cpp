@@ -2548,7 +2548,7 @@ void Graphics::drawtowerentities(mapclass& map, entityclass& obj, UtilityClass& 
             else if (obj.entities[i].size == 5)    //Horizontal Line
             {
                 line_rect.x = obj.entities[i].xp;
-                line_rect.y = obj.entities[i].yp-map.ypos;
+                line_rect.y = obj.entities[i].yp - lerp(map.oldypos, map.ypos, alpha);
                 line_rect.w = obj.entities[i].w;
                 line_rect.h = 1;
                 drawgravityline(i, obj);
@@ -2556,7 +2556,7 @@ void Graphics::drawtowerentities(mapclass& map, entityclass& obj, UtilityClass& 
             else if (obj.entities[i].size == 6)    //Vertical Line
             {
                 line_rect.x = obj.entities[i].xp;
-                line_rect.y = obj.entities[i].yp-map.ypos;
+				line_rect.y = obj.entities[i].yp - lerp(map.oldypos, map.ypos, alpha);
                 line_rect.w = 1;
                 line_rect.h = obj.entities[i].h;
                 drawgravityline(i, obj);
