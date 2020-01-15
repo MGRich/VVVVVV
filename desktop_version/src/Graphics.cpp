@@ -2385,14 +2385,12 @@ void Graphics::drawmap( mapclass& map )
 
 }
 
-void Graphics::drawfinalmap(mapclass & map)
-{
+void Graphics::drawfinalmapfixed(mapclass& map) {
 	//Update colour cycling for final level
 	if (map.final_colormode) {
 		map.final_aniframedelay--;
-		if(map.final_aniframedelay==0)
-		{
-			foregrounddrawn=false;
+		if (map.final_aniframedelay == 0) {
+			foregrounddrawn = false;
 		}
 		if (map.final_aniframedelay <= 0) {
 			map.final_aniframedelay = 2;
@@ -2401,7 +2399,9 @@ void Graphics::drawfinalmap(mapclass & map)
 				map.final_aniframe = 0;
 		}
 	}
+}
 
+void Graphics::drawfinalmap(mapclass& map) {
 	if (!foregrounddrawn) {
 		FillRect(foregroundBuffer, 0xDEADBEEF);
 		if(map.tileset==0){

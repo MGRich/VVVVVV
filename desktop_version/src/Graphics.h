@@ -161,6 +161,8 @@ public:
 
 	void drawmap(mapclass& map);
 
+	void drawfinalmapfixed(mapclass& map);
+
 	void drawforetile(int x, int y, int t);
 
 	void drawforetile2(int x, int y, int t);

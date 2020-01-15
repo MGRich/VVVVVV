@@ -267,6 +267,12 @@ void towerlogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& musi
 
     if (game.deathseq != -1)
     {
+		for (int i = 0; i < obj.nentity; i++) {
+			// update old position (stops jitter)
+			obj.entities[i].oldxp = obj.entities[i].xp;
+			obj.entities[i].oldyp = obj.entities[i].yp;
+		}
+
         map.colsuperstate = 1;  //cause the palette to go spastic!
         map.cameramode = 2;
         game.deathsequence(map, obj, music);
@@ -520,6 +526,14 @@ void towerlogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& musi
 
 
         }
+		// collecting trinket?
+		else {
+			for (int i = 0; i < obj.nentity; i++) {
+				// update old position (stops jitter)
+				obj.entities[i].oldxp = obj.entities[i].xp;
+				obj.entities[i].oldyp = obj.entities[i].yp;
+			}
+		}
         //now! let's clean up removed entities
         obj.cleanup();
 
@@ -581,6 +595,10 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
     {
         for (int i = 0; i < obj.nentity; i++)
         {
+			// update old position (stops jitter)
+			obj.entities[i].oldxp = obj.entities[i].xp;
+			obj.entities[i].oldyp = obj.entities[i].yp;
+
             if (game.roomx == 111 && game.roomy == 107)
             {
                 if (obj.entities[i].type == 1)
@@ -623,9 +641,7 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
             else if (obj.entities[i].type == 23 && game.swnmode && game.deathseq<15)
             {
                 //if playing SWN, get the enemies offscreen.
-				obj.entities[i].oldxp = obj.entities[i].xp;
                 obj.entities[i].xp += obj.entities[i].vx*5;
-				obj.entities[i].oldyp = obj.entities[i].yp;
                 obj.entities[i].yp += obj.entities[i].vy*5;
             }
         }
@@ -1037,7 +1053,15 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
             }
 
             obj.entitycollisioncheck(dwgfx, game, map, music);         // Check ent v ent collisions, update states
-        }
+		}
+		// collecting trinket?
+		else {
+			for (int i = 0; i < obj.nentity; i++) {
+				// update old position (stops jitter)
+				obj.entities[i].oldxp = obj.entities[i].xp;
+				obj.entities[i].oldyp = obj.entities[i].yp;
+			}
+		}
 
         //now! let's clean up removed entities
         obj.cleanup();

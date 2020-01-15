@@ -41,10 +41,12 @@ Entities drawframe is set to entities tile apon creation, this stops them having
 
 Gravitron entities are interpolated, and their old position is updated when getting the enemies offscreen
 
+Death/Complete Stops update the old position of entities to avoid interpolation jitter
+
+The colour cycling for the final level are only updated during fixed timesteps
+
 What doesn't work
 -
-Death/trinkets causes entities that are interpolated to jitter
-
 Moving platforms cause player to jitter when on them
 
 Threadmills are cause player to jitter when on them
@@ -65,6 +67,7 @@ All of The Laboratory
 All of The Tower
 All of the Warp Zone
 The Elephant (seems to "flash" as quickly as possible, might try changing to "flash" at a fixed framerate to make each colour stand out more for longer)
+The start of the Final Level
 
 When are you going to update it
 -

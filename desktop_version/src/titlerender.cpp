@@ -1528,6 +1528,9 @@ void gamerenderfixed(Graphics& dwgfx, mapclass& map, Game& game, entityclass& ob
 				obj.animateentities(i, game, help);
 			}
 		}
+		if (map.final_colormode) {
+			dwgfx.drawfinalmapfixed(map);
+		}
 	}
 
 	dwgfx.drawguifixed();
