@@ -1506,146 +1506,125 @@ void gamecompleterender2(Graphics& dwgfx, Game& game, entityclass& obj, UtilityC
     //dwgfx.backbuffer.unlock();
 }
 
-void gamerenderonlyanimateentities(Game& game, entityclass& obj, UtilityClass& help) {
+void gamerenderfixed(mapclass& map, Game& game, entityclass& obj, UtilityClass& help) {
 	if (!game.blackout) {
 		if (!game.completestop) {
 			for (int i = 0; i < obj.nentity; i++) {
-				//Animate the entities
+				//Is this entity on the ground? (needed for jumping)
+				if (obj.entitycollidefloor(map, i)) {
+					obj.entities[i].onground = 2;
+				}
+				else {
+					obj.entities[i].onground--;
+				}
+
+				if (obj.entitycollideroof(map, i)) {
+					obj.entities[i].onroof = 2;
+				}
+				else {
+					obj.entities[i].onroof--;
+				}
+
 				obj.animateentities(i, game, help);
 			}
 		}
 	}
+
+	if (game.activeactivity > -1) {
+		if (game.act_fade < 5) game.act_fade = 5;
+		if (game.act_fade < 10) {
+			game.act_fade++;
+		}
+	}
+	else {
+		if (game.act_fade > 5) {
+			game.act_fade--;
+		}
+	}
+
+	if (obj.trophytext > 0) {
+		obj.trophytext--;
+	}
+
+	if (game.flashlight > 0 && !game.noflashingmode) {
+		game.flashlight--;
+	}
+
+	if (game.screenshake > 0 && !game.noflashingmode) {
+		game.screenshake--;
+	}
 }
 
-void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help, const float alpha, const float deltatime)
-{
-
-
-
-    if(!game.blackout)
-    {
-
-        if(!game.colourblindmode)
-		{
-        dwgfx.drawbackground(map.background, map, deltatime);
+void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help, const float alpha, const float deltatime) {
+    if(!game.blackout) {
+        if(!game.colourblindmode) {
+			dwgfx.drawbackground(map.background, map, deltatime);
 		}
-		else
-		{
+		else {
 			FillRect(dwgfx.backBuffer,0x00000);
 		}
-        if (map.final_colormode)
-		{
+        if (map.final_colormode) {
         	dwgfx.drawfinalmap(map);
         }
-        else
-		{
-        dwgfx.drawmap(map);
-        }
-
-
-        if(!game.completestop)
-        {
-            for (int i = 0; i < obj.nentity; i++)
-            {
-                //Is this entity on the ground? (needed for jumping)
-                if (obj.entitycollidefloor(map, i))
-                {
-                    obj.entities[i].onground = 2;
-                }
-                else
-                {
-                    obj.entities[i].onground--;
-                }
-
-                if (obj.entitycollideroof(map, i))
-                {
-                    obj.entities[i].onroof = 2;
-                }
-                else
-                {
-                    obj.entities[i].onroof--;
-                }
-
-                //Don't animate the entities
-                //obj.animateentities(i, game, help);
-            }
+        else {
+			dwgfx.drawmap(map);
         }
 
         dwgfx.drawentities(map, obj, help, alpha);
     }
 
-    /*for(int i=0; i<obj.nblocks; i++){
-    if (obj.blocks[i].active) {
-    		dwgfx.backbuffer.fillRect(obj.blocks[i].rect, 0xDDDDDD);
-    }
-      }*/
-    //dwgfx.drawminimap(game, map);
-
-    if(map.extrarow==0 || (map.custommode && map.roomname!=""))
-    {
+    if(map.extrarow==0 || (map.custommode && map.roomname!="")) {
         FillRect(dwgfx.backBuffer, dwgfx.footerrect, 0);
 
-        if (map.finalmode)
-        {
+        if (map.finalmode) {
         	map.glitchname = map.getglitchname(game.roomx, game.roomy);
           dwgfx.Print(5, 231, map.glitchname, 196, 196, 255 - help.glow, true);
-        }else{
+        }
+		else {
           dwgfx.Print(5, 231, map.roomname, 196, 196, 255 - help.glow, true);
         }
     }
 
-    if (map.roomtexton)
-    {
+    if (map.roomtexton) {
         //Draw room text!
-        for (int i = 0; i < map.roomtextnumlines; i++)
-        {
+        for (int i = 0; i < map.roomtextnumlines; i++) {
             dwgfx.Print(map.roomtextx[i]*8, (map.roomtexty[i]*8), map.roomtext[i], 196, 196, 255 - help.glow);
         }
     }
 
-     if(map.custommode && !map.custommodeforreal){
+    if (map.custommode && !map.custommodeforreal) {
         //Return to level editor
         dwgfx.bprint(5, 5, "[Press ENTER to return to editor]", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), false);
-      }
-
+    }
 
     dwgfx.cutscenebars();
     dwgfx.drawfade();
 	BlitSurfaceStandard(dwgfx.backBuffer, NULL, dwgfx.tempBuffer, NULL);
 
     dwgfx.drawgui(help);
-    if (dwgfx.flipmode)
-    {
+    if (dwgfx.flipmode) {
         if (game.advancetext) dwgfx.bprint(5, 228, "- Press ACTION to advance text -", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true);
     }
-    else
-    {
+    else {
         if (game.advancetext) dwgfx.bprint(5, 5, "- Press ACTION to advance text -", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true);
     }
 
-    if (game.readytotele > 100 && !game.advancetext && game.hascontrol && !script.running && !game.intimetrial)
-    {
-        if(dwgfx.flipmode)
-        {
+    if (game.readytotele > 100 && !game.advancetext && game.hascontrol && !script.running && !game.intimetrial) {
+        if(dwgfx.flipmode) {
             dwgfx.bprint(5, 20, "- Press ENTER to Teleport -", game.readytotele - 20 - (help.glow / 2), game.readytotele - 20 - (help.glow / 2), game.readytotele, true);
         }
-        else
-        {
+        else {
             dwgfx.bprint(5, 210, "- Press ENTER to Teleport -", game.readytotele - 20 - (help.glow / 2), game.readytotele - 20 - (help.glow / 2), game.readytotele, true);
         }
     }
 
-    if (game.swnmode)
-    {
-        if (game.swngame == 0)
-        {
+    if (game.swnmode) {
+        if (game.swngame == 0) {
             tempstring = help.timestring(game.swntimer);
             dwgfx.bigprint( -1, 20, tempstring, 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true, 2);
         }
-        else if (game.swngame == 1)
-        {
-            if (game.swnmessage == 0)
-            {
+        else if (game.swngame == 1) {
+            if (game.swnmessage == 0) {
                 tempstring = help.timestring(game.swntimer);
                 dwgfx.Print( 10, 10, "Current Time", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), false);
                 dwgfx.bigprint( 25, 24, tempstring, 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), false, 2);
@@ -1653,8 +1632,7 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
                 dwgfx.Print( 240, 10, "Best Time", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), false);
                 dwgfx.bigrprint( 300, 24, tempstring, 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), false, 2);
 
-                switch(game.swnbestrank)
-                {
+                switch(game.swnbestrank) {
                 case 0:
                     dwgfx.Print( -1, 204, "Next Trophy at 5 seconds", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true);
                     break;
@@ -1678,22 +1656,19 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
                     break;
                 }
             }
-            else if (game.swnmessage == 1)
-            {
+            else if (game.swnmessage == 1) {
                 tempstring = help.timestring(game.swntimer);
                 dwgfx.Print( 10, 10, "Current Time", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), false);
                 dwgfx.bigprint( 25, 24, tempstring, 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), false, 2);
                 tempstring = help.timestring(game.swnrecord);
-                if (int(game.deathseq / 5) % 2 == 1)
-                {
+                if (int(game.deathseq / 5) % 2 == 1) {
                     dwgfx.Print( 240, 10, "Best Time", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), false);
                     dwgfx.bigrprint( 300, 24, tempstring, 128 - (help.glow), 220 - (help.glow), 128 - (help.glow / 2), false, 2);
 
                     dwgfx.bigprint( -1, 200, "New Record!", 128 - (help.glow), 220 - (help.glow), 128 - (help.glow / 2), true, 2);
                 }
             }
-            else if (game.swnmessage >= 2)
-            {
+            else if (game.swnmessage >= 2) {
                 game.swnmessage--;
                 if (game.swnmessage == 2) game.swnmessage = 0;
                 tempstring = help.timestring(game.swntimer);
@@ -1703,213 +1678,126 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
                 dwgfx.Print( 240, 10, "Best Time", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), false);
                 dwgfx.bigrprint( 300, 24, tempstring, 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), false, 2);
 
-                if (int(game.swnmessage / 5) % 2 == 1)
-                {
+                if (int(game.swnmessage / 5) % 2 == 1) {
                     dwgfx.bigprint( -1, 200, "New Trophy!", 220 - (help.glow), 128 - (help.glow), 128 - (help.glow / 2), true, 2);
                 }
             }
 
             dwgfx.Print( 20, 228, "[Press ENTER to stop]", 160 - (help.glow/2), 160 - (help.glow/2), 160 - (help.glow/2), true);
         }
-        else if(game.swngame==2)
-        {
-            if (int(game.swndelay / 15) % 2 == 1 || game.swndelay >= 120)
-            {
-                if (dwgfx.flipmode)
-                {
+        else if(game.swngame==2) {
+            if (int(game.swndelay / 15) % 2 == 1 || game.swndelay >= 120) {
+                if (dwgfx.flipmode) {
                     dwgfx.bigprint( -1, 30, "Survive for", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true, 2);
                     dwgfx.bigprint( -1, 10, "60 seconds!", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true, 2);
                 }
-                else
-                {
+                else {
                     dwgfx.bigprint( -1, 10, "Survive for", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true, 2);
                     dwgfx.bigprint( -1, 30, "60 seconds!", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true, 2);
                 }
             }
         }
-        else if(game.swngame==7)
-        {
-            if (game.swndelay >= 60)
-            {
+        else if(game.swngame==7) {
+            if (game.swndelay >= 60) {
                 dwgfx.bigprint( -1, 20, "SUPER GRAVITRON", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true, 2);
 
                 tempstring = help.timestring(game.swnrecord);
                 dwgfx.Print( 240, 190, "Best Time", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true);
                 dwgfx.bigrprint( 300, 205, tempstring, 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true, 2);
             }
-            else	if (int(game.swndelay / 10) % 2 == 1)
-            {
+            else if (int(game.swndelay / 10) % 2 == 1) {
                 dwgfx.bigprint( -1, 20, "SUPER GRAVITRON", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true, 2);
                 dwgfx.bigprint( -1, 200, "GO!", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true, 3);
             }
         }
     }
 
-    if (game.intimetrial && dwgfx.fademode==0)
-    {
+    if (game.intimetrial && dwgfx.fademode==0) {
         //Draw countdown!
-        if (game.timetrialcountdown > 0)
-        {
-            if (game.timetrialcountdown < 30)
-            {
+        if (game.timetrialcountdown > 0) {
+            if (game.timetrialcountdown < 30) {
                 game.resetgameclock();
                 if (int(game.timetrialcountdown / 4) % 2 == 0) dwgfx.bigprint( -1, 100, "Go!", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true, 4);
             }
-            else if (game.timetrialcountdown < 60)
-            {
+            else if (game.timetrialcountdown < 60) {
                 dwgfx.bigprint( -1, 100, "1", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true, 4);
             }
-            else if (game.timetrialcountdown < 90)
-            {
+            else if (game.timetrialcountdown < 90) {
                 dwgfx.bigprint( -1, 100, "2", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true, 4);
             }
-            else if (game.timetrialcountdown < 120)
-            {
+            else if (game.timetrialcountdown < 120) {
                 dwgfx.bigprint( -1, 100, "3", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true, 4);
             }
         }
-        else
-        {
+        else {
             //Draw OSD stuff
             dwgfx.bprint(6, 18, "TIME :",  255,255,255);
             dwgfx.bprint(6, 30, "DEATH:",  255, 255, 255);
             dwgfx.bprint(6, 42, "SHINY:",  255,255,255);
 
-            if(game.timetrialparlost)
-            {
+            if(game.timetrialparlost) {
                 dwgfx.bprint(56, 18, game.timestring(help),  196, 80, 80);
             }
-            else
-            {
+            else {
                 dwgfx.bprint(56, 18, game.timestring(help),  196, 196, 196);
             }
-            if(game.deathcounts>0)
-            {
+            if(game.deathcounts>0) {
                 dwgfx.bprint(56, 30,help.String(game.deathcounts),  196, 80, 80);
             }
-            else
-            {
+            else {
                 dwgfx.bprint(56, 30,help.String(game.deathcounts),  196, 196, 196);
             }
-            if(game.trinkets<game.timetrialshinytarget)
-            {
+            if(game.trinkets<game.timetrialshinytarget) {
                 dwgfx.bprint(56, 42,help.String(game.trinkets) + " of " +help.String(game.timetrialshinytarget),  196, 80, 80);
-            }
-            else
-            {
+            } 
+			else {
                 dwgfx.bprint(56, 42,help.String(game.trinkets) + " of " +help.String(game.timetrialshinytarget),  196, 196, 196);
             }
 
-            if(game.timetrialparlost)
-            {
+            if(game.timetrialparlost) {
                 dwgfx.bprint(195, 214, "PAR TIME:",  80, 80, 80);
                 dwgfx.bprint(275, 214, game.partimestring(help),  80, 80, 80);
             }
-            else
-            {
+            else {
                 dwgfx.bprint(195, 214, "PAR TIME:",  255, 255, 255);
                 dwgfx.bprint(275, 214, game.partimestring(help),  196, 196, 196);
             }
         }
     }
 
-    if (game.activeactivity > -1)
-    {
-        //dwgfx.backbuffer.fillRect(new Rectangle(0, 0, 320, 18), 0x000000);
+    if (game.activeactivity > -1) {
         game.activity_lastprompt = obj.blocks[game.activeactivity].prompt;
         game.activity_r = obj.blocks[game.activeactivity].r;
         game.activity_g = obj.blocks[game.activeactivity].g;
         game.activity_b = obj.blocks[game.activeactivity].b;
-        if(game.act_fade<5) game.act_fade=5;
-        if(game.act_fade<10)
-        {
-            game.act_fade++;
-        }
+
         dwgfx.drawtextbox(16, 4, 36, 3, game.activity_r*(game.act_fade/10.0f), game.activity_g*(game.act_fade/10.0f), game.activity_b*(game.act_fade/10.0f));
         dwgfx.Print(5, 12, game.activity_lastprompt, game.activity_r*(game.act_fade/10.0f), game.activity_g*(game.act_fade/10.0f), game.activity_b*(game.act_fade/10.0f), true);
     }
-    else
-    {
-        if(game.act_fade>5)
-        {
+    else {
+        if(game.act_fade>5) {
             dwgfx.drawtextbox(16, 4, 36, 3, game.activity_r*(game.act_fade/10.0f), game.activity_g*(game.act_fade/10.0f), game.activity_b*(game.act_fade/10.0f));
             dwgfx.Print(5, 12, game.activity_lastprompt, game.activity_r*(game.act_fade/10.0f), game.activity_g*(game.act_fade/10.0f), game.activity_b*(game.act_fade/10.0f), true);
-            game.act_fade--;
         }
     }
 
-    if (obj.trophytext > 0)
-    {
+    if (obj.trophytext > 0) {
         dwgfx.drawtrophytext(obj, help);
-        obj.trophytext--;
     }
 
-    //dwgfx.rprint(5, 231,help.String(game.coins), 255 - help.glow/2, 255 - help.glow/2, 196, true);
-    //dwgfx.drawhuetile(311, 230, 48, 1);
-
-    //Level complete image
-    //if (game.state >= 3007) {
-    //	dwgfx.drawimage(0, 0, 12, true);
-    //}
-
-    //state changes
-
-    /*
-    game.test = true;
-    if (game.teststring !=help.String(game.state)) trace(game.state);
-    game.teststring =help.String(game.state);
-    */
-
-    //Detail entity info for debuging
-    /*
-    for (int i = 0; i < obj.nentity; i++) {
-    	game.tempstring =help.String(obj.entities[i].type) +", (" +help.String(obj.entities[i].xp) + "," +help.String(obj.entities[i].yp) + ")";
-    	game.tempstring += " state:" +obj.entities[i].state + ", delay:" + obj.entities[i].statedelay;
-    	dwgfx.Print(5, 5 + i * 8, game.tempstring, 255, 255, 255);
-    }
-    */
-
-    /*
-    game.test = true;
-    game.teststring =help.String(int(obj.entities[obj.getplayer()].xp)) + "," +help.String(int(obj.entities[obj.getplayer()].yp));
-    game.teststring += "   [" +help.String(game.roomx) + "," +help.String(game.roomy) + "]";
-    */
-
-    //game.test = true;
-    //game.teststring = "Current room deaths: " +help.String(game.currentroomdeaths);
-
-    //Special thing for loading:
-    /*
-    if(dwgfx.fademode==1){
-      if(game.mainmenu==22){
-        dwgfx.Print(5, 225, "Loading...", 196, 196, 255 - help.glow, false);
-      }
-    }
-    */
-
-
-    if (game.test)
-    {
+    if (game.test) {
         dwgfx.Print(5, 5, game.teststring, 196, 196, 255, false);
     }
 
-    if (game.flashlight > 0 && !game.noflashingmode)
-    {
-        game.flashlight--;
+    if (game.flashlight > 0 && !game.noflashingmode) {
         dwgfx.flashlight();
     }
 
-    if (game.screenshake > 0 && !game.noflashingmode)
-    {
-        game.screenshake--;
+    if (game.screenshake > 0 && !game.noflashingmode) {
         dwgfx.screenshake();
-    }
-    else
-    {
+    } else {
         dwgfx.render();
     }
-
-    //dwgfx.backbuffer.unlock();
 }
 
 void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, UtilityClass& help)
