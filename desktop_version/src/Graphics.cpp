@@ -1927,6 +1927,21 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
     }
 }
 
+void Graphics::drawbackgroundfixed(int t) {
+	if (t == 2) {
+		//Lab
+		if (rcol == 6) {
+			//crazy case
+			spcoldel--;
+			if (spcoldel <= 0) {
+				spcoldel = 15;
+				spcol++;
+				if (spcol >= 12) spcol = 0;
+			}
+		}
+	}
+}
+
 void Graphics::drawbackground( int t, mapclass& map, const float deltatime )
 {
     int temp = 0;
@@ -1984,13 +1999,6 @@ void Graphics::drawbackground( int t, mapclass& map, const float deltatime )
                 break;  //Green
             case 6:
                 //crazy case
-                spcoldel--;
-                if (spcoldel <= 0)
-                {
-                    spcoldel = 15;
-                    spcol++;
-                    if (spcol >= 12) spcol = 0;
-                }
                 switch(spcol)
                 {
                 case 0:

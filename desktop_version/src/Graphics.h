@@ -149,6 +149,7 @@ public:
 
 	void setcolreal(Uint32 t);
 
+	void drawbackgroundfixed(int t);
 	void drawbackground(int t, mapclass& map, const float deltatime);
 	void drawtile3( int x, int y, int t, int off );
 	void drawentcolours( int x, int y, int t);
