@@ -96,6 +96,7 @@ public:
 
 	void drawimagecol(int t, int xp, int yp, int r, int g, int b, bool cent= false);
 
+	void drawguifixed();
 	void drawgui(UtilityClass& help);
 
 	void drawsprite(int x, int y, int t, int r, int g, int b);

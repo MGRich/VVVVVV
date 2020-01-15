@@ -1506,7 +1506,7 @@ void gamecompleterender2(Graphics& dwgfx, Game& game, entityclass& obj, UtilityC
     //dwgfx.backbuffer.unlock();
 }
 
-void gamerenderfixed(mapclass& map, Game& game, entityclass& obj, UtilityClass& help) {
+void gamerenderfixed(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help) {
 	if (!game.blackout) {
 		if (!game.completestop) {
 			for (int i = 0; i < obj.nentity; i++) {
@@ -1529,6 +1529,8 @@ void gamerenderfixed(mapclass& map, Game& game, entityclass& obj, UtilityClass& 
 			}
 		}
 	}
+
+	dwgfx.drawguifixed();
 
 	if (game.activeactivity > -1) {
 		if (game.act_fade < 5) game.act_fade = 5;
@@ -1804,7 +1806,7 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
 {
     //dwgfx.backbuffer.lock();
 
-
+	dwgfx.drawguifixed();
     dwgfx.drawgui(help);
 
     //draw screen alliteration
@@ -2715,6 +2717,7 @@ void towerrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, U
       }*/
     dwgfx.cutscenebars();
 
+	dwgfx.drawguifixed();
     dwgfx.drawgui(help);
     if (dwgfx.flipmode)
     {
@@ -2932,6 +2935,7 @@ void teleporterrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& o
         dwgfx.Print(5, 225, "Press ENTER to Teleport", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true);
     }
 
+	dwgfx.drawguifixed();
     dwgfx.drawgui(help);
 
     if (dwgfx.flipmode)

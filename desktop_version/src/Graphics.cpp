@@ -564,14 +564,19 @@ void Graphics::drawtowertile3( int x, int y, int t, int off )
     BlitSurfaceStandard(tiles3[t+(off*30)], NULL, towerbuffer, &rect);
 }
 
+void Graphics::drawguifixed() {
+	textboxcleanup();
+
+	for (int i = 0; i < ntextbox; i++) {
+		textbox[i].fixedupdate();
+	}
+}
+
 void Graphics::drawgui( UtilityClass& help )
 {
-    textboxcleanup();
     //Draw all the textboxes to the screen
     for (int i = 0; i<ntextbox; i++)
     {
-        //This routine also updates the textboxs
-        textbox[i].update();
         if (textbox[i].active)
         {
             if (textbox[i].r == 0 && textbox[i].g == 0 && textbox[i].b == 0)

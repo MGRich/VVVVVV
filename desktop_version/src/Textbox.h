@@ -24,7 +24,7 @@ public:
 
     void setcol(int rr, int gg, int bb);
 
-    void update();
+	void fixedupdate();
 
     void remove();
 

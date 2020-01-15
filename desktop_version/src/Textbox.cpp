@@ -86,33 +86,30 @@ void textboxclass::setcol(int rr, int gg, int bb)
     b = bb;
 }
 
-void textboxclass::update()
-{
-    if (tm == 0)
-    {
-        tl += .1f;
-        if (tl >= 1)
-        {
-            tl = 1;
-            tm = 1;
-        }
-        setcol(int(tr * tl), int(tg * tl), int(tb * tl));
-    }
-    else if (tm == 2)
-    {
-        tl -= .1f;
-        if (tl <= 0.5)
-        {
-            tl = 0.5;
-            active = false;
-        }
-        setcol(int(tr * tl), int(tg * tl), int(tb * tl));
-    }
-    if (timer > 0)
-    {
-        timer--;
-        if (timer == 0) tm = 2;
-    }
+void textboxclass::fixedupdate() {
+	// fade in
+	if (tm == 0) {
+		tl += .1f;
+		if (tl >= 1) {
+			tl = 1;
+			tm = 1;
+		}
+		setcol(int(tr * tl), int(tg * tl), int(tb * tl));
+	}
+	// fade out
+	else if (tm == 2) {
+		tl -= .1f;
+		if (tl <= 0.5) {
+			tl = 0.5;
+			active = false;
+		}
+		setcol(int(tr * tl), int(tg * tl), int(tb * tl));
+	}
+	// if timer reaches 0 then fade out
+	if (timer > 0) {
+		timer--;
+		if (timer == 0) tm = 2;
+	}
 }
 
 void textboxclass::remove()

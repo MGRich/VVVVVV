@@ -31,10 +31,10 @@ Animation frames are now updated in fixed timestep instead of in the render func
 
 Creation of entities sets the old position variables to avoid initial zip
 
+Message Boxes are only updated during fixed timesteps
+
 What doesn't work
 -
-Tutorial messages
-
 Entities have player sprite until the first fixed timestep after they are created
 
 Death/trinkets causes anything interpolated to jitter

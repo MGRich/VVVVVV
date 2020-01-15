@@ -361,7 +361,7 @@ int main(int argc, char *argv[])
 
 							gameinput(key, graphics, game, map, obj, help, music);
 							//}
-							gamerenderfixed(map, game, obj, help);
+							gamerenderfixed(graphics, map, game, obj, help);
 							gamelogic(graphics, game, obj, music, map, help);
 
 

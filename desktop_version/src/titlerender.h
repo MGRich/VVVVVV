@@ -22,7 +22,7 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
 
 void towerrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, UtilityClass& help);
 
-void gamerenderfixed(mapclass& map, Game& game, entityclass& obj, UtilityClass& help);
+void gamerenderfixed(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help);
 void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help, const float alpha, const float deltatime);
 
 void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, UtilityClass& help);
