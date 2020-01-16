@@ -1625,6 +1625,7 @@ void entityclass::setenemy( int t, int r )
         else if ( (entities[r].para) == 1)
         {
             entities[r].yp += 10;
+            entities[r].oldyp += 10;
             entities[r].tile = 63;
             entities[r].animate = 100; //LIES
             entities[r].colour = 6;
@@ -1664,7 +1665,9 @@ void entityclass::setenemy( int t, int r )
         else if ( (entities[r].para) == 1)
         {
             entities[r].xp += 4;
+            entities[r].oldxp += 4;
             entities[r].yp -= 4;
+            entities[r].oldyp -= 4;
             entities[r].tile = 76;
             entities[r].animate = 100; // Clouds
             entities[r].colour = 6;
