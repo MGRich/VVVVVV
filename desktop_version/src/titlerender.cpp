@@ -1537,6 +1537,12 @@ void gamerenderfixed(Graphics& dwgfx, mapclass& map, Game& game, entityclass& ob
 		dwgfx.drawentitiesfixed(obj, help);
 	}
 
+	if (map.extrarow == 0 || (map.custommode && map.roomname != "")) {
+		if (map.finalmode) {
+			map.glitchname = map.getglitchname(game.roomx, game.roomy);
+		}
+	}
+
 	dwgfx.drawguifixed();
 
 	if (game.activeactivity > -1) {
@@ -1586,7 +1592,7 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
         FillRect(dwgfx.backBuffer, dwgfx.footerrect, 0);
 
         if (map.finalmode) {
-        	map.glitchname = map.getglitchname(game.roomx, game.roomy);
+        	//map.glitchname = map.getglitchname(game.roomx, game.roomy);
           dwgfx.Print(5, 231, map.glitchname, 196, 196, 255 - help.glow, true);
         }
 		else {
