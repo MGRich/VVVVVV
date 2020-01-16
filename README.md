@@ -17,7 +17,7 @@ Method 2 has a disadvantage of 1/30th of a second worth of latency.
 
 Exterpolation could maybe be used instead to solve this at the disadvantage of wrong predictions.
 
-What works
+What works (todo make shorter)
 -
 Sprite entities use linear interpolation
 
@@ -49,30 +49,39 @@ The colour cycling for the final level are only updated during fixed timesteps
 
 Anomaly and Purest Unobtainium backgrounds are only updated during fixed timesteps
 
+Entities old positions are now updated before the input function, meaning that when the player is on a treadmill/moving platform
+
+The game logic function and the game fixed render functions have been swapped, meaning logic is now processed before rendering
+
+Entities and teleporters store their colour and update it at a fixed framerate instead of every time they are rendered (makes colours stand out more)
+
+The glitched level name getter is now called in the fixed render function so that the glitched level name can be seen better
+
+Gravity line flashing is updated in fixed render function
+
+"LIES" and clouds are spawned with their old position set to the spawn position so that they aren't off by a few pixels during first render
+
 What doesn't work
 -
-Moving platforms cause player to jitter when on them
-
-Threadmills are cause player to jitter when on them
-
-Changing colours happens at over 30fps when it should only happen at 30fps to make colours stand out more
-
-Gravity lines flash too fast
+Enemies that move back and forth stutter for a frame or two when they reach their turning point (todo: test again)
 
 Anything that's not in gamestate GAMEMODE does not render over 30 fps
 
-"huge hero" in Secret Lab cutscene not interpolated, old position isn't updated during cutscene so can't easily use a lerp
+"huge hero" in Secret Lab cutscene not interpolated, old position isn't updated during cutscene (edit: previous statement might no longer be the case) so can't easily use a lerp
 
-"The Cuckoo" and a few rooms after it have "Lies" that move downwards for 1 frame (along with clouds that move rightwards for 1 frame)
-
-Hardest room doesn't display
+Hardest room doesn't display (todo: test again)
 
 and things that have not been tested yet might not work
 
-What's been tested
+What's been tested before old positions were updated before the input function and before the fixed render function and the logic function were swapped
 -
 100% of the main game.
 The secret lab.
+3 Time Trials
+
+What's been tested after the two big changes mentioned above were implemented
+-
+The final Time Trial
 
 When are you going to update it
 -
