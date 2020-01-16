@@ -1534,6 +1534,7 @@ void gamerenderfixed(Graphics& dwgfx, mapclass& map, Game& game, entityclass& ob
 		if (map.final_colormode) {
 			dwgfx.drawfinalmapfixed(map);
 		}
+		dwgfx.drawentitiesfixed(obj, help);
 	}
 
 	dwgfx.drawguifixed();
@@ -2690,6 +2691,7 @@ void towerrenderfixed(Graphics& dwgfx, Game& game, mapclass& map, entityclass& o
 			obj.animateentities(i, game, help);
 		}
 	}
+	dwgfx.drawentitiesfixed(obj, help);
 
 	dwgfx.drawguifixed();
 

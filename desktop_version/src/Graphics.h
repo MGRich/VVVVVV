@@ -127,6 +127,7 @@ public:
 
 	bool Hitest(SDL_Surface* surface1, point p1, int col, SDL_Surface* surface2, point p2, int col2);
 
+	void drawentitiesfixed(entityclass& obj, UtilityClass& help);
 	void drawentities(mapclass& map, entityclass& obj, UtilityClass& help, const float alpha);
 
 	void drawtrophytext(entityclass&, UtilityClass& help);
@@ -189,7 +190,9 @@ public:
 
 	void drawtowerbackground(mapclass& map, const float alpha);
 
-	void setcol(int t, UtilityClass& help);
+	void setcolourtransform(Uint32& colourtransform, const int colour, UtilityClass& help);
+	void setcol(Uint32 colour);
+
 	void drawfinalmap(mapclass & map);
 
 	colourTransform ct;
@@ -279,6 +282,11 @@ public:
 
 	int warpskip, warpfcol, warpbcol;
 
+	Uint32 inactiveteleportercolour;
+	Uint32 activeteleportercolour;
+	Uint32 teleporterinactioncolour;
+	void setcolourtoteleportercolour(int colour);
+	void setteleportercolours(UtilityClass& help);
 };
 
 #endif /* GRAPHICS_H */

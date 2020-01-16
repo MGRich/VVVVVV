@@ -347,8 +347,8 @@ int main(int argc, char *argv[])
 						//else
 						//{
 						//}
-						towerrenderfixed(graphics, game, map, obj, help);
 						towerlogic(graphics, game, obj, music, map, help);
+						towerrenderfixed(graphics, game, map, obj, help);
 
 					}
 					else {
@@ -363,8 +363,8 @@ int main(int argc, char *argv[])
 
 							gameinput(key, graphics, game, map, obj, help, music);
 							//}
-							gamerenderfixed(graphics, map, game, obj, help);
 							gamelogic(graphics, game, obj, music, map, help);
+							gamerenderfixed(graphics, map, game, obj, help);
 
 
 						}

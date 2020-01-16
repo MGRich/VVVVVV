@@ -125,6 +125,10 @@ Graphics::Graphics()
     trinketg = 0;
     trinketb = 0;
     warprect = SDL_Rect();
+
+	inactiveteleportercolour = 0;
+	activeteleportercolour = 0;
+	teleporterinactioncolour = 0;
 }
 
 Graphics::~Graphics()
@@ -136,7 +140,7 @@ void Graphics::drawspritesetcol(int x, int y, int t, int c, UtilityClass& help)
 {
     SDL_Rect rect;
     setRect(rect,x,y,sprites_rect.w,sprites_rect.h);
-    setcol(c, help);
+	setcolourtransform(ct.colour, c, help); // since this function is only called at a fixed framerate, it's fine to call this here
 
     BlitSurfaceColoured(sprites[t],NULL,backBuffer, &rect, ct);
     //.copyPixels(sprites[t], sprites_rect, backbuffer, tpoint);
@@ -1406,6 +1410,32 @@ void Graphics::drawtrophytext( entityclass& obj, UtilityClass& help )
     }
 }
 
+void Graphics::drawentitiesfixed(entityclass& obj, UtilityClass& help) {
+	for (int i = obj.nentity - 1; i >= 0; i--) {
+		if (!obj.entities[i].invis && obj.entities[i].active) {
+			if (obj.entities[i].size == 0 ||  // Sprites
+				obj.entities[i].size == 9 ||  // Really Big Sprite! (2x2)
+				obj.entities[i].size == 10 || // 2x1 Sprite
+				obj.entities[i].size == 11 || // The fucking elephant
+				obj.entities[i].size == 13)   // Special for epilogue: huge hero!
+			{
+				setcolourtransform(obj.entities[i].colourtransform, obj.entities[i].colour, help);
+			}
+			else if (obj.entities[i].size == 12) // Regular sprites that don't wrap
+			{
+				//if we're outside the screen, we need to draw indicators
+				if ((obj.entities[i].xp < -20 && obj.entities[i].vx > 0) || (obj.entities[i].xp > 340 && obj.entities[i].vx < 0)) {
+					setcolourtransform(obj.entities[i].colourtransform, 23, help);
+				}
+				else {
+					setcolourtransform(obj.entities[i].colourtransform, obj.entities[i].colour, help);
+				}
+			}
+		}
+	}
+	setteleportercolours(help);
+}
+
 void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help, const float alpha)
 {
     //Update line colours!
@@ -1439,7 +1469,7 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
 					tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha);
 					tpoint.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha);
                     //
-                    setcol(obj.entities[i].colour, help);
+                    setcol(obj.entities[i].colourtransform);
                     //flipsprites[obj.entities[i].drawframe].colorTransform(sprites_rect, ct);
                     drawRect = sprites_rect;
                     drawRect.x += tpoint.x;
@@ -1492,7 +1522,7 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
 					tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha);
 					tpoint.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha);
                     //
-                    setcol(obj.entities[i].colour, help);
+					setcol(obj.entities[i].colourtransform);
                     //sprites[obj.entities[i].drawframe].colorTransform(sprites_rect, ct);
 
                     drawRect = sprites_rect;
@@ -1665,7 +1695,7 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
             {
                 if (flipmode)
                 {
-                    setcol(obj.entities[i].colour, help);
+					setcol(obj.entities[i].colourtransform);
 
 					tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha);
 					tpoint.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha);
@@ -1695,7 +1725,7 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
                 }
                 else
                 {
-                    setcol(obj.entities[i].colour, help);
+					setcol(obj.entities[i].colourtransform);
 
 					tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha);
 					tpoint.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha);
@@ -1728,7 +1758,7 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
             {
                 if (flipmode)
                 {
-                    setcol(obj.entities[i].colour, help);
+					setcol(obj.entities[i].colourtransform);
 
 					tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha);
 					tpoint.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha);
@@ -1746,7 +1776,7 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
                 }
                 else
                 {
-                    setcol(obj.entities[i].colour, help);
+					setcol(obj.entities[i].colourtransform);
 
 					tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha);
 					tpoint.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha);
@@ -1766,7 +1796,7 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
             else if (obj.entities[i].size == 11)    //The fucking elephant
             {
 				//TODO elephant bug
-                setcol(obj.entities[i].colour, help);
+				setcol(obj.entities[i].colourtransform);
                 drawimagecol(3, obj.entities[i].xp, obj.entities[i].yp);
             }
             else if (obj.entities[i].size == 12)         // Regular sprites that don't wrap
@@ -1777,7 +1807,7 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
 					// linearly interpolate between old position and current position
 					tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha);
 					tpoint.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha);
-                    setcol(obj.entities[i].colour, help);
+					setcol(obj.entities[i].colourtransform);
                     //
 
                     drawRect = sprites_rect;
@@ -1798,7 +1828,7 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
                         }
 
                         tpoint.y = tpoint.y+4;
-                        setcol(23, help);
+						setcol(obj.entities[i].colourtransform);
 
                         drawRect = tiles_rect;
                         drawRect.x += tpoint.x;
@@ -1818,7 +1848,7 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
                         }
 
                         tpoint.y = tpoint.y+4;
-                        setcol(23, help);
+						setcol(obj.entities[i].colourtransform);
                         //
 
                         drawRect = tiles_rect;
@@ -1832,7 +1862,7 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
 					// linearly interpolate between old position and current position
 					tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha);
 					tpoint.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha);
-                    setcol(obj.entities[i].colour, help);
+					setcol(obj.entities[i].colourtransform);
                     //
                     drawRect = sprites_rect;
                     drawRect.x += tpoint.x;
@@ -1854,7 +1884,7 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
                         }
 
                         tpoint.y = tpoint.y+4;
-                        setcol(23, help);
+						setcol(obj.entities[i].colourtransform);
 
 
                         drawRect = tiles_rect;
@@ -1875,7 +1905,7 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
                         }
 
                         tpoint.y = tpoint.y+4;
-                        setcol(23, help);
+						setcol(obj.entities[i].colourtransform);
                         //
 
                         drawRect = tiles_rect;
@@ -1898,7 +1928,7 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
 						FillRect(tempBuffer, 0x000000);
 
                 		tpoint.x = obj.entities[i].xp; tpoint.y = obj.entities[i].yp;
-                		setcol(obj.entities[i].colour, help);
+						setcol(obj.entities[i].colourtransform);
                 		//flipsprites[obj.entities[i].drawframe].colorTransform(sprites_rect, ct);
                 		//bigbuffer.copyPixels(flipsprites[obj.entities[i].drawframe], sprites_rect, new Point(0, 0));
 						SDL_Rect drawRect = {Sint16(obj.entities[i].xp ), Sint16(obj.entities[i].yp), sprites_rect.x, sprites_rect.y   };
@@ -1911,7 +1941,7 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
 					{
 						//TODO checkthis
 						tpoint.x = obj.entities[i].xp; tpoint.y = obj.entities[i].yp;
-						setcol(obj.entities[i].colour, help);
+						setcol(obj.entities[i].colourtransform);
 						//flipsprites[obj.entities[i].drawframe].colorTransform(sprites_rect, ct);
 						//bigbuffer.copyPixels(flipsprites[obj.entities[i].drawframe], sprites_rect, new Point(0, 0));
 						SDL_Rect drawRect = {Sint16(obj.entities[i].xp ), Sint16(obj.entities[i].yp), Sint16(sprites_rect.x * 6), Sint16(sprites_rect.y * 6 ) };
@@ -2429,6 +2459,47 @@ void Graphics::drawfinalmap(mapclass& map) {
 	OverlaySurfaceKeyed(foregroundBuffer, backBuffer, 0xDEADBEEF);
 }
 
+void Graphics::setcolourtoteleportercolour(int colour) {
+	switch (colour) {
+	case 100: //Inactive Teleporter
+		ct.colour = inactiveteleportercolour;
+		break;
+	case 101: //Active Teleporter
+		ct.colour = activeteleportercolour;
+		break;
+	case 102: //Teleporter in action!
+		ct.colour = teleporterinactioncolour;
+		break;
+	default:
+		printf("> 30 FPS MOD: Tried to set teleporter colour to %i but that colour is not a valid teleporter colour.\n");
+		break;
+	}
+}
+
+void Graphics::setteleportercolours(UtilityClass& help) {
+	//Inactive Teleporter
+	int temp = (help.glow / 2) + (fRandom() * 8);
+	inactiveteleportercolour = getRGB(42 + temp, 42 + temp, 42 + temp);
+
+	//Active Teleporter
+	activeteleportercolour = getRGB(164 + (fRandom() * 64), 164 + (fRandom() * 64), 255 - (fRandom() * 64));
+
+	//Teleporter in action!
+	temp = fRandom() * 150;
+	if (temp < 33) {
+		teleporterinactioncolour = getRGB(255 - (fRandom() * 64), 64 + (fRandom() * 64), 64 + (fRandom() * 64));
+	}
+	else if (temp < 66) {
+		teleporterinactioncolour = getRGB(64 + (fRandom() * 64), 255 - (fRandom() * 64), 64 + (fRandom() * 64));
+	}
+	else if (temp < 100) {
+		teleporterinactioncolour = getRGB(64 + (fRandom() * 64), 64 + (fRandom() * 64), 255 - (fRandom() * 64));
+	}
+	else {
+		teleporterinactioncolour = getRGB(164 + (fRandom() * 64), 164 + (fRandom() * 64), 255 - (fRandom() * 64));
+	}
+}
+
 void Graphics::drawtowermap(mapclass& map, const float alpha)
 {
     int temp;
@@ -2482,7 +2553,7 @@ void Graphics::drawtowerentities(mapclass& map, entityclass& obj, UtilityClass& 
 				trinketcolset = false;
 				tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha);
 				tpoint.y = lerp(obj.entities[i].oldyp - map.oldypos, obj.entities[i].yp - map.ypos, alpha);
-                setcol(obj.entities[i].colour, help);
+				setcol(obj.entities[i].colourtransform);
                 setRect(trect, tpoint.x, tpoint.y, sprites_rect.w, sprites_rect.h);
                 BlitSurfaceColoured(sprites[obj.entities[i].drawframe], NULL, backBuffer, &trect, ct);
                 //screenwrapping!
@@ -2658,24 +2729,24 @@ void Graphics::drawtowerbackground(mapclass& map, const float alpha) {
     //}
 }
 
-void Graphics::setcol( int t, UtilityClass& help )
+void Graphics::setcolourtransform(Uint32& colourtransform, const int colour, UtilityClass& help )
 {
 	int temp;
 
 	//Setup predefinied colours as per our zany palette
-	switch(t)
+	switch(colour)
 	{
 		//Player Normal
 	case 0:
-		ct.colour = getRGB(160- help.glow/2 - (fRandom()*20), 200- help.glow/2, 220 - help.glow);
+		colourtransform = getRGB(160- help.glow/2 - (fRandom()*20), 200- help.glow/2, 220 - help.glow);
 		break;
 		//Player Hurt
 	case 1:
-		ct.colour = getRGB(196 - (fRandom() * 64), 10, 10);
+		colourtransform = getRGB(196 - (fRandom() * 64), 10, 10);
 		break;
 		//Enemies and stuff
 	case 2:
-		ct.colour = getRGB(225-(help.glow/2), 75, 30);
+		colourtransform = getRGB(225-(help.glow/2), 75, 30);
 		break;
 	case 3: //Trinket
 		if (!trinketcolset)
@@ -2685,107 +2756,107 @@ void Graphics::setcol( int t, UtilityClass& help )
 			trinketb = 164 + (fRandom() * 60);
 			trinketcolset = true;
 		}
-		ct.colour = getRGB(trinketr, trinketg, trinketb);
+		colourtransform = getRGB(trinketr, trinketg, trinketb);
 		break;
 	case 4: //Inactive savepoint
 		temp = (help.glow/2) + (fRandom() * 8);
-		ct.colour = getRGB(80 + temp, 80 + temp, 80 + temp);
+		colourtransform = getRGB(80 + temp, 80 + temp, 80 + temp);
 		break;
 	case 5: //Active savepoint
-		ct.colour = getRGB(164+(fRandom()*64),164+(fRandom()*64), 255-(fRandom()*64));
+		colourtransform = getRGB(164+(fRandom()*64),164+(fRandom()*64), 255-(fRandom()*64));
 		break;
 	case 6: //Enemy : Red
-		ct.colour = getRGB(250 - help.glow/2, 60- help.glow/2, 60 - help.glow/2);
+		colourtransform = getRGB(250 - help.glow/2, 60- help.glow/2, 60 - help.glow/2);
 		break;
 	case 7: //Enemy : Green
-		ct.colour = getRGB(100 - help.glow/2 - (fRandom()*30), 250 - help.glow/2, 100 - help.glow/2 - (fRandom()*30));
+		colourtransform = getRGB(100 - help.glow/2 - (fRandom()*30), 250 - help.glow/2, 100 - help.glow/2 - (fRandom()*30));
 		break;
 	case 8: //Enemy : Purple
-		ct.colour = getRGB(250 - help.glow/2, 20, 128 - help.glow/2 + (fRandom()*30));
+		colourtransform = getRGB(250 - help.glow/2, 20, 128 - help.glow/2 + (fRandom()*30));
 		break;
 	case 9: //Enemy : Yellow
-		ct.colour = getRGB(250 - help.glow/2, 250 - help.glow/2, 20);
+		colourtransform = getRGB(250 - help.glow/2, 250 - help.glow/2, 20);
 		break;
 	case 10: //Warp point (white)
-		ct.colour = getRGB(255 - (fRandom() * 64), 255 - (fRandom() * 64), 255 - (fRandom() * 64));
+		colourtransform = getRGB(255 - (fRandom() * 64), 255 - (fRandom() * 64), 255 - (fRandom() * 64));
 		break;
 	case 11: //Enemy : Cyan
-		ct.colour = getRGB(20, 250 - help.glow/2, 250 - help.glow/2);
+		colourtransform = getRGB(20, 250 - help.glow/2, 250 - help.glow/2);
 		break;
 	case 12: //Enemy : Blue
-		ct.colour = getRGB(90- help.glow/2, 90 - help.glow/2, 250 - help.glow/2);
+		colourtransform = getRGB(90- help.glow/2, 90 - help.glow/2, 250 - help.glow/2);
 		break;
 		//Crew Members
 		//green
 	case 13:
-		ct.colour = getRGB(120- help.glow/4 - (fRandom()*20), 220 - help.glow/4, 120- help.glow/4);
+		colourtransform = getRGB(120- help.glow/4 - (fRandom()*20), 220 - help.glow/4, 120- help.glow/4);
 		break;
 		//Yellow
 	case 14:
-		ct.colour = getRGB(220- help.glow/4 - (fRandom()*20), 210 - help.glow/4, 120- help.glow/4);
+		colourtransform = getRGB(220- help.glow/4 - (fRandom()*20), 210 - help.glow/4, 120- help.glow/4);
 		break;
 		//pink
 	case 15:
-		ct.colour = getRGB(255 - help.glow/8, 70 - help.glow/4, 70 - help.glow / 4);
+		colourtransform = getRGB(255 - help.glow/8, 70 - help.glow/4, 70 - help.glow / 4);
 		break;
 		//Blue
 	case 16:
-		ct.colour = getRGB(75, 75, 255- help.glow/4 - (fRandom()*20));
+		colourtransform = getRGB(75, 75, 255- help.glow/4 - (fRandom()*20));
 		break;
 
 
 	case 17: //Enemy : Orange
-		ct.colour = getRGB(250 - help.glow/2, 130 - help.glow/2, 20);
+		colourtransform = getRGB(250 - help.glow/2, 130 - help.glow/2, 20);
 		break;
 	case 18: //Enemy : Gray
-		ct.colour = getRGB(130- help.glow/2, 130 - help.glow/2, 130 - help.glow/2);
+		colourtransform = getRGB(130- help.glow/2, 130 - help.glow/2, 130 - help.glow/2);
 		break;
 	case 19: //Enemy : Dark gray
-		ct.colour = getRGB(60- help.glow/8, 60 - help.glow/8, 60 - help.glow/8);
+		colourtransform = getRGB(60- help.glow/8, 60 - help.glow/8, 60 - help.glow/8);
 		break;
 		//Purple
 	case 20:
-		ct.colour = getRGB(220 - help.glow / 4 - (fRandom() * 20), 120 - help.glow / 4, 210 - help.glow / 4);
+		colourtransform = getRGB(220 - help.glow / 4 - (fRandom() * 20), 120 - help.glow / 4, 210 - help.glow / 4);
 		break;
 
 	case 21: //Enemy : Light Gray
-		ct.colour = getRGB(180- help.glow/2, 180 - help.glow/2, 180 - help.glow/2);
+		colourtransform = getRGB(180- help.glow/2, 180 - help.glow/2, 180 - help.glow/2);
 		break;
 	case 22: //Enemy : Indicator Gray
-		ct.colour = getRGB(230- help.glow/2, 230- help.glow/2, 230- help.glow/2);
+		colourtransform = getRGB(230- help.glow/2, 230- help.glow/2, 230- help.glow/2);
 		break;
 	case 23: //Enemy : Indicator Gray
-		ct.colour = getRGB(255- help.glow/2 - (fRandom() * 40) , 255- help.glow/2 - (fRandom() * 40), 255- help.glow/2 - (fRandom() * 40));
+		colourtransform = getRGB(255- help.glow/2 - (fRandom() * 40) , 255- help.glow/2 - (fRandom() * 40), 255- help.glow/2 - (fRandom() * 40));
 		break;
 
 		//Trophies
 		//cyan
 	case 30:
-		ct.colour = RGBf(160, 200, 220);
+		colourtransform = RGBf(160, 200, 220);
 		break;
 		//Purple
 	case 31:
-		ct.colour = RGBf(220, 120, 210);
+		colourtransform = RGBf(220, 120, 210);
 		break;
 		//Yellow
 	case 32:
-		ct.colour = RGBf(220, 210, 120);
+		colourtransform = RGBf(220, 210, 120);
 		break;
 		//red
 	case 33:
-		ct.colour = RGBf(255, 70, 70);
+		colourtransform = RGBf(255, 70, 70);
 		break;
 		//green
 	case 34:
-		ct.colour = RGBf(120, 220, 120);
+		colourtransform = RGBf(120, 220, 120);
 		break;
 		//Blue
 	case 35:
-		ct.colour = RGBf(75, 75, 255);
+		colourtransform = RGBf(75, 75, 255);
 		break;
 		//Gold
 	case 36:
-		ct.colour = getRGB(180, 120, 20);
+		colourtransform = getRGB(180, 120, 20);
 		break;
 	case 37: //Trinket
 		if (!trinketcolset)
@@ -2795,69 +2866,73 @@ void Graphics::setcol( int t, UtilityClass& help )
 			trinketb = 164 + (fRandom() * 60);
 			trinketcolset = true;
 		}
-		ct.colour = RGBf(trinketr, trinketg, trinketb);
+		colourtransform = RGBf(trinketr, trinketg, trinketb);
 		break;
 		//Silver
 	case 38:
-		ct.colour = RGBf(196, 196, 196);
+		colourtransform = RGBf(196, 196, 196);
 		break;
 		//Bronze
 	case 39:
-		ct.colour = RGBf(128, 64, 10);
+		colourtransform = RGBf(128, 64, 10);
 		break;
 		//Awesome
 	case 40: //Teleporter in action!
 		temp = fRandom() * 150;
 		if(temp<33)
 		{
-			ct.colour = RGBf(255 - (fRandom() * 64), 64 + (fRandom() * 64), 64 + (fRandom() * 64));
+			colourtransform = RGBf(255 - (fRandom() * 64), 64 + (fRandom() * 64), 64 + (fRandom() * 64));
 		}
 		else if (temp < 66)
 		{
-			ct.colour = RGBf(64 + (fRandom() * 64), 255 - (fRandom() * 64), 64 + (fRandom() * 64));
+			colourtransform = RGBf(64 + (fRandom() * 64), 255 - (fRandom() * 64), 64 + (fRandom() * 64));
 		}
 		else if (temp < 100)
 		{
-			ct.colour = RGBf(64 + (fRandom() * 64), 64 + (fRandom() * 64), 255 - (fRandom() * 64));
+			colourtransform = RGBf(64 + (fRandom() * 64), 64 + (fRandom() * 64), 255 - (fRandom() * 64));
 		}
 		else
 		{
-			ct.colour = RGBf(164+(fRandom()*64),164+(fRandom()*64), 255-(fRandom()*64));
+			colourtransform = RGBf(164+(fRandom()*64),164+(fRandom()*64), 255-(fRandom()*64));
 		}
 		break;
 
 	case 100: //Inactive Teleporter
 		temp = (help.glow/2) + (fRandom() * 8);
-		ct.colour = getRGB(42 + temp, 42 + temp, 42 + temp);
+		colourtransform = getRGB(42 + temp, 42 + temp, 42 + temp);
 		break;
 	case 101: //Active Teleporter
-		ct.colour = getRGB(164+(fRandom()*64),164+(fRandom()*64), 255-(fRandom()*64));
+		colourtransform = getRGB(164+(fRandom()*64),164+(fRandom()*64), 255-(fRandom()*64));
 		break;
 	case 102: //Teleporter in action!
 		temp = fRandom() * 150;
 		if(temp<33)
 		{
-			ct.colour = getRGB(255 - (fRandom() * 64), 64 + (fRandom() * 64), 64 + (fRandom() * 64));
+			colourtransform = getRGB(255 - (fRandom() * 64), 64 + (fRandom() * 64), 64 + (fRandom() * 64));
 		}
 		else if (temp < 66)
 		{
-			ct.colour = getRGB(64 + (fRandom() * 64), 255 - (fRandom() * 64), 64 + (fRandom() * 64));
+			colourtransform = getRGB(64 + (fRandom() * 64), 255 - (fRandom() * 64), 64 + (fRandom() * 64));
 		}
 		else if (temp < 100)
 		{
-			ct.colour = getRGB(64 + (fRandom() * 64), 64 + (fRandom() * 64), 255 - (fRandom() * 64));
+			colourtransform = getRGB(64 + (fRandom() * 64), 64 + (fRandom() * 64), 255 - (fRandom() * 64));
 		}
 		else
 		{
-			ct.colour = getRGB(164+(fRandom()*64),164+(fRandom()*64), 255-(fRandom()*64));
+			colourtransform = getRGB(164+(fRandom()*64),164+(fRandom()*64), 255-(fRandom()*64));
 		}
 		break;
 
 	default:
-		ct.colour = 0xFFFFFF;
+		colourtransform = 0xFFFFFF;
 		break;
 	}
 	//ct.color = endian_swap(ct.color);
+}
+
+void Graphics::setcol(Uint32 colour) {
+	ct.colour = colour;
 }
 
 void Graphics::menuoffrender()
@@ -3139,7 +3214,7 @@ void Graphics::drawtele(int x, int y, int t, int c, UtilityClass& help)
 	setRect(telerect, x , y, tele_rect.w, tele_rect.h );
 	BlitSurfaceColoured(tele[0], NULL, backBuffer, &telerect, ct);
 
-	setcol(c, help);
+	setcolourtoteleportercolour(c);
 	if (t > 9) t = 8;
 	if (t < 0) t = 0;
 
