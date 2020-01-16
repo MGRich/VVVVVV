@@ -526,14 +526,6 @@ void towerlogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& musi
 
 
         }
-		// collecting trinket?
-		else {
-			for (int i = 0; i < obj.nentity; i++) {
-				// update old position (stops jitter)
-				obj.entities[i].oldxp = obj.entities[i].xp;
-				obj.entities[i].oldyp = obj.entities[i].yp;
-			}
-		}
         //now! let's clean up removed entities
         obj.cleanup();
 
@@ -595,9 +587,6 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
     {
         for (int i = 0; i < obj.nentity; i++)
         {
-			// update old position (stops jitter)
-			obj.entities[i].oldxp = obj.entities[i].xp;
-			obj.entities[i].oldyp = obj.entities[i].yp;
 
             if (game.roomx == 111 && game.roomy == 107)
             {
@@ -1053,14 +1042,6 @@ void gamelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& music
             }
 
             obj.entitycollisioncheck(dwgfx, game, map, music);         // Check ent v ent collisions, update states
-		}
-		// collecting trinket?
-		else {
-			for (int i = 0; i < obj.nentity; i++) {
-				// update old position (stops jitter)
-				obj.entities[i].oldxp = obj.entities[i].xp;
-				obj.entities[i].oldyp = obj.entities[i].yp;
-			}
 		}
 
         //now! let's clean up removed entities

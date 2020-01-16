@@ -338,6 +338,12 @@ int main(int argc, char *argv[])
 					break;
 				case GAMEMODE:
 					if (map.towermode) {
+						// update old position of every entity
+						for (int i = 0; i < obj.nentity; i++) {
+							obj.entities[i].oldxp = obj.entities[i].xp;
+							obj.entities[i].oldyp = obj.entities[i].yp;
+						}
+
 						gameinput(key, graphics, game, map, obj, help, music);
 
 						//if(game.recording==1)
@@ -359,6 +365,12 @@ int main(int argc, char *argv[])
 						else {
 							if (script.running) {
 								script.run(key, graphics, game, map, obj, help, music);
+							}
+
+							// update old position of every entity
+							for (int i = 0; i < obj.nentity; i++) {
+								obj.entities[i].oldxp = obj.entities[i].xp;
+								obj.entities[i].oldyp = obj.entities[i].yp;
 							}
 
 							gameinput(key, graphics, game, map, obj, help, music);

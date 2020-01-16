@@ -5079,9 +5079,6 @@ void entityclass::cleanup()
 
 void entityclass::updateentitylogic( int t, Game& game )
 {
-    entities[t].oldxp = entities[t].xp;
-    entities[t].oldyp = entities[t].yp;
-
     entities[t].vx = entities[t].vx + entities[t].ax;
     entities[t].vy = entities[t].vy + entities[t].ay;
     entities[t].ax = 0;
