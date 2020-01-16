@@ -1411,6 +1411,16 @@ void Graphics::drawtrophytext( entityclass& obj, UtilityClass& help )
 }
 
 void Graphics::drawentitiesfixed(entityclass& obj, UtilityClass& help) {
+	//Update line colours!
+	if (linedelay <= 0) {
+		linestate++;
+		if (linestate >= 10) linestate = 0;
+		linedelay = 2;
+	}
+	else {
+		linedelay--;
+	}
+
 	for (int i = obj.nentity - 1; i >= 0; i--) {
 		if (!obj.entities[i].invis && obj.entities[i].active) {
 			if (obj.entities[i].size == 0 ||  // Sprites
@@ -1438,18 +1448,6 @@ void Graphics::drawentitiesfixed(entityclass& obj, UtilityClass& help) {
 
 void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help, const float alpha)
 {
-    //Update line colours!
-    if (linedelay <= 0)
-    {
-        linestate++;
-        if (linestate >= 10) linestate = 0;
-        linedelay = 2;
-    }
-    else
-    {
-        linedelay--;
-    }
-
     point tpoint;
 
     SDL_Rect drawRect;
@@ -2530,17 +2528,6 @@ void Graphics::drawtowermap_nobackground(mapclass& map, const float alpha)
 
 void Graphics::drawtowerentities(mapclass& map, entityclass& obj, UtilityClass& help, const float alpha)
 {
-    //Update line colours!
-    if (linedelay <= 0)
-    {
-        linestate++;
-        if (linestate >= 10) linestate = 0;
-        linedelay = 2;
-    }
-    else
-    {
-        linedelay--;
-    }
     point tpoint;
     SDL_Rect trect;
 
