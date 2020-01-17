@@ -149,9 +149,9 @@ int main(int argc, char *argv[])
     // offset.x = 60;
     // offset.y = 80;
 
-    game.gamestate = TITLEMODE;
+    //game.gamestate = TITLEMODE;
     //game.gamestate=EDITORMODE;
-    //game.gamestate = PRELOADER; //Remember to uncomment this later!
+    game.gamestate = PRELOADER; //Remember to uncomment this later!
 
     game.menustart = false;
     game.mainmenu = 0;
