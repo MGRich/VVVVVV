@@ -17,71 +17,45 @@ Method 2 has a disadvantage of 1/30th of a second worth of latency.
 
 Exterpolation could maybe be used instead to solve this at the disadvantage of wrong predictions.
 
-What works (todo make shorter)
+What works
 -
-Sprite entities use linear interpolation
+All entities that move are interpolated (this is done by updating their old position before they are moved)
 
-"Really big sprite" entities use linear interpolation
+All backgrounds that move use deltatime
 
-2x1 entities (seemed to only be used in Boldly To Go) entities use linear interpolation
+Variables set related to colour/animations/flashing/screenshake/messageboxes/glitched level names have been moved from the new variable render function to fixed render function.
 
-Moving platform entities use linear interpolation
+Creation of entities sets more variables to be more accurate needed to avoid inaccurate rendering for first frame (this includes old position, animation frames, colour transform, and spawning of "LIES" and clouds being slightly off)
 
-All backgrounds (apart from The Tower) use deltatime, stars are stored using floats, Warp Zones no longer use surface (for now) thus less efficient
+Screen wrapping updates the old position so that the player doesn't very quickly move across the screen to get to the other side
 
-Animation frames are now updated in fixed timestep instead of in the render function
-
-Creation of entities sets the old position variables to avoid initial zip
-
-Message Boxes are only updated during fixed timesteps
-
-Screen wrapping does not "zip", it updates the old position
-
-The Tower, and entities inside the tower are interpolated, including gravity lines. The background is interpolated and doesn't use surface (see Warp Zones above)
-
-Entities drawframe is set to entities tile apon creation, this stops them having the sprite of the player for the first frame.
-
-Gravitron entities are interpolated, and their old position is updated when getting the enemies offscreen
-
-Death/Complete Stops update the old position of entities to avoid interpolation jitter
-
-The colour cycling for the final level are only updated during fixed timesteps
-
-Anomaly and Purest Unobtainium backgrounds are only updated during fixed timesteps
-
-Entities old positions are now updated before the input function, meaning that when the player is on a treadmill/moving platform
+The Tower "map" is interpolated
 
 The game logic function and the game fixed render functions have been swapped, meaning logic is now processed before rendering
 
-Entities and teleporters store their colour and update it at a fixed framerate instead of every time they are rendered (makes colours stand out more)
-
-The glitched level name getter is now called in the fixed render function so that the glitched level name can be seen better
-
-Gravity line flashing is updated in fixed render function
-
-"LIES" and clouds are spawned with their old position set to the spawn position so that they aren't off by a few pixels during first render
-
 What doesn't work
 -
-Enemies that move back and forth stutter for a frame or two when they reach their turning point (todo: test again)
+Anything that's not in gamestate GAMEMODE does not render over 30 fps (NOT PLANNING ON DOING)
 
-Anything that's not in gamestate GAMEMODE does not render over 30 fps
+Running the game at a slower fixed speed than 30 using slowmode probably does not alter deltatime when it should (not tested)
 
 "huge hero" in Secret Lab cutscene not interpolated, old position isn't updated during cutscene (edit: previous statement might no longer be the case) so can't easily use a lerp
 
-Hardest room doesn't display (todo: test again)
+Swiping transitions during gameplay are at 30 fps which I might be able to easily improve
+
+entering the tower, tower glitched for 1 frame
 
 and things that have not been tested yet might not work
 
-What's been tested before old positions were updated before the input function and before the fixed render function and the logic function were swapped
+Bugs that occur in the original game still occur, I'm not planning on fixing these.
+
+What's been tested
 -
 100% of the main game.
 The secret lab.
 3 Time Trials
-
-What's been tested after the two big changes mentioned above were implemented
--
-The final Time Trial
+any% of the main game flipped
+1 Time Trial flipped
 
 When are you going to update it
 -
