@@ -39,17 +39,27 @@ The game logic function and the game fixed render functions have been swapped, m
 
 Deltatime is slowed down if playing on slowmode
 
+There should not be any game breaking issues
+
 What doesn't work
 -
 Anything that's not in gamestate GAMEMODE does not render over 30 fps (NOT PLANNING ON DOING)
 
-and things that have not been tested yet might not work
+I'm compiling in release mode, which according to the build instructions should have issues, but I've not encountered any
+
+and things that have not been tested yet might not work, like custom levels, having a brief look at them they seem to work but I don't have time to test them all
 
 Bugs that occur in the original game still occur, I'm not planning on fixing these.
+
+I found something that does not work that is related to this mod
+-
+Create a new issue on github, and I'll try to fix the issue if I have time, even if it's something minor like an enemy being rendered in the wrong place for 1 frame
 
 What's been tested
 -
 100% of the main game
+
+any% of the main game
 
 15 seconds of the Super Gravitron in the Secret Lab
 
