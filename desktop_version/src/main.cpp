@@ -262,7 +262,7 @@ int main(int argc, char *argv[])
 		const float rawdeltatime = static_cast<float>(time - timePrev);
 		accumulator += rawdeltatime;
 		while (accumulator >= game.gameframerate) {
-			accumulator -= game.gameframerate;
+			accumulator = fmodf(accumulator, game.gameframerate);
 
 			key.Poll();
 			if (key.toggleFullscreen) {
