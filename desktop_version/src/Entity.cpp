@@ -3056,25 +3056,25 @@ bool entityclass::updateentities( int i, UtilityClass& help, Game& game, musiccl
                         if (entities[getplayer()].yp > 14 * 8)
                         {
                             entities[i].tile = 120;
-                            entities[i].yp = (28*8)-62;
+							entities[i].oldyp = entities[i].yp = (28*8)-62;
                         }
                         else
                         {
                             entities[i].tile = 96;
-                            entities[i].yp = 24;
+							entities[i].oldyp = entities[i].yp = 24;
                         }
                         //now, x position
                         if (entities[getplayer()].xp > 20 * 8)
                         {
                             //approach from the left
-                            entities[i].xp = -64;
+							entities[i].oldxp = entities[i].xp = -64;
                             entities[i].state = 2;
                             updateentities(i, help, game, music); //right
                         }
                         else
                         {
                             //approach from the left
-                            entities[i].xp = 320;
+							entities[i].oldxp = entities[i].xp = 320;
                             entities[i].state = 3;
                             updateentities(i, help, game, music); //left
                         }
