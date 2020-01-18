@@ -2523,7 +2523,7 @@ void Graphics::drawtowermap_nobackground(mapclass& map, const float alpha)
     {
         for (int i = 0; i < 40; i++)
         {
-			int yposinterpolated = static_cast<int>(lerp(map.oldypos, map.ypos, alpha));
+			int yposinterpolated = static_cast<int>(ceil(lerp(map.oldypos, map.ypos, alpha)));
             temp = map.tower.at(i, j, yposinterpolated);
             if (temp > 0 && temp<28) drawtile3(i * 8, (j * 8) - ((int)yposinterpolated % 8), temp, map.colstate);
         }
@@ -2543,7 +2543,7 @@ void Graphics::drawtowerentities(mapclass& map, entityclass& obj, UtilityClass& 
             {
 				trinketcolset = false;
 				tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha);
-				tpoint.y = lerp(obj.entities[i].oldyp - map.oldypos, obj.entities[i].yp - map.ypos, alpha);
+				tpoint.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha) - ceil(lerp(map.oldypos, map.ypos, alpha));
 				setcol(obj.entities[i].colourtransform);
                 setRect(trect, tpoint.x, tpoint.y, sprites_rect.w, sprites_rect.h);
                 BlitSurfaceColoured(sprites[obj.entities[i].drawframe], NULL, backBuffer, &trect, ct);
@@ -2571,7 +2571,7 @@ void Graphics::drawtowerentities(mapclass& map, entityclass& obj, UtilityClass& 
             {
                 // Tiles
                 tpoint.x = obj.entities[i].xp;
-				tpoint.y = obj.entities[i].yp - lerp(map.oldypos, map.ypos, alpha);
+				tpoint.y = obj.entities[i].yp - ceil(lerp(map.oldypos, map.ypos, alpha));
                 setRect(trect,tiles_rect.w, tiles_rect.h, tpoint.x, tpoint.y);
                 BlitSurfaceColoured(tiles[obj.entities[i].drawframe], NULL, backBuffer, &trect, ct);
             }
@@ -2579,7 +2579,8 @@ void Graphics::drawtowerentities(mapclass& map, entityclass& obj, UtilityClass& 
             {
                 // Special: Moving platform, 4 tiles
 				tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha);
-				tpoint.y = lerp(obj.entities[i].oldyp - map.oldypos, obj.entities[i].yp - map.ypos, alpha);
+				tpoint.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha) - ceil(lerp(map.oldypos, map.ypos, alpha));
+
                 setRect(trect,tiles_rect.w, tiles_rect.h, tpoint.x, tpoint.y);
                 BlitSurfaceColoured(tiles[obj.entities[i].drawframe], NULL, backBuffer, &trect, ct);
                 tpoint.x += 8;
@@ -2614,7 +2615,7 @@ void Graphics::drawtowerentities(mapclass& map, entityclass& obj, UtilityClass& 
             else if (obj.entities[i].size == 5)    //Horizontal Line
             {
                 line_rect.x = obj.entities[i].xp;
-                line_rect.y = obj.entities[i].yp - lerp(map.oldypos, map.ypos, alpha);
+                line_rect.y = obj.entities[i].yp - ceil(lerp(map.oldypos, map.ypos, alpha));
                 line_rect.w = obj.entities[i].w;
                 line_rect.h = 1;
                 drawgravityline(i, obj);
@@ -2622,7 +2623,7 @@ void Graphics::drawtowerentities(mapclass& map, entityclass& obj, UtilityClass& 
             else if (obj.entities[i].size == 6)    //Vertical Line
             {
                 line_rect.x = obj.entities[i].xp;
-				line_rect.y = obj.entities[i].yp - lerp(map.oldypos, map.ypos, alpha);
+				line_rect.y = obj.entities[i].yp - ceil(lerp(map.oldypos, map.ypos, alpha));
                 line_rect.w = 1;
                 line_rect.h = obj.entities[i].h;
                 drawgravityline(i, obj);
