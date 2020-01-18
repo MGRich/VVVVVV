@@ -1925,11 +1925,13 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
                 		//bigbuffer.fillRect(bigbuffer.rect, 0x000000);
 						FillRect(tempBuffer, 0x000000);
 
-                		tpoint.x = obj.entities[i].xp; tpoint.y = obj.entities[i].yp;
+						// linearly interpolate between old position and current position
+						tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha);
+						tpoint.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha);
 						setcol(obj.entities[i].colourtransform);
                 		//flipsprites[obj.entities[i].drawframe].colorTransform(sprites_rect, ct);
                 		//bigbuffer.copyPixels(flipsprites[obj.entities[i].drawframe], sprites_rect, new Point(0, 0));
-						SDL_Rect drawRect = {Sint16(obj.entities[i].xp ), Sint16(obj.entities[i].yp), sprites_rect.x, sprites_rect.y   };
+						SDL_Rect drawRect = {Sint16(tpoint.x), Sint16(tpoint.y), sprites_rect.x, sprites_rect.y   };
 						SDL_Surface* TempSurface = ScaleSurface( flipsprites[obj.entities[i].drawframe], 6* sprites_rect.w,6* sprites_rect.w );
 						BlitSurfaceColoured(TempSurface, NULL , backBuffer,  &drawRect, ct );
 						SDL_FreeSurface(TempSurface);
@@ -1938,11 +1940,13 @@ void Graphics::drawentities( mapclass& map, entityclass& obj, UtilityClass& help
 					else
 					{
 						//TODO checkthis
-						tpoint.x = obj.entities[i].xp; tpoint.y = obj.entities[i].yp;
+						// linearly interpolate between old position and current position
+						tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha);
+						tpoint.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha);
 						setcol(obj.entities[i].colourtransform);
 						//flipsprites[obj.entities[i].drawframe].colorTransform(sprites_rect, ct);
 						//bigbuffer.copyPixels(flipsprites[obj.entities[i].drawframe], sprites_rect, new Point(0, 0));
-						SDL_Rect drawRect = {Sint16(obj.entities[i].xp ), Sint16(obj.entities[i].yp), Sint16(sprites_rect.x * 6), Sint16(sprites_rect.y * 6 ) };
+						SDL_Rect drawRect = {Sint16(tpoint.x), Sint16(tpoint.y), Sint16(sprites_rect.x * 6), Sint16(sprites_rect.y * 6 ) };
 						SDL_Surface* TempSurface = ScaleSurface( flipsprites[obj.entities[i].drawframe], 6 * sprites_rect.w,6* sprites_rect.h );
 						BlitSurfaceColoured(TempSurface, NULL , backBuffer,  &drawRect, ct );
 						SDL_FreeSurface(TempSurface);
