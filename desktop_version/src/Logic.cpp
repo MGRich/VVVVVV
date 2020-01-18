@@ -267,12 +267,6 @@ void towerlogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclass& musi
 
     if (game.deathseq != -1)
     {
-		for (int i = 0; i < obj.nentity; i++) {
-			// update old position (stops jitter)
-			obj.entities[i].oldxp = obj.entities[i].xp;
-			obj.entities[i].oldyp = obj.entities[i].yp;
-		}
-
         map.colsuperstate = 1;  //cause the palette to go spastic!
         map.cameramode = 2;
         game.deathsequence(map, obj, music);
