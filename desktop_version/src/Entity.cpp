@@ -1107,19 +1107,19 @@ void entityclass::createblock( int t, int xp, int yp, int w, int h, int trig /*=
             trig=0;
             break;
         case 25:
-            blocks[k].prompt = "Passion for exploring";
+            blocks[k].prompt = "Passion for Exploring";
             blocks[k].script = "terminal_juke1";
             setblockcolour(k, "orange");
             trig=0;
             break;
         case 26:
-            blocks[k].prompt = "Pushing onwards";
+            blocks[k].prompt = "Pushing Onwards";
             blocks[k].script = "terminal_juke2";
             setblockcolour(k, "orange");
             trig=0;
             break;
         case 27:
-            blocks[k].prompt = "Positive force";
+            blocks[k].prompt = "Positive Force";
             blocks[k].script = "terminal_juke3";
             setblockcolour(k, "orange");
             trig=0;
@@ -1131,13 +1131,13 @@ void entityclass::createblock( int t, int xp, int yp, int w, int h, int trig /*=
             trig=0;
             break;
         case 29:
-            blocks[k].prompt = "Potential for anything";
+            blocks[k].prompt = "Potential for Anything";
             blocks[k].script = "terminal_juke5";
             setblockcolour(k, "orange");
             trig=0;
             break;
         case 30:
-            blocks[k].prompt = "Predestined fate";
+            blocks[k].prompt = "Predestined Fate";
             blocks[k].script = "terminal_juke6";
             setblockcolour(k, "orange");
             trig=0;
@@ -1161,7 +1161,7 @@ void entityclass::createblock( int t, int xp, int yp, int w, int h, int trig /*=
             trig=0;
             break;
         case 34:
-            blocks[k].prompt = "ecrof evitisoP";
+            blocks[k].prompt = "ecroF evitisoP";
             blocks[k].script = "terminal_juke10";
             setblockcolour(k, "orange");
             trig=0;
@@ -1842,7 +1842,7 @@ void entityclass::createentity( Game& game, float xp, float yp, int t, float vx 
 
         entities[k].gravity = true;
         break;
-    case 1: //Simple enemy, bouncing about like a spastic
+    case 1: //Simple enemy, bouncing off the walls
         entities[k].rule = 1;
         entities[k].oldxp = entities[k].xp = xp;
         entities[k].oldyp = entities[k].yp = yp;
@@ -4385,7 +4385,8 @@ int entityclass::getcrewman( int t )
 
     for (int i = 0; i < nentity; i++)
     {
-        if (entities[i].rule == 6 || entities[i].rule == 7)
+        if ((entities[i].type == 12 || entities[i].type == 14)
+        && (entities[i].rule == 6 || entities[i].rule == 7))
         {
             if(entities[i].colour==t)
             {
