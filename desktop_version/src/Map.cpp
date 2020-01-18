@@ -1236,8 +1236,8 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 				int player = obj.getplayer();
 				obj.entities[player].yp += (671 * 8);
 
-				ypos = (700-29) * 8;
-				bypos = ypos / 2;
+				oldypos = ypos = (700-29) * 8;
+				oldbypos = bypos = ypos / 2;
 				cameramode = 0;
 				colstate = 0;
 				colsuperstate = 0;
@@ -1245,8 +1245,8 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 			else if (ry == 104)
 			{
 				//you've entered from the top floor
-				ypos = 0;
-				bypos = 0;
+				oldypos = ypos = 0;
+				oldbypos = bypos = 0;
 				cameramode = 0;
 				colstate = 0;
 				colsuperstate = 0;
@@ -1424,8 +1424,8 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 
 		tower.loadminitower1();
 
-		ypos = 0;
-		bypos = 0;
+		oldypos = ypos = 0;
+		oldbypos = bypos = 0;
 		cameramode = 0;
 		colstate = 0;
 		colsuperstate = 0;
@@ -1450,8 +1450,8 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 		game.roomy--;
 		finaly--;
 
-		ypos = (100-29) * 8;
-		bypos = ypos/2;
+		oldypos = ypos = (100-29) * 8;
+		oldbypos = bypos = ypos/2;
 		cameramode = 0;
 		colstate = 0;
 		colsuperstate = 0;}
@@ -1491,8 +1491,8 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 		game.roomy--;
 		finaly--;
 
-		ypos = (100-29) * 8;
-		bypos = ypos/2;
+		oldypos = ypos = (100-29) * 8;
+		oldbypos = bypos = ypos/2;
 		cameramode = 0;
 		colstate = 0;
 		colsuperstate = 0;
@@ -1529,8 +1529,8 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 		obj.createentity(game, 32, 20, 11, 96); // (horizontal gravity line)
 		obj.createentity(game, 72, 156, 11, 200); // (horizontal gravity line)
 
-		ypos = 0;
-		bypos = 0;
+		oldypos = ypos = 0;
+		oldbypos = bypos = 0;
 		cameramode = 0;
 		colstate = 0;
 		colsuperstate = 0;

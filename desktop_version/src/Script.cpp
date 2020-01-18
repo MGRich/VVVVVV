@@ -2598,8 +2598,8 @@ void scriptclass::startgamemode( int t, KeyPoll& key, Graphics& dwgfx, Game& gam
 			map.resetplayer(dwgfx, game, obj, music);
 
 			i = obj.getplayer();
-			map.ypos = obj.entities[i].yp - 120;
-			map.bypos = map.ypos / 2;
+			map.oldypos = map.ypos = obj.entities[i].yp - 120;
+			map.oldbypos = map.bypos = map.ypos / 2;
 			map.cameramode = 0;
 			map.colsuperstate = 0;
 		}
