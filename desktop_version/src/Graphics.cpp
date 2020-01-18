@@ -98,7 +98,7 @@ Graphics::Graphics()
     //Fading stuff
     fadebars.resize(15);
 
-    fadeamount = 0;
+    fadeamount = 0.f;
     fademode = 0;
 
     // initialize everything else to zero
@@ -1072,7 +1072,7 @@ void Graphics::drawfade()
 
 }
 
-void Graphics::processfade()
+void Graphics::processfade(const float deltatime)
 {
     if (fademode > 1)
     {
@@ -1083,13 +1083,13 @@ void Graphics::processfade()
             {
                 fadebars[i] = -int(fRandom() * 12) * 8;
             }
-            fadeamount = 0;
+            fadeamount = 0.f;
             fademode = 3;
         }
         else if (fademode == 3)
         {
-            fadeamount += 24;
-            if (fadeamount > 416)
+            fadeamount += 24.f / 30.f * deltatime;
+            if (fadeamount > 416.f)
             {
                 fademode = 1; //faded
             }
@@ -1101,12 +1101,12 @@ void Graphics::processfade()
             {
                 fadebars[i] = 320 + int(fRandom() * 12) * 8;
             }
-            fadeamount = 416;
+            fadeamount = 416.f;
             fademode = 5;
         }
         else if (fademode == 5)
         {
-            fadeamount -= 24;
+            fadeamount -= 24.f / 30.f * deltatime;
             if (fadeamount <= 0)
             {
                 fademode = 0; //normal

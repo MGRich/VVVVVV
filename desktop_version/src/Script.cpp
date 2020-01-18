@@ -1421,7 +1421,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			}
 			else if (words[0] == "befadein")
 			{
-				dwgfx.fadeamount = 0;
+				dwgfx.fadeamount = 0.f;
 				dwgfx.fademode= 0;
 			}
 			else if (words[0] == "fadein")

@@ -45,7 +45,7 @@ public:
 	void drawmenu(Game& game, int cr, int cg, int cb, int division = 30);
 	void drawlevelmenu(Game& game, int cr, int cg, int cb, int division = 30);
 
-	void processfade();
+	void processfade(const float deltatime);
 
 	void drawfade();
 
@@ -258,7 +258,7 @@ public:
 	int crewframedelay;
 
 	int fademode;
-	int fadeamount;
+	float fadeamount;
 	std::vector <int> fadebars;
 
 	bool trinketcolset;
