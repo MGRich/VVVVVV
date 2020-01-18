@@ -259,8 +259,8 @@ int main(int argc, char *argv[])
         NETWORK_update();
 
         //framerate limit to 30
-		const float deltatime = time - timePrev;
-		accumulator += deltatime;
+		const float rawdeltatime = static_cast<float>(time - timePrev);
+		accumulator += rawdeltatime;
 		while (accumulator >= game.gameframerate) {
 			accumulator -= game.gameframerate;
 
@@ -498,6 +498,7 @@ int main(int argc, char *argv[])
 				gameScreen.FlipScreen();
 			}
 		}
+		const float deltatime = rawdeltatime * 34.f / game.gameframerate;
 		graphics.processfade(deltatime);
 		const float alpha = static_cast<float>(accumulator) / game.gameframerate;
 		if (game.gamestate == GAMEMODE) {
