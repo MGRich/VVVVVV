@@ -65,6 +65,10 @@ void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, U
             if (music.mmmmmm) {
                 dwgfx.Print(10, 230, "[MMMMMM Mod Installed]", tr / 2, tg / 2, tb / 2);
             }
+            else {
+                dwgfx.Print(10, 220, "Uses elements from:", tr / 2, tg / 2, tb / 2);
+                dwgfx.Print(10, 230, "V6-CE, V6-over-30-FPS", tr / 2, tg / 2, tb / 2);
+            }
         }
         else if (game.currentmenuname == "levellist")
         {
