@@ -1530,11 +1530,6 @@ void gamecompleterender2(Graphics& dwgfx, Game& game, entityclass& obj, UtilityC
 
 void gamerenderfixed(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help) {
 
-    if (dwgfx.camxoff > 0) dwgfx.camxoff -= 320 / dwgfx.camspeed;
-    else if (dwgfx.camxoff < 0) dwgfx.camxoff += 320 / dwgfx.camspeed;
-    if (dwgfx.camyoff > 0) dwgfx.camyoff -= 240 / dwgfx.camspeed;
-    else if (dwgfx.camyoff < 0) dwgfx.camyoff += 240 / dwgfx.camspeed;
-
 	if (!game.blackout) {
 		if (!game.completestop) {
 			for (int i = 0; i < obj.nentity; i++) {
@@ -1599,6 +1594,11 @@ void gamerenderfixed(Graphics& dwgfx, mapclass& map, Game& game, entityclass& ob
 }
 
 void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help, const float alpha, const float deltatime) {
+    if (dwgfx.camxoff > 0) dwgfx.camxoff -= 320 / (dwgfx.camspeed * 2);
+    else if (dwgfx.camxoff < 0) dwgfx.camxoff += 320 / (dwgfx.camspeed * 2);
+    if (dwgfx.camyoff > 0) dwgfx.camyoff -= 240 / (dwgfx.camspeed * 2);
+    else if (dwgfx.camyoff < 0) dwgfx.camyoff += 240 / (dwgfx.camspeed * 2);
+
     if(!game.blackout) {
         if(!game.colourblindmode) {
 			dwgfx.drawbackground(map.background, map, deltatime);
@@ -1621,7 +1621,7 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
 
         dwgfx.drawentities(map, obj, help, alpha);
     }
-      }//*/
+      //}*/
     //dwgfx.drawminimap(game, map);
 
     SDL_Rect rect = { dwgfx.camxoff, dwgfx.camyoff - 232, dwgfx.backBuffer->w, dwgfx.backBuffer->h };

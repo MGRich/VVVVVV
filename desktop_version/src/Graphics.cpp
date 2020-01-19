@@ -1852,7 +1852,7 @@ void Graphics::drawentities(mapclass& map, entityclass& obj, UtilityClass& help,
             else if (obj.entities[i].size == 11)    //The fucking elephant
             {
                 //TODO elephant bug
-                setcol(obj.entities[i].colour, help);
+                setcol(obj.entities[i].colour);
                 drawimagecol(3, obj.entities[i].xp + 53, obj.entities[i].yp);
             }
             else if (obj.entities[i].size == 12)         // Regular sprites that don't wrap
