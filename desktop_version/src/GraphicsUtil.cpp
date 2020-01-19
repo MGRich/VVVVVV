@@ -11,6 +11,13 @@ void setRect( SDL_Rect& _r, int x, int y, int w, int h )
     _r.h = h;
 }
 
+void setRect(RectFloat& _r, float x, float y, float w, float h) {
+	_r.x = x;
+	_r.y = y;
+	_r.w = w;
+	_r.h = h;
+}
+
 unsigned int endian_swap( unsigned int x )
 {
     return (x>>24) |
@@ -496,8 +503,8 @@ void ScrollSurface( SDL_Surface* _src, int _pX, int _pY )
 {
     SDL_Surface* part1 = NULL;
 
-    SDL_Rect rect1;
-	 SDL_Rect rect2;
+	SDL_Rect rect1;
+	SDL_Rect rect2;
     //scrolling up;
     if(_pY < 0)
     {
@@ -505,7 +512,7 @@ void ScrollSurface( SDL_Surface* _src, int _pX, int _pY )
 
         part1 = GetSubSurface(_src, rect2.x, rect2.y, rect2.w, rect2.h);
 
-        SDL_Rect destrect1;
+		SDL_Rect destrect1;
 
         SDL_SetSurfaceBlendMode(part1, SDL_BLENDMODE_NONE);
 
@@ -521,7 +528,7 @@ void ScrollSurface( SDL_Surface* _src, int _pX, int _pY )
 
         part1 = GetSubSurface(_src, rect1.x, rect1.y, rect1.w, rect1.h);
 
-        SDL_Rect destrect1;
+		SDL_Rect destrect1;
 
         SDL_SetSurfaceBlendMode(part1, SDL_BLENDMODE_NONE);
 

@@ -47,7 +47,7 @@ public:
 	void drawmenu(Game& game, int cr, int cg, int cb, int division = 30);
 	void drawlevelmenu(Game& game, int cr, int cg, int cb, int division = 30);
 
-	void processfade();
+	void processfade(const float deltatime);
 
 	void drawfade();
 
@@ -98,6 +98,7 @@ public:
 
 	void drawimagecol(int t, int xp, int yp, int r, int g, int b, bool cent = false);
 
+	void drawguifixed();
 	void drawgui(UtilityClass& help);
 
 	void drawsprite(int x, int y, int t, int r, int g, int b);
@@ -128,7 +129,8 @@ public:
 
 	bool Hitest(SDL_Surface* surface1, point p1, int col, SDL_Surface* surface2, point p2, int col2);
 
-	void drawentities(mapclass& map, entityclass& obj, UtilityClass& help);
+	void drawentitiesfixed(entityclass& obj, UtilityClass& help);
+	void drawentities(mapclass& map, entityclass& obj, UtilityClass& help, const float alpha);
 
 	void drawtrophytext(entityclass&, UtilityClass& help);
 
@@ -150,17 +152,20 @@ public:
 
 	void setcolreal(Uint32 t);
 
-	void drawbackground(int t, mapclass& map);
-	void drawtile3(int x, int y, int t, int off, bool flip = false);
-	void drawentcolours(int x, int y, int t);
-	void drawtile2(int x, int y, int t, int r, int g, int b);
-	void drawtile(int x, int y, int t, int r, int g, int b);
-	void drawtowertile(int x, int y, int t);
-	void drawtowertile3(int x, int y, int t, int off, bool flip = false);
+	void drawbackgroundfixed(int t);
+	void drawbackground(int t, mapclass& map, const float deltatime);
+	void drawtile3( int x, int y, int t, int off, bool flip = false );
+	void drawentcolours( int x, int y, int t);
+	void drawtile2( int x, int y, int t, int r, int g, int b );
+	void drawtile( int x, int y, int t, int r, int g, int b );
+	void drawtowertile( int x, int y, int t );
+	void drawtowertile3( int x, int y, int t, int off, bool flip = false );
 
 	void drawtile(int x, int y, int t);
 
 	void drawmap(mapclass& map, int k, bool c = false);
+
+	void drawfinalmapfixed(mapclass& map);
 
 	void drawforetile(int x, int y, int t);
 
@@ -170,13 +175,13 @@ public:
 
 	void drawrect(int x, int y, int w, int h, int r, int g, int b);
 
-	void drawtowermap(mapclass& map);
+	void drawtowermap(mapclass& map, const float alpha);
 
-	void drawtowermap_nobackground(mapclass& map);
+	void drawtowermap_nobackground(mapclass& map, const float alpha);
 
 	void drawtowerspikes(mapclass& map);
 
-	void drawtowerentities(mapclass& map, entityclass& obj, UtilityClass& help);
+	void drawtowerentities(mapclass& map, entityclass& obj, UtilityClass& help, const float alpha);
 
 	bool onscreen(int t);
 
@@ -185,9 +190,11 @@ public:
 
 	void menuoffrender();
 
-	void drawtowerbackground(mapclass& map);
+	void drawtowerbackground(mapclass& map, const float alpha);
 
-	void setcol(int t, UtilityClass& help);
+	void setcolourtransform(Uint32& colourtransform, const int colour, UtilityClass& help);
+	void setcol(Uint32 colour);
+
 	void drawfinalmap(mapclass& map, int k, bool c = false);
 
 	colourTransform ct;
@@ -245,7 +252,7 @@ public:
 	SDL_Rect footerrect;
 
 	int linestate, linedelay;
-	int backoffset;
+	float backoffset;
 	bool backgrounddrawn, foregrounddrawn;
 
 	int menuoffset;
@@ -257,7 +264,7 @@ public:
 	int crewframedelay;
 
 	int fademode;
-	int fadeamount;
+	float fadeamount;
 	growing_vector <int> fadebars;
 
 	bool trinketcolset;
@@ -269,11 +276,11 @@ public:
 	bool showcutscenebars;
 	int cutscenebarspos;
 
-	growing_vector<SDL_Rect> stars;
+	growing_vector<RectFloat> stars;
 	growing_vector<int> starsspeed;
 
 	int spcol, spcoldel;
-	growing_vector<SDL_Rect> backboxes;
+	growing_vector<RectFloat> backboxes;
 	growing_vector<int> backboxvx;
 	growing_vector<int> backboxvy;
 	growing_vector<float> backboxint;
@@ -281,6 +288,11 @@ public:
 
 	int warpskip, warpfcol, warpbcol;
 
+	Uint32 inactiveteleportercolour;
+	Uint32 activeteleportercolour;
+	Uint32 teleporterinactioncolour;
+	void setcolourtoteleportercolour(int colour);
+	void setteleportercolours(UtilityClass& help);
 	bool specialwarp = false;
 	int camxoff = 0;
 	int camyoff = 0;

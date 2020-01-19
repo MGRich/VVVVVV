@@ -1528,26 +1528,84 @@ void gamecompleterender2(Graphics& dwgfx, Game& game, entityclass& obj, UtilityC
     //dwgfx.backbuffer.unlock();
 }
 
-void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help)
-{
-
+void gamerenderfixed(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help) {
 
     if (dwgfx.camxoff > 0) dwgfx.camxoff -= 320 / dwgfx.camspeed;
     else if (dwgfx.camxoff < 0) dwgfx.camxoff += 320 / dwgfx.camspeed;
     if (dwgfx.camyoff > 0) dwgfx.camyoff -= 240 / dwgfx.camspeed;
     else if (dwgfx.camyoff < 0) dwgfx.camyoff += 240 / dwgfx.camspeed;
 
-    if (!game.blackout)
-    {
+	if (!game.blackout) {
+		if (!game.completestop) {
+			for (int i = 0; i < obj.nentity; i++) {
+				//Is this entity on the ground? (needed for jumping)
+				if (obj.entitycollidefloor(map, i)) {
+					obj.entities[i].onground = 2;
+				}
+				else {
+					obj.entities[i].onground--;
+				}
 
-        if (!game.colourblindmode)
-        {
-            dwgfx.drawbackground(map.background, map);
-        }
-        else
-        {
-            FillRect(dwgfx.backBuffer, 0x00000);
-        }
+				if (obj.entitycollideroof(map, i)) {
+					obj.entities[i].onroof = 2;
+				}
+				else {
+					obj.entities[i].onroof--;
+				}
+
+				obj.animateentities(i, game, help);
+			}
+		}
+		if (!game.colourblindmode) {
+			dwgfx.drawbackgroundfixed(map.background);
+		}
+		if (map.final_colormode) {
+			dwgfx.drawfinalmapfixed(map);
+		}
+		dwgfx.drawentitiesfixed(obj, help);
+	}
+
+	if (map.extrarow == 0 || (map.custommode && map.roomname != "")) {
+		if (map.finalmode) {
+			map.glitchname = map.getglitchname(game.roomx, game.roomy);
+		}
+	}
+
+	dwgfx.drawguifixed();
+
+	if (game.activeactivity > -1) {
+		if (game.act_fade < 5) game.act_fade = 5;
+		if (game.act_fade < 10) {
+			game.act_fade++;
+		}
+	}
+	else {
+		if (game.act_fade > 5) {
+			game.act_fade--;
+		}
+	}
+
+	if (obj.trophytext > 0) {
+		obj.trophytext--;
+	}
+
+	if (game.flashlight > 0 && !game.noflashingmode) {
+		game.flashlight--;
+	}
+
+	if (game.screenshake > 0 && !game.noflashingmode) {
+		game.screenshake--;
+	}
+}
+
+void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help, const float alpha, const float deltatime) {
+    if(!game.blackout) {
+        if(!game.colourblindmode) {
+			dwgfx.drawbackground(map.background, map, deltatime);
+		}
+		else {
+			FillRect(dwgfx.backBuffer,0x00000);
+		}
         if (map.final_colormode)
         {
             dwgfx.drawfinalmap(map, 0, true);
@@ -1561,45 +1619,10 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
             dwgfx.drawmap(map, 2);
         }
 
-
-        if (!game.completestop)
-        {
-            for (int i = 0; i < obj.nentity; i++)
-            {
-                //Is this entity on the ground? (needed for jumping)
-                if (obj.entitycollidefloor(map, i))
-                {
-                    obj.entities[i].onground = 2;
-                }
-                else
-                {
-                    obj.entities[i].onground--;
-                }
-
-                if (obj.entitycollideroof(map, i))
-                {
-                    obj.entities[i].onroof = 2;
-                }
-                else
-                {
-                    obj.entities[i].onroof--;
-                }
-
-                //Animate the entities
-                obj.animateentities(i, game, help);
-            }
-        }
-
-        dwgfx.drawentities(map, obj, help);
-
+        dwgfx.drawentities(map, obj, help, alpha);
     }
-
-    /*for(int i=0; i<obj.nblocks; i++){
-    if (obj.blocks[i].active) {
-            dwgfx.backbuffer.fillRect(obj.blocks[i].rect, 0xDDDDDD);
-    }
-      }*/
-      //dwgfx.drawminimap(game, map);
+      }//*/
+    //dwgfx.drawminimap(game, map);
 
     SDL_Rect rect = { dwgfx.camxoff, dwgfx.camyoff - 232, dwgfx.backBuffer->w, dwgfx.backBuffer->h };
     if (dwgfx.camyoff != 0) {
@@ -1617,18 +1640,16 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
     {
         FillRect(dwgfx.backBuffer, dwgfx.footerrect, 0);
 
-        if (map.finalmode)
-        {
-            map.glitchname = map.getglitchname(game.roomx, game.roomy);
-            dwgfx.Print(5, 231, map.glitchname, 196, 196, 255 - help.glow, true);
+        if (map.finalmode) {
+        	//map.glitchname = map.getglitchname(game.roomx, game.roomy);
+          dwgfx.Print(5, 231, map.glitchname, 196, 196, 255 - help.glow, true);
         }
-        else {
-            dwgfx.Print(5, 231, map.roomname, 196, 196, 255 - help.glow, true);
+		else {
+          dwgfx.Print(5, 231, map.roomname, 196, 196, 255 - help.glow, true);
         }
     }
 
-    if (map.roomtexton)
-    {
+    if (map.roomtexton) {
         //Draw room text!
         for (int i = 0; i < map.roomtextnumlines; i++)
         {
@@ -1641,18 +1662,15 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
         dwgfx.bprint(5, 5, "[Press ENTER to return to editor]", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), false);
     }
 
-
     dwgfx.cutscenebars();
     dwgfx.drawfade();
     BlitSurfaceStandard(dwgfx.backBuffer, NULL, dwgfx.tempBuffer, NULL);
 
     dwgfx.drawgui(help);
-    if (dwgfx.flipmode)
-    {
+    if (dwgfx.flipmode) {
         if (game.advancetext) dwgfx.bprint(5, 228, "- Press ACTION to advance text -", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true);
     }
-    else
-    {
+    else {
         if (game.advancetext) dwgfx.bprint(5, 5, "- Press ACTION to advance text -", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true);
     }
 
@@ -1662,23 +1680,18 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
         {
             dwgfx.bprint(5, 20, "- Press ENTER to Teleport -", game.readytotele - 20 - (help.glow / 2), game.readytotele - 20 - (help.glow / 2), game.readytotele, true);
         }
-        else
-        {
+        else {
             dwgfx.bprint(5, 210, "- Press ENTER to Teleport -", game.readytotele - 20 - (help.glow / 2), game.readytotele - 20 - (help.glow / 2), game.readytotele, true);
         }
     }
 
-    if (game.swnmode)
-    {
-        if (game.swngame == 0)
-        {
+    if (game.swnmode) {
+        if (game.swngame == 0) {
             tempstring = help.timestring(game.swntimer);
             dwgfx.bigprint(-1, 20, tempstring, 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true, 2);
         }
-        else if (game.swngame == 1)
-        {
-            if (game.swnmessage == 0)
-            {
+        else if (game.swngame == 1) {
+            if (game.swnmessage == 0) {
                 tempstring = help.timestring(game.swntimer);
                 dwgfx.Print(10 + 53, 10, "Current Time", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), false);
                 dwgfx.bigprint(25 + 53, 24, tempstring, 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), false, 2);
@@ -1711,8 +1724,7 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
                     break;
                 }
             }
-            else if (game.swnmessage == 1)
-            {
+            else if (game.swnmessage == 1) {
                 tempstring = help.timestring(game.swntimer);
                 dwgfx.Print(10 + 53, 10, "Current Time", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), false);
                 dwgfx.bigprint(25 + 53, 24, tempstring, 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), false, 2);
@@ -1725,8 +1737,7 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
                     dwgfx.bigprint(-1, 200, "New Record!", 128 - (help.glow), 220 - (help.glow), 128 - (help.glow / 2), true, 2);
                 }
             }
-            else if (game.swnmessage >= 2)
-            {
+            else if (game.swnmessage >= 2) {
                 game.swnmessage--;
                 if (game.swnmessage == 2) game.swnmessage = 0;
                 tempstring = help.timestring(game.swntimer);
@@ -1781,10 +1792,8 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
     if (game.intimetrial && dwgfx.fademode == 0)
     {
         //Draw countdown!
-        if (game.timetrialcountdown > 0)
-        {
-            if (game.timetrialcountdown < 30)
-            {
+        if (game.timetrialcountdown > 0) {
+            if (game.timetrialcountdown < 30) {
                 game.resetgameclock();
                 if (int(game.timetrialcountdown / 4) % 2 == 0) dwgfx.bigprint(-1, 100, "Go!", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true, 4);
             }
@@ -1801,8 +1810,7 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
                 dwgfx.bigprint(-1, 100, "3", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true, 4);
             }
         }
-        else
-        {
+        else {
             //Draw OSD stuff
             dwgfx.bprint(6, 18, "TIME :", 255, 255, 255);
             dwgfx.bprint(6, 30, "DEATH:", 255, 255, 255);
@@ -1846,20 +1854,14 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
         }
     }
 
-    if (game.activeactivity > -1)
-    {
-        //dwgfx.backbuffer.fillRect(new Rectangle(0, 0, 320, 18), 0x000000);
+    if (game.activeactivity > -1) {
         game.activity_lastprompt = obj.blocks[game.activeactivity].prompt;
         game.activity_r = obj.blocks[game.activeactivity].r;
         game.activity_g = obj.blocks[game.activeactivity].g;
         game.activity_b = obj.blocks[game.activeactivity].b;
-        if (game.act_fade < 5) game.act_fade = 5;
-        if (game.act_fade < 10)
-        {
-            game.act_fade++;
-        }
-        dwgfx.drawtextbox(16, 4, 36, 3, game.activity_r * (game.act_fade / 10.0f), game.activity_g * (game.act_fade / 10.0f), game.activity_b * (game.act_fade / 10.0f));
-        dwgfx.Print(5, 12, game.activity_lastprompt, game.activity_r * (game.act_fade / 10.0f), game.activity_g * (game.act_fade / 10.0f), game.activity_b * (game.act_fade / 10.0f), true);
+
+        dwgfx.drawtextbox(16, 4, 36, 3, game.activity_r*(game.act_fade/10.0f), game.activity_g*(game.act_fade/10.0f), game.activity_b*(game.act_fade/10.0f));
+        dwgfx.Print(5, 12, game.activity_lastprompt, game.activity_r*(game.act_fade/10.0f), game.activity_g*(game.act_fade/10.0f), game.activity_b*(game.act_fade/10.0f), true);
     }
     else
     {
@@ -1867,89 +1869,33 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
         {
             dwgfx.drawtextbox(16, 4, 36, 3, game.activity_r * (game.act_fade / 10.0f), game.activity_g * (game.act_fade / 10.0f), game.activity_b * (game.act_fade / 10.0f));
             dwgfx.Print(5, 12, game.activity_lastprompt, game.activity_r * (game.act_fade / 10.0f), game.activity_g * (game.act_fade / 10.0f), game.activity_b * (game.act_fade / 10.0f), true);
-            game.act_fade--;
         }
     }
 
-    if (obj.trophytext > 0)
-    {
+    if (obj.trophytext > 0) {
         dwgfx.drawtrophytext(obj, help);
-        obj.trophytext--;
     }
 
-    //dwgfx.rprint(5, 231,help.String(game.coins), 255 - help.glow/2, 255 - help.glow/2, 196, true);
-    //dwgfx.drawhuetile(311, 230, 48, 1);
-
-    //Level complete image
-    //if (game.state >= 3007) {
-    //	dwgfx.drawimage(0, 0, 12, true);
-    //}
-
-    //state changes
-
-    /*
-    game.test = true;
-    if (game.teststring !=help.String(game.state)) trace(game.state);
-    game.teststring =help.String(game.state);
-    */
-
-    //Detail entity info for debuging
-    /*
-    for (int i = 0; i < obj.nentity; i++) {
-        game.tempstring =help.String(obj.entities[i].type) +", (" +help.String(obj.entities[i].xp) + "," +help.String(obj.entities[i].yp) + ")";
-        game.tempstring += " state:" +obj.entities[i].state + ", delay:" + obj.entities[i].statedelay;
-        dwgfx.Print(5, 5 + i * 8, game.tempstring, 255, 255, 255);
-    }
-    */
-
-    /*
-    game.test = true;
-    game.teststring =help.String(int(obj.entities[obj.getplayer()].xp)) + "," +help.String(int(obj.entities[obj.getplayer()].yp));
-    game.teststring += "   [" +help.String(game.roomx) + "," +help.String(game.roomy) + "]";
-    */
-
-    //game.test = true;
-    //game.teststring = "Current room deaths: " +help.String(game.currentroomdeaths);
-
-    //Special thing for loading:
-    /*
-    if(dwgfx.fademode==1){
-      if(game.mainmenu==22){
-        dwgfx.Print(5, 225, "Loading...", 196, 196, 255 - help.glow, false);
-      }
-    }
-    */
-
-
-    if (game.test)
-    {
+    if (game.test) {
         dwgfx.Print(5, 5, game.teststring, 196, 196, 255, false);
     }
 
-    if (game.flashlight > 0 && !game.noflashingmode)
-    {
-        game.flashlight--;
+    if (game.flashlight > 0 && !game.noflashingmode) {
         dwgfx.flashlight();
     }
 
-    if (game.screenshake > 0 && !game.noflashingmode)
-    {
-        game.screenshake--;
+    if (game.screenshake > 0 && !game.noflashingmode) {
         dwgfx.screenshake();
-    }
-    else
-    {
+    } else {
         dwgfx.render();
     }
-
-    //dwgfx.backbuffer.unlock();
 }
 
 void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, UtilityClass& help)
 {
     //dwgfx.backbuffer.lock();
 
-
+	dwgfx.drawguifixed();
     dwgfx.drawgui(help);
 
     //draw screen alliteration
@@ -2818,50 +2764,54 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
     //dwgfx.backbuffer.unlock();
 }
 
-void towerrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, UtilityClass& help)
+void towerrenderfixed(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, UtilityClass& help) {
+	if (!game.completestop) {
+		for (int i = 0; i < obj.nentity; i++) {
+			//Is this entity on the ground? (needed for jumping)
+			if (obj.entitycollidefloor(map, i)) {
+				obj.entities[i].onground = 2;
+			}
+			else {
+				obj.entities[i].onground--;
+			}
+
+			if (obj.entitycollideroof(map, i)) {
+				obj.entities[i].onroof = 2;
+			}
+			else {
+				obj.entities[i].onroof--;
+			}
+
+			//Animate the entities
+			obj.animateentities(i, game, help);
+		}
+	}
+	dwgfx.drawentitiesfixed(obj, help);
+
+	dwgfx.drawguifixed();
+
+	if (game.flashlight > 0 && !game.noflashingmode) {
+		game.flashlight--;
+		dwgfx.flashlight();
+	}
+}
+
+void towerrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, UtilityClass& help, const float alpha)
 {
 
     FillRect(dwgfx.backBuffer, 0x000000);
 
     if (!game.colourblindmode)
     {
-        dwgfx.drawtowerbackground(map);
-        dwgfx.drawtowermap(map);
+        dwgfx.drawtowerbackground(map, alpha);
+        dwgfx.drawtowermap(map, alpha);
     }
     else
     {
-        dwgfx.drawtowermap_nobackground(map);
+        dwgfx.drawtowermap_nobackground(map, alpha);
     }
 
-    if (!game.completestop)
-    {
-        for (int i = 0; i < obj.nentity; i++)
-        {
-            //Is this entity on the ground? (needed for jumping)
-            if (obj.entitycollidefloor(map, i))
-            {
-                obj.entities[i].onground = 2;
-            }
-            else
-            {
-                obj.entities[i].onground--;
-            }
-
-            if (obj.entitycollideroof(map, i))
-            {
-                obj.entities[i].onroof = 2;
-            }
-            else
-            {
-                obj.entities[i].onroof--;
-            }
-
-            //Animate the entities
-            obj.animateentities(i, game, help);
-        }
-    }
-
-    dwgfx.drawtowerentities(map, obj, help);
+    dwgfx.drawtowerentities(map, obj, help, alpha);
 
     dwgfx.drawtowerspikes(map);
 
@@ -2963,12 +2913,6 @@ void towerrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, U
     if (game.test)
     {
         dwgfx.Print(5, 5, game.teststring, 196, 196, 255, false);
-    }
-
-    if (game.flashlight > 0 && !game.noflashingmode)
-    {
-        game.flashlight--;
-        dwgfx.flashlight();
     }
 
     dwgfx.render();
@@ -3090,6 +3034,7 @@ void teleporterrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& o
         dwgfx.Print(5, 225, "Press ENTER to Teleport", 220 - (help.glow), 220 - (help.glow), 255 - (help.glow / 2), true);
     }
 
+	dwgfx.drawguifixed();
     dwgfx.drawgui(help);
 
     if (dwgfx.flipmode)

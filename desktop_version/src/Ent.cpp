@@ -58,6 +58,8 @@ void entclass::clear()
 	walkingframe = 0;
 	dir = 0;
 	actionframe = 0;
+
+	colourtransform = 0;
 }
 
 bool entclass::outside()

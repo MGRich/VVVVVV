@@ -2365,15 +2365,15 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
         {
         case 1:
             dwgfx.rcol=ed.getwarpbackground(ed.levx, ed.levy);
-            dwgfx.drawbackground(3, map);
+            dwgfx.drawbackground(3, map, 1.f/game.gameframerate);
             break;
         case 2:
             dwgfx.rcol=ed.getwarpbackground(ed.levx, ed.levy);
-            dwgfx.drawbackground(4, map);
+            dwgfx.drawbackground(4, map, 1.f / game.gameframerate);
             break;
         case 3:
             dwgfx.rcol=ed.getwarpbackground(ed.levx, ed.levy);
-            dwgfx.drawbackground(5, map);
+            dwgfx.drawbackground(5, map, 1.f / game.gameframerate);
             break;
         default:
             break;

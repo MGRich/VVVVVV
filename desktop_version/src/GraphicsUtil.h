@@ -8,8 +8,21 @@ struct colourTransform
     Uint32 colour;
 };
 
+struct RectFloat {
+	operator SDL_Rect() const {
+		SDL_Rect rect;
+		rect.x = x;
+		rect.y = y;
+		rect.w = w;
+		rect.h = h;
+		return rect;
+	}
+	float x, y;
+	float w, h;
+};
 
 void setRect(SDL_Rect& _r, int x, int y, int w, int h);
+void setRect(RectFloat& _r, float x, float y, float w, float h);
 
 unsigned int endian_swap(unsigned int x);
 

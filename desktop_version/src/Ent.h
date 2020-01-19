@@ -39,6 +39,8 @@ public:
     //Animation
     int framedelay, drawframe, walkingframe, dir, actionframe;
     int yp;int xp;
+	// Colour transform, written to in fixed render function, read from in variable render function
+	unsigned int colourtransform;
 };
 
 #endif /* ENT_H */

@@ -20,9 +20,11 @@ extern int temp;
 
 void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help, musicclass& music);
 
-void towerrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, UtilityClass& help);
+void towerrenderfixed(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, UtilityClass& help);
+void towerrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, UtilityClass& help, const float alpha);
 
-void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help);
+void gamerenderfixed(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help);
+void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help, const float alpha, const float deltatime);
 
 void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, UtilityClass& help);
 
@@ -31,5 +33,6 @@ void teleporterrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& o
 void gamecompleterender(Graphics& dwgfx, Game& game, entityclass& obj, UtilityClass& help, mapclass& map);
 
 void gamecompleterender2(Graphics& dwgfx, Game& game, entityclass& obj, UtilityClass& help);
+
 
 #endif /* TITLERENDERER_H */

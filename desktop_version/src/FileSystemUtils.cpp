@@ -105,6 +105,7 @@ int FILESYSTEM_init(char *argvZero)
 	{
 		printf("gamecontrollerdb.txt not found!\n");
 	}
+
 	return 1;
 }
 
