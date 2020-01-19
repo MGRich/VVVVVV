@@ -8068,6 +8068,8 @@ std::vector<growing_vector<std::string>> otherlevelclass::loadlevel(int rx, int 
 			if (i == 1) obj.createentity(game, -8, 148 + 32, 11, 328 + 8);  // (horizontal gravity line)
 			if (i == 1) obj.createblock(1, -10, 84 - 16, 340, 32, 9); //start the game
 			if (i == 1) t = rn(20, 8);
+		case rn(1, 7):
+		case rn(2, 7):
 		case rn(7, 12):
 		case rn(7, 13):
 		case rn(4, 8):
@@ -8084,7 +8086,7 @@ std::vector<growing_vector<std::string>> otherlevelclass::loadlevel(int rx, int 
 		case rn(11, 15): //all forceblanks
 			forceblank = true;
 		default:
-
+			//if (i == 1) printf("%d %d", rx, ry);
 			if (i == 1 || forceblank)
 				for (int j = 0; j < 30; j++)
 					tmap[i].push_back("0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0");

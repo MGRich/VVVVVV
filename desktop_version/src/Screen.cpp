@@ -90,8 +90,6 @@ Screen::Screen(bool letterbox)
 	genny = false;
 
 	glScreen = true;
-
-	ResizeScreen(-1, -1);
 }
 
 void Screen::ResizeScreen(int x, int y)

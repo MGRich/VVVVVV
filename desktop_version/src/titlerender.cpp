@@ -1594,7 +1594,7 @@ void gamerenderfixed(Graphics& dwgfx, mapclass& map, Game& game, entityclass& ob
 }
 
 void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help, const float alpha, const float deltatime) {
-    if (dwgfx.camxoff > 0) dwgfx.camxoff -= 320 / (dwgfx.camspeed * 2);
+    if (dwgfx.camxoff > 0) dwgfx.camxoff -= 320 / ((dwgfx.camspeed * 2));
     else if (dwgfx.camxoff < 0) dwgfx.camxoff += 320 / (dwgfx.camspeed * 2);
     if (dwgfx.camyoff > 0) dwgfx.camyoff -= 240 / (dwgfx.camspeed * 2);
     else if (dwgfx.camyoff < 0) dwgfx.camyoff += 240 / (dwgfx.camspeed * 2);
@@ -1630,10 +1630,11 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
         BlitSurfaceKeyed(dwgfx.yBuffer, NULL, dwgfx.backBuffer, &rect, 0xDEADBEEF);
     }
 
-    rect = { dwgfx.camxoff - 320, dwgfx.camyoff, dwgfx.backBuffer->w, dwgfx.backBuffer->h };
+    rect = { dwgfx.camxoff - 320 + 53, dwgfx.camyoff, dwgfx.backBuffer->w, dwgfx.backBuffer->h };
     if (dwgfx.camxoff != 0) {
-        if (dwgfx.camxoff < 0) rect.y = dwgfx.camxoff + 320;
-        BlitSurfaceKeyed(dwgfx.xBuffer, NULL, dwgfx.backBuffer, &rect, 0xDEADBEEF);
+        if (dwgfx.camxoff < 0) rect.x = dwgfx.camxoff + 320 + 53;
+        SDL_Rect srcrect = { 53, 0, 320, 240 };
+        BlitSurfaceKeyed(dwgfx.xBuffer, &srcrect, dwgfx.backBuffer, &rect, 0xDEADBEEF);
     }
 
     if (map.extrarow == 0 || (map.custommode && map.roomname != ""))

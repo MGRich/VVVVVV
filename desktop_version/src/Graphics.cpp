@@ -2476,7 +2476,7 @@ void Graphics::drawmap(mapclass& map, int k, bool c)
         foregrounddrawn = false;
         FillRect(foregroundBuffer, 0xDEADBEEF);
     }
-    if ((k == 0 && camxoff < 0) || (k == 2 && camxoff > 0)) return;
+    if ((k == 2 && camxoff < 0) || (k == 0 && camxoff > 0)) return;
     ///TODO forground once;
     if (!foregrounddrawn)
     {
