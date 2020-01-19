@@ -1528,10 +1528,10 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
 {
 
 
-    if (dwgfx.camxoff > 0) dwgfx.camxoff -= 320 / 5;
-    else if (dwgfx.camxoff < 0) dwgfx.camxoff += 320 / 5;
-    if (dwgfx.camyoff > 0) dwgfx.camyoff -= 240 / 5;
-    else if (dwgfx.camyoff < 0) dwgfx.camyoff += 240 / 5;
+    if (dwgfx.camxoff > 0) dwgfx.camxoff -= 320 / dwgfx.camspeed;
+    else if (dwgfx.camxoff < 0) dwgfx.camxoff += 320 / dwgfx.camspeed;
+    if (dwgfx.camyoff > 0) dwgfx.camyoff -= 240 / dwgfx.camspeed;
+    else if (dwgfx.camyoff < 0) dwgfx.camyoff += 240 / dwgfx.camspeed;
 
     if (!game.blackout)
     {

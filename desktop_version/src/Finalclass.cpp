@@ -12,7 +12,7 @@ std::vector<growing_vector<std::string>> finalclass::loadlevel(int rx, int ry, G
 	warpx = false;
 	warpy = false;
 	bool warped = false;
-	roomname = "";
+	roomname = "Outer Space";
 
 	for (int i = 0; i < 3; i++) {
 		t++;

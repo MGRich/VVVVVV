@@ -74,11 +74,12 @@ int main(int argc, char *argv[])
     if (inArgs("-renderer"))
         SDL_SetHintWithPriority(SDL_HINT_RENDER_DRIVER, argDetail("-renderer").c_str(), SDL_HINT_OVERRIDE);
 
-    bool camera = !inArgs("-nocamera");
 
     NETWORK_init();
 
-    Screen gameScreen(inArgs("-letterbox"));
+    bool camera = !(inArgs("-nocamera") || inArgs("-original"));
+    Screen gameScreen((inArgs("-letterbox") || inArgs("-original")));
+
     gameScreen.genny = inArgs("-genny");
 
 #ifdef WIN32
@@ -142,6 +143,8 @@ int main(int argc, char *argv[])
         SDL_SetWindowTitle(gameScreen.m_window, t2.c_str());
     }
 
+    if (camera && inArgs("-camera"))
+        graphics.camspeed = std::stoi(argDetail("-camera"));
     musicclass music;
     Game game;
     game.infocus = true;
@@ -288,7 +291,28 @@ int main(int argc, char *argv[])
 
     while(!key.quitProgram)
     {
-		//gameScreen.ClearScreen(0x00);
+        /*SDL_Event evt;
+        bool doframe = false;
+        if (game.framestep) {
+            while (SDL_PollEvent(&evt)) {
+                if (evt.type == SDL_KEYUP) {
+                    if (evt.key.keysym.sym == SDLK_F8)
+                        game.framestep = false;
+                    if (evt.key.keysym.sym == SDLK_F9)
+                        doframe = true;
+                }
+            }
+            if (!doframe) continue;
+            doframe = true;
+        }
+        if (!doframe)
+            while (SDL_PollEvent(&evt)) {
+                if (evt.type == SDL_KEYUP) {
+                    if (evt.key.keysym.sym == SDLK_F8)
+                        framestep = true;
+                }
+            }
+        //gameScreen.ClearScreen(0x00);*/
 
         time = SDL_GetTicks();
 

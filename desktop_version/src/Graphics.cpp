@@ -2414,7 +2414,7 @@ void Graphics::drawbackground(int t, mapclass& map)
 
 void Graphics::drawmap(mapclass& map, int k, bool c)
 {
-    mapoff = -267 + (k * 320) + camxoff;
+    mapoff = -267 + (k * 320);
     if (c) {
         foregrounddrawn = false;
         FillRect(foregroundBuffer, 0xDEADBEEF);
@@ -2455,14 +2455,15 @@ void Graphics::drawmap(mapclass& map, int k, bool c)
         }
         if (k == 2 && !camxoff) foregrounddrawn = true;
     }
-    OverlaySurfaceKeyed(foregroundBuffer, backBuffer, 0xDEADBEEF);
+    SDL_Rect rect = {camxoff, camyoff, backBuffer->w, backBuffer->h};
+    BlitSurfaceKeyed(foregroundBuffer, NULL, backBuffer, &rect, 0xDEADBEEF);
     //SDL_BlitSurface(foregroundBuffer, NULL, backBuffer, NULL);
 
 }
 
 void Graphics::drawfinalmap(mapclass& map, int k, bool c)
 {
-    mapoff = -267 + (k * 320) + camxoff;
+    mapoff = -267 + (k * 320);
 
     //Update colour cycling for final level
     if (map.final_colormode && c) {
@@ -2500,8 +2501,8 @@ void Graphics::drawfinalmap(mapclass& map, int k, bool c)
         }
         if (k == 2) foregrounddrawn = true;
     }
-
-    OverlaySurfaceKeyed(foregroundBuffer, backBuffer, 0xDEADBEEF);
+    SDL_Rect rect = { camxoff, camyoff, backBuffer->w, backBuffer->h };
+    BlitSurfaceKeyed(foregroundBuffer, NULL, backBuffer, &rect, 0xDEADBEEF);
 }
 
 void Graphics::drawtowermap(mapclass& map)
@@ -3288,7 +3289,7 @@ void Graphics::drawforetile(int x, int y, int t)
 {
     //frontbuffer.copyPixels(tiles[t], tiles_rect, tpoint);
     SDL_Rect rect;
-    setRect(rect, x + mapoff, y + camyoff, tiles_rect.w, tiles_rect.h);
+    setRect(rect, x + mapoff, y, tiles_rect.w, tiles_rect.h);
     BlitSurfaceStandard(tiles[t], NULL, foregroundBuffer, &rect);
 }
 
@@ -3296,14 +3297,14 @@ void Graphics::drawforetile2(int x, int y, int t)
 {
     //frontbuffer.copyPixels(tiles2[t], tiles_rect, tpoint);
     SDL_Rect rect;
-    setRect(rect, x + mapoff, y + camyoff, tiles_rect.w, tiles_rect.h);
+    setRect(rect, x + mapoff, y, tiles_rect.w, tiles_rect.h);
     BlitSurfaceStandard(tiles2[t], NULL, foregroundBuffer, &rect);
 }
 
 void Graphics::drawforetile3(int x, int y, int t, int off)
 {
     SDL_Rect rect;
-    setRect(rect, x + mapoff, y + camyoff, tiles_rect.w, tiles_rect.h);
+    setRect(rect, x + mapoff, y, tiles_rect.w, tiles_rect.h);
     BlitSurfaceStandard(tiles3[t + (off * 30)], NULL, foregroundBuffer, &rect);
     //frontbuffer.copyPixels(tiles3[t+(off*30)], tiles_rect, tpoint);
 }

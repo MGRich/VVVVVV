@@ -360,6 +360,7 @@ public:
 	std::vector<SDL_GameControllerButton> controllerButton_esc;
 
     bool skipfakeload;
+    bool framestep = false;
 };
 
 #endif /* GAME_H */
