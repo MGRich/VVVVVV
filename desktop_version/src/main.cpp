@@ -4,15 +4,15 @@
 #ifdef WIN32
 	#include <windows.h>
 	#undef RGB
+	#include <Psapi.h>
 	#ifdef _DEBUG
 		#define _CRTDBG_MAP_ALLOC
 		#include <stdlib.h>
-		#include <Psapi.h>
 		#include <crtdbg.h>
 		#define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
 		#define new DEBUG_NEW
 	#endif
-	#define sprintf sprintf_s
+	//#define sprintf sprintf_s
 #endif
 
 #include "UtilityClass.h"
@@ -374,7 +374,7 @@ int main(int argc, char *argv[])
 			titlebuf[6] = 0;
 			sprintf(rambuf, "%s | %d MB | %d FPS", titlebuf, ramusage, int(1000.0f / rawdeltatime));
 			SDL_SetWindowTitle(gameScreen.m_window, rambuf);
-			ramcheck = 30;
+			ramcheck = 1;
 			accumepeak = 1;
 		}
 
