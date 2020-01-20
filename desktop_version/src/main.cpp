@@ -371,7 +371,7 @@ int main(int argc, char *argv[])
 			char titlebuf[7];
 			strncpy(titlebuf, SDL_GetWindowTitle(gameScreen.m_window), 6);
 			titlebuf[6] = 0;
-			sprintf_s(rambuf, "%s | %d MB | %d FPS", titlebuf, ramusage, int(1 / rawdeltatime));
+			sprintf_s(rambuf, "%s | %d MB | %d FPS", titlebuf, ramusage, int(1000.0f / rawdeltatime));
 			SDL_SetWindowTitle(gameScreen.m_window, rambuf);
 			ramcheck = 30;
 			accumepeak = 1;
