@@ -157,7 +157,7 @@ class editorclass{
   int getwarpbackground(int rx, int ry);
 
   std::vector<std::string> getLevelDirFileNames( );
-  std::vector <int> swapmap;
+  std::vector<std::vector <int>> swapmap;
   std::vector <int> contents;
   std::vector <int> vmult;
   int numtrinkets;

@@ -1595,26 +1595,31 @@ void gamerenderfixed(Graphics& dwgfx, mapclass& map, Game& game, entityclass& ob
 
 void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help, const float alpha, const float deltatime) {
 
-    if (!dwgfx.whatthefuck) {
-        float camx = dwgfx.camxoff, camy = dwgfx.camyoff;
-        if (dwgfx.camxoff > 0) camx -= 320 / ((dwgfx.camspeed * 2));
-        else if (dwgfx.camxoff < 0) camx += 320 / (dwgfx.camspeed * 2);
-        else if (dwgfx.yBuffer != NULL) { SDL_FreeSurface(dwgfx.xBuffer); dwgfx.xBuffer = NULL; }
-        if (dwgfx.camyoff > 0) camy -= 240 / (dwgfx.camspeed * 2);
-        else if (dwgfx.camyoff < 0) camy += 240 / (dwgfx.camspeed * 2);
-        else if (dwgfx.yBuffer != NULL) {SDL_FreeSurface(dwgfx.yBuffer); dwgfx.yBuffer = NULL;}
-        dwgfx.camxoff = camx;
-        dwgfx.camyoff = camy;
-        //dwgfx.camxoff = dwgfx.lerp(dwgfx.camxoff, camx, alpha);
-        //dwgfx.camyoff = dwgfx.lerp(dwgfx.camyoff, camy, alpha);
-    } 
-    else {
-        dwgfx.camxoff = -obj.entities[obj.getplayer()].xp + 148.5;
-        dwgfx.camyoff = -obj.entities[obj.getplayer()].yp + 120;
-        FillRect(dwgfx.yBuffer, 0);
-        FillRect(dwgfx.xBuffer, 0);
+    if (dwgfx.camspeed) {
+        if (!dwgfx.whatthefuck) {
+            float camx = dwgfx.camxoff, camy = dwgfx.camyoff;
+            if (dwgfx.camxoff > 0) camx -= 320 / ((dwgfx.camspeed * 2));
+                else if (dwgfx.camxoff < 0) camx += 320 / (dwgfx.camspeed * 2);
+                else if (dwgfx.yBuffer != NULL) { SDL_FreeSurface(dwgfx.xBuffer); dwgfx.xBuffer = NULL; }
+            if (dwgfx.camyoff > 0) camy -= 240 / (dwgfx.camspeed * 2);
+                else if (dwgfx.camyoff < 0) camy += 240 / (dwgfx.camspeed * 2);
+                else if (dwgfx.yBuffer != NULL) {SDL_FreeSurface(dwgfx.yBuffer); dwgfx.yBuffer = NULL;}
+            dwgfx.camxoff = camx;
+            dwgfx.camyoff = camy;
+            //dwgfx.camxoff = dwgfx.lerp(dwgfx.camxoff, camx, alpha);
+            //dwgfx.camyoff = dwgfx.lerp(dwgfx.camyoff, camy, alpha);
+        } 
+        else {
+            dwgfx.camxoff = -obj.entities[obj.getplayer()].xp + 148.5;
+            dwgfx.camyoff = -obj.entities[obj.getplayer()].yp + 120;
+            FillRect(dwgfx.yBuffer, 0);
+            FillRect(dwgfx.xBuffer, 0);
+        }
     }
-
+    else {
+        dwgfx.camxoff = 0;
+        dwgfx.camyoff = 0;
+    }
     //FillRect(dwgfx.xBuffer, 0x252526);
     //FillRect(dwgfx.yBuffer, 0x252526);
     if(!game.blackout) {

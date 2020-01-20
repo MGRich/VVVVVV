@@ -158,6 +158,8 @@ int main(int argc, char *argv[])
 
     if (camera && inArgs("-camera"))
         graphics.camspeed = std::stoi(argDetail("-camera"));
+	else if (!camera)
+		graphics.camspeed = 0;
     musicclass music;
     Game game;
     game.infocus = true;
@@ -231,6 +233,7 @@ int main(int argc, char *argv[])
 
     //Moved screensetting init here from main menu V2.1
     game.loadstats(map, graphics);
+
     if (game.skipfakeload)
         game.gamestate = TITLEMODE;
 		if(game.usingmmmmmm==0) music.usingmmmmmm=false;
@@ -457,6 +460,7 @@ int main(int argc, char *argv[])
 					titlelogic(graphics, game, obj, help, music, map);
 					break;
 				case GAMEMODE:
+					gameScreen.sfps = sfps;
 					if (map.towermode) {
 						// update old position of every entity
 						for (int i = 0; i < obj.nentity; i++) {
@@ -478,7 +482,6 @@ int main(int argc, char *argv[])
 
 					}
 					else {
-						gameScreen.sfps = sfps;
 						if (game.recording == 1) {
 							//recordinput(key, dwgfx, game, map, obj, help, music);
 						}
@@ -652,6 +655,7 @@ int main(int argc, char *argv[])
     NETWORK_shutdown();
     SDL_Quit();
     FILESYSTEM_deinit();
+	//free(&music.musicTracks);
 
     return 0;
 }

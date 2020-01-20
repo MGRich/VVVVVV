@@ -1623,9 +1623,10 @@ void mapclass::loadlevel(int rx, int ry, Graphics& dwgfx, Game& game, entityclas
 		roomtexton = false;
 		roomtextnumlines = 0;
 
+		for (int edk = 0; edk < 3; edk++)
 		for (int edj = 0; edj < 30; edj++) {
 			for (int edi = 0; edi < 40; edi++) {
-				contents[1][edi + vmult[edj]] = ed.swapmap[edi + vmult[edj]];
+				contents[edk][edi + vmult[edj]] = ed.swapmap[edk][edi + vmult[edj]];
 			}
 		}
 
