@@ -228,6 +228,7 @@ SDL_Surface *  FlipSurfaceHorizontal(SDL_Surface* _src)
 
 
 	}
+   // SDL_FreeSurface(_src);
 
 	return ret;
 }
@@ -250,6 +251,7 @@ SDL_Surface *  FlipSurfaceVerticle(SDL_Surface* _src)
 
 
 	}
+    //SDL_FreeSurface(_src);
 
 	return ret;
 }

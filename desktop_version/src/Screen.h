@@ -36,6 +36,7 @@ public:
 	SDL_Rect filterSubrect;
 
 	bool widescreen = true;
+	bool sfps = true;
 };
 
 

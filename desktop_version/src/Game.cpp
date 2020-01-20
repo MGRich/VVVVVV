@@ -24,6 +24,7 @@
 #define strcasecmp stricmp
 #endif
 
+
 //TODO: Non Urgent code cleanup
 const char* BoolToString(bool _b)
 {

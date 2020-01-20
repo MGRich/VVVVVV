@@ -25,6 +25,8 @@ public:
 	Graphics();
 	~Graphics();
 
+	float lerp(const float v0, const float v1, const float alpha);
+
 	GraphicsResources grphx;
 
 	int bfontlen(char32_t ch);
@@ -298,6 +300,7 @@ public:
 	int camyoff = 0;
 	int camspeed = 5;
 	bool widescreen;
+	bool whatthefuck = false;
 };
 
 #endif /* GRAPHICS_H */

@@ -1594,11 +1594,29 @@ void gamerenderfixed(Graphics& dwgfx, mapclass& map, Game& game, entityclass& ob
 }
 
 void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help, const float alpha, const float deltatime) {
-    if (dwgfx.camxoff > 0) dwgfx.camxoff -= 320 / ((dwgfx.camspeed * 2));
-    else if (dwgfx.camxoff < 0) dwgfx.camxoff += 320 / (dwgfx.camspeed * 2);
-    if (dwgfx.camyoff > 0) dwgfx.camyoff -= 240 / (dwgfx.camspeed * 2);
-    else if (dwgfx.camyoff < 0) dwgfx.camyoff += 240 / (dwgfx.camspeed * 2);
 
+    if (!dwgfx.whatthefuck) {
+        float camx = dwgfx.camxoff, camy = dwgfx.camyoff;
+        if (dwgfx.camxoff > 0) camx -= 320 / ((dwgfx.camspeed * 2));
+        else if (dwgfx.camxoff < 0) camx += 320 / (dwgfx.camspeed * 2);
+        else if (dwgfx.yBuffer != NULL) { SDL_FreeSurface(dwgfx.xBuffer); dwgfx.xBuffer = NULL; }
+        if (dwgfx.camyoff > 0) camy -= 240 / (dwgfx.camspeed * 2);
+        else if (dwgfx.camyoff < 0) camy += 240 / (dwgfx.camspeed * 2);
+        else if (dwgfx.yBuffer != NULL) {SDL_FreeSurface(dwgfx.yBuffer); dwgfx.yBuffer = NULL;}
+        dwgfx.camxoff = camx;
+        dwgfx.camyoff = camy;
+        //dwgfx.camxoff = dwgfx.lerp(dwgfx.camxoff, camx, alpha);
+        //dwgfx.camyoff = dwgfx.lerp(dwgfx.camyoff, camy, alpha);
+    } 
+    else {
+        dwgfx.camxoff = -obj.entities[obj.getplayer()].xp + 148.5;
+        dwgfx.camyoff = -obj.entities[obj.getplayer()].yp + 120;
+        FillRect(dwgfx.yBuffer, 0);
+        FillRect(dwgfx.xBuffer, 0);
+    }
+
+    //FillRect(dwgfx.xBuffer, 0x252526);
+    //FillRect(dwgfx.yBuffer, 0x252526);
     if(!game.blackout) {
         if(!game.colourblindmode) {
 			dwgfx.drawbackground(map.background, map, deltatime);
@@ -1625,13 +1643,13 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
     //dwgfx.drawminimap(game, map);
 
     SDL_Rect rect = { dwgfx.camxoff, dwgfx.camyoff - 232, dwgfx.backBuffer->w, dwgfx.backBuffer->h };
-    if (dwgfx.camyoff != 0) {
+    if (dwgfx.camyoff != 0 && dwgfx.yBuffer != NULL) {
         if (dwgfx.camyoff < 0) rect.y = dwgfx.camyoff + 232;
         BlitSurfaceKeyed(dwgfx.yBuffer, NULL, dwgfx.backBuffer, &rect, 0xDEADBEEF);
     }
 
     rect = { dwgfx.camxoff - 320 + 53, dwgfx.camyoff, dwgfx.backBuffer->w, dwgfx.backBuffer->h };
-    if (dwgfx.camxoff != 0) {
+    if (dwgfx.camxoff != 0 && dwgfx.xBuffer != NULL) {
         if (dwgfx.camxoff < 0) rect.x = dwgfx.camxoff + 320 + 53;
         SDL_Rect srcrect = { 53, 0, 320, 240 };
         BlitSurfaceKeyed(dwgfx.xBuffer, &srcrect, dwgfx.backBuffer, &rect, 0xDEADBEEF);

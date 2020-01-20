@@ -5,9 +5,6 @@
 #include "Screen.h"
 #include <utf8.h>
 
-float lerp(const float v0, const float v1, const float alpha) {
-	return v0 + alpha * (v1 - v0);
-}
 
 Graphics::Graphics()
 {
@@ -135,6 +132,9 @@ Graphics::Graphics()
 	inactiveteleportercolour = 0;
 	activeteleportercolour = 0;
 	teleporterinactioncolour = 0;
+}
+float Graphics::lerp(const float v0, const float v1, const float alpha) {
+    return v0 + alpha * (v1 - v0);
 }
 
 int Graphics::font_idx(char32_t ch) {
@@ -571,8 +571,9 @@ void Graphics::drawtile2(int x, int y, int t, int r, int g, int b)
 void Graphics::drawtile3(int x, int y, int t, int off, bool flip)
 {
     SDL_Rect rect = { Sint16(x), Sint16(y), tiles_rect.w, tiles_rect.h };
-    SDL_Surface* temp = SDL_DuplicateSurface(tiles3[t + (off * 30)]);
-    if (flip) temp = FlipSurfaceHorizontal(temp);
+    SDL_Surface* temp;
+    if (!flip) temp = SDL_DuplicateSurface(tiles3[t + (off * 30)]);
+    else temp = FlipSurfaceHorizontal(tiles3[t + (off * 30)]);
     BlitSurfaceStandard(temp, NULL, backBuffer, &rect);
     SDL_FreeSurface(temp);
 }
@@ -592,9 +593,10 @@ void Graphics::drawtowertile(int x, int y, int t)
 
 void Graphics::drawtowertile3(int x, int y, int t, int off, bool flip)
 {
-    SDL_Rect rect = { Sint16(x), Sint16(y), tiles_rect.w, tiles_rect.h };
-    SDL_Surface* temp = SDL_DuplicateSurface(tiles3[t + (off * 30)]);
-    if (flip) temp = FlipSurfaceHorizontal(temp);
+    SDL_Rect rect = { Sint16(x), Sint16(y), tiles_rect.w, tiles_rect.h };   
+    SDL_Surface* temp;
+    if (!flip) temp = SDL_DuplicateSurface(tiles3[t + (off * 30)]);
+    else temp = FlipSurfaceHorizontal(tiles3[t + (off * 30)]);
     BlitSurfaceStandard(temp, NULL, towerbuffer, &rect);
     SDL_FreeSurface(temp);
 }
@@ -2476,7 +2478,7 @@ void Graphics::drawmap(mapclass& map, int k, bool c)
         foregrounddrawn = false;
         FillRect(foregroundBuffer, 0xDEADBEEF);
     }
-    if ((k == 2 && camxoff < 0) || (k == 0 && camxoff > 0)) return;
+    if ((k == 2 && camxoff < 0) || (k == 0 && camxoff > 0) && !whatthefuck) return;
     ///TODO forground once;
     if (!foregrounddrawn)
     {
@@ -2510,7 +2512,7 @@ void Graphics::drawmap(mapclass& map, int k, bool c)
                 }
             }
         }
-        if (k == 2 && !camxoff) foregrounddrawn = true;
+        if (k == 2 && (!camxoff && !whatthefuck)) foregrounddrawn = true;
     }
     SDL_Rect rect = {camxoff, camyoff, backBuffer->w, backBuffer->h};
     BlitSurfaceKeyed(foregroundBuffer, NULL, backBuffer, &rect, 0xDEADBEEF);
@@ -2628,7 +2630,7 @@ void Graphics::drawtowermap(mapclass& map, const float alpha)
 			int yposinterpolated = static_cast<int>(ceil(lerp(map.oldypos, map.ypos, alpha)));
             temp = map.tower.at(i, j, yposinterpolated);
             for (int k = 0; k < 3; k++)
-                if (temp > 0) drawtile3(i * 8 + -267 + (k * 320), (j * 8) - ((int)map.ypos % 8), temp, map.colstate);
+                if (temp > 0) drawtile3(i * 8 + -267 + (k * 320), (j * 8) - (yposinterpolated % 8), temp, map.colstate);
         }
     }
 }
@@ -2643,7 +2645,7 @@ void Graphics::drawtowermap_nobackground(mapclass& map, const float alpha)
 			int yposinterpolated = static_cast<int>(ceil(lerp(map.oldypos, map.ypos, alpha)));
             temp = map.tower.at(i, j, yposinterpolated);
             for (int k = 0; k < 3; k++)
-                if (temp > 0 && temp < 28) drawtile3(i * 8 + -267 + (k * 320), (j * 8) - ((int)map.ypos % 8), temp, map.colstate);
+                if (temp > 0 && temp < 28) drawtile3(i * 8 + -267 + (k * 320), (j * 8) - ((int)yposinterpolated % 8), temp, map.colstate);
         }
     }
 }
@@ -2838,6 +2840,8 @@ void Graphics::drawtowerbackground(mapclass& map, const float alpha) {
 
     if (map.scrolldir == 1) map.tdrawback = true;
 
+    int byposinterpolated = lerp(map.oldbypos, map.bypos, alpha);
+
     //if (map.tdrawback)
     //{
         //Draw the whole thing; needed for every colour cycle!
@@ -2846,14 +2850,13 @@ void Graphics::drawtowerbackground(mapclass& map, const float alpha) {
             int x = 0;
             for (int i = 0; i < 40; i++)
             {
-                int byposinterpolated = lerp(map.oldbypos, map.bypos, alpha);
                 temp = map.tower.backat(i, j, byposinterpolated);
-                drawtowertile3(x++ * 8, (j * 8) - (map.bypos % 8), temp, map.colstate);
+                drawtowertile3(x++ * 8, (j * 8) - (byposinterpolated % 8), temp, map.colstate);
             }
             for (int i = 39; i > -1; i--)
             {
                 temp = map.tower.backat(i, j, map.bypos);
-                drawtowertile3(x++ * 8, (j * 8) - (map.bypos % 8), temp, map.colstate, true);
+                drawtowertile3(x++ * 8, (j * 8) - (byposinterpolated % 8), temp, map.colstate, true);
             }
         }
     /*    map.tdrawback = false;

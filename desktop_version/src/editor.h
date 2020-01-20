@@ -4,6 +4,9 @@
 #include <vector>
 #include <string>
 #include "Script.h"
+#ifdef WIN32
+#undef free
+#endif
 
 class KeyPoll; class Graphics; class Game; class mapclass; class entityclass; class UtilityClass;
 

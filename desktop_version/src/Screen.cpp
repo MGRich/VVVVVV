@@ -135,11 +135,19 @@ void Screen::GetWindowSize(int* x, int* y)
 {
 	SDL_GetWindowSize(m_window, x, y);
 }
-
+bool render = true;
+SDL_Surface* tBuffer;
 void Screen::UpdateScreen(SDL_Surface* buffer, SDL_Rect* rect)
 {
+	if (!sfps) render = !render;
+	else render = true;
 	if ((buffer == NULL) && (m_screen == NULL))
 	{
+		return;
+	}
+	if (!render) 
+	{
+		BlitSurfaceStandard(tBuffer, NULL, m_screen, NULL); 
 		return;
 	}
 
@@ -162,6 +170,8 @@ void Screen::UpdateScreen(SDL_Surface* buffer, SDL_Rect* rect)
 	{
 		SDL_FreeSurface(buffer);
 	}
+	SDL_FreeSurface(tBuffer);
+	tBuffer = SDL_DuplicateSurface(m_screen);
 
 }
 

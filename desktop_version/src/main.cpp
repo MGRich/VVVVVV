@@ -4,6 +4,14 @@
 #ifdef WIN32
 #include <windows.h>
 #undef RGB
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <Psapi.h>
+#include <crtdbg.h>
+#ifdef _DEBUG
+#define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
+#define new DEBUG_NEW
+#endif
 #endif
 
 #include "UtilityClass.h"
@@ -84,6 +92,7 @@ int main(int argc, char *argv[])
     gameScreen.genny = inArgs("-genny");
 
 #ifdef WIN32
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     if (inArgs("-console")) {
         AllocConsole();
         freopen("conin$", "r", stdin);
@@ -132,6 +141,8 @@ int main(int argc, char *argv[])
 
     Graphics graphics;
     graphics.widescreen = gameScreen.widescreen;
+	graphics.whatthefuck = inArgs("-why");
+	bool sfps = !(inArgs("-30") || inArgs("-original") || inArgs("-why"));
 
     if (inArgs("-custom")) {
         std::string t = argDetail("-custom");
@@ -291,6 +302,7 @@ int main(int argc, char *argv[])
     game.infocus = true;
     key.isActive = true;
 
+	int ramcheck = 0;
 	// > 30fps variables
 	Uint32 accumulator = 0;
 
@@ -332,13 +344,43 @@ int main(int argc, char *argv[])
         case 12: game.gameframerate = 83; break;
         default: game.gameframerate = 1000 / 30; break;
         }
+		//std::string temp;
+		//printf(rambuf);
+		//graphics.Print(50, 50, rambuf, 255, 255, 255);
+		
+		//SDL_FillRect( SDL_GetVideoSurface(), NULL, 0 );
 
 
         //framerate limit to 30
 		const float rawdeltatime = static_cast<float>(time - timePrev);
 		accumulator += rawdeltatime;
+
+		int accumepeak = 1;
+		if (!ramcheck) {
+			int ramusage = 0;
+#ifdef WIN32
+			PROCESS_MEMORY_COUNTERS pmc;
+			GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
+			//memInfo.dwLength = sizeof(MEMORYSTATUSEX);
+			//GlobalMemoryStatusEx(&memInfo);
+			//DWORDLONG totalPhysMem = memInfo.ullTotalPhys;
+			ramusage = pmc.WorkingSetSize / 1048576;
+#endif
+
+			char rambuf[100];
+			char titlebuf[7];
+			strncpy(titlebuf, SDL_GetWindowTitle(gameScreen.m_window), 6);
+			titlebuf[6] = 0;
+			sprintf_s(rambuf, "%s | %d MB | %d FPS", titlebuf, ramusage, int(1 / rawdeltatime));
+			SDL_SetWindowTitle(gameScreen.m_window, rambuf);
+			ramcheck = 30;
+			accumepeak = 1;
+		}
+
 		while (accumulator >= game.gameframerate) {
+			ramcheck--;
 			accumulator = fmodf(accumulator, game.gameframerate);
+			//if (accumepeak == 1) accumepeak = accumulator;
 
 			key.Poll();
 			if (key.toggleFullscreen) {
@@ -375,7 +417,7 @@ int main(int argc, char *argv[])
 			{
 				music.playef(2);
 			}*/
-
+			gameScreen.sfps = true;
 			game.infocus = key.isActive;
 			if (!game.infocus) {
 				if (game.getGlobalSoundVol() > 0) {
@@ -390,6 +432,7 @@ int main(int argc, char *argv[])
 				SDL_Delay(100);
 			}
 			else {
+
 				switch (game.gamestate) {
 				case PRELOADER:
 					//Render
@@ -434,7 +477,7 @@ int main(int argc, char *argv[])
 
 					}
 					else {
-
+						gameScreen.sfps = sfps;
 						if (game.recording == 1) {
 							//recordinput(key, dwgfx, game, map, obj, help, music);
 						}
@@ -595,7 +638,6 @@ int main(int argc, char *argv[])
 			gameScreen.FlipScreen();
 		}
 
-        //SDL_FillRect( SDL_GetVideoSurface(), NULL, 0 );
     }
 
 
