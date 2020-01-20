@@ -31,6 +31,7 @@ jobs:
       run: |
         cd $env:SRC_DIR_PATH
         cmake --build .
+        cmake --build . --config Release
         
     - name: Move artifacts
       run: |
@@ -39,12 +40,24 @@ jobs:
         mkdir build
         move VVVVVV.exe build/RMGV6.exe
         copy "../../.github/libs/*.dll" build/
+        cd $env:SRC_DIR_PATH/Release
+        dir
+        mkdir build
+        move VVVVVV.exe build/RMGV6.exe
+        copy "../../.github/libs/*.dll" build/
         
-    - name: Upload artifact
+    - name: Upload debug artifact
       uses: actions/upload-artifact@v1.0.0
       with:
         name: RMGV6-Windows 
         path: desktop_version\Debug\build 
+
+    - name: Upload release artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: RMGV6-Windows-Release
+        path: desktop_version\Release\build 
+
   build:
     name: Build
 
