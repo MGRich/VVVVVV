@@ -5,7 +5,9 @@
 #include <string>
 #include "Script.h"
 #ifdef WIN32
-#undef free
+    #ifdef _DEBUG
+        #undef free
+    #endif
 #endif
 
 class KeyPoll; class Graphics; class Game; class mapclass; class entityclass; class UtilityClass;

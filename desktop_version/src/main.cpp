@@ -2,17 +2,17 @@
 #include "SoundSystem.h"
 
 #ifdef WIN32
-#include <windows.h>
-#undef RGB
-#define _CRTDBG_MAP_ALLOC
-#include <stdlib.h>
-#include <Psapi.h>
-#include <crtdbg.h>
-#ifdef _DEBUG
-#define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
-#define new DEBUG_NEW
-#endif
-#define sprintf sprintf_s
+	#include <windows.h>
+	#undef RGB
+	#ifdef _DEBUG
+		#define _CRTDBG_MAP_ALLOC
+		#include <stdlib.h>
+		#include <Psapi.h>
+		#include <crtdbg.h>
+		#define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
+		#define new DEBUG_NEW
+	#endif
+	#define sprintf sprintf_s
 #endif
 
 #include "UtilityClass.h"
