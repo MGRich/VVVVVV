@@ -1161,7 +1161,7 @@ void entityclass::createblock( int t, int xp, int yp, int w, int h, int trig /*=
             trig=0;
             break;
         case 34:
-            blocks[k].prompt = "ecroF evitisoP";
+            blocks[k].prompt = "Predestined Fate [Final]";
             blocks[k].script = "terminal_juke10";
             setblockcolour(k, "orange");
             trig=0;

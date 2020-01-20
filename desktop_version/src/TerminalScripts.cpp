@@ -894,7 +894,7 @@ void scriptclass::loadother(std::string t)
     }
     else if (t == "terminal_juke10")
     {
-        add("play(9)");
+        add("play(15)");
         add("squeak(terminal)");
         add("jukebox(10)");
     }
