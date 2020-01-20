@@ -12,6 +12,7 @@
 #define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
 #define new DEBUG_NEW
 #endif
+#define sprintf sprintf_s
 #endif
 
 #include "UtilityClass.h"
@@ -371,7 +372,7 @@ int main(int argc, char *argv[])
 			char titlebuf[7];
 			strncpy(titlebuf, SDL_GetWindowTitle(gameScreen.m_window), 6);
 			titlebuf[6] = 0;
-			sprintf_s(rambuf, "%s | %d MB | %d FPS", titlebuf, ramusage, int(1000.0f / rawdeltatime));
+			sprintf(rambuf, "%s | %d MB | %d FPS", titlebuf, ramusage, int(1000.0f / rawdeltatime));
 			SDL_SetWindowTitle(gameScreen.m_window, rambuf);
 			ramcheck = 30;
 			accumepeak = 1;
