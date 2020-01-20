@@ -40,8 +40,8 @@ jobs:
         move Debug/VVVVVV.exe Debug/build/RMGV6.exe
         mkdir Release/build
         move Release/VVVVVV.exe Release/build/RMGV6.exe
-        copy "../../.github/libs/*.dll" Debug/build/
-        copy "../../.github/libs/*.dll" Release/build/
+        copy "../.github/libs/*.dll" Debug/build/
+        copy "../.github/libs/*.dll" Release/build/
         
     - name: Upload debug artifact
       uses: actions/upload-artifact@v1.0.0
