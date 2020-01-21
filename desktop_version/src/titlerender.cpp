@@ -1486,7 +1486,7 @@ void gamecompleterender2(Graphics& dwgfx, Game& game, entityclass& obj, UtilityC
     //dwgfx.backbuffer.unlock();
 }
 
-void gamerenderfixed(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help) {
+void gamerenderfixedpre(mapclass& map, Game& game, entityclass& obj) {
 	if (!game.blackout) {
 		if (!game.completestop) {
 			for (int i = 0; i < obj.nentity; i++) {
@@ -1504,7 +1504,15 @@ void gamerenderfixed(Graphics& dwgfx, mapclass& map, Game& game, entityclass& ob
 				else {
 					obj.entities[i].onroof--;
 				}
+			}
+		}
+	}
+}
 
+void gamerenderfixedpost(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help) {
+	if (!game.blackout) {
+		if (!game.completestop) {
+			for (int i = 0; i < obj.nentity; i++) {
 				obj.animateentities(i, game, help);
 			}
 		}
@@ -2654,8 +2662,7 @@ void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, Uti
 
     //dwgfx.backbuffer.unlock();
 }
-
-void towerrenderfixed(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, UtilityClass& help) {
+void towerrenderfixedpre(Game& game, mapclass& map, entityclass& obj) {
 	if (!game.completestop) {
 		for (int i = 0; i < obj.nentity; i++) {
 			//Is this entity on the ground? (needed for jumping)
@@ -2672,7 +2679,13 @@ void towerrenderfixed(Graphics& dwgfx, Game& game, mapclass& map, entityclass& o
 			else {
 				obj.entities[i].onroof--;
 			}
+		}
+	}
+}
 
+void towerrenderfixedpost(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, UtilityClass& help) {
+	if (!game.completestop) {
+		for (int i = 0; i < obj.nentity; i++) {
 			//Animate the entities
 			obj.animateentities(i, game, help);
 		}
