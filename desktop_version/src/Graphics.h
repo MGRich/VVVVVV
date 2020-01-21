@@ -298,6 +298,7 @@ public:
 	bool specialwarp = false;
 	int camxoff = 0;
 	int camyoff = 0;
+	float camxpre = 0, camypre = 0;
 	int camspeed = 5;
 
 	bool widescreen;

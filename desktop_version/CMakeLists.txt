@@ -60,6 +60,7 @@ INCLUDE_DIRECTORIES(
 	../third_party/physfs
 	../third_party/lodepng
 	../third_party/utfcpp/source
+	../third_party/libgit2/include
 )
 
 # Source Lists
@@ -146,8 +147,15 @@ ADD_LIBRARY(tinyxml-static STATIC ${XML_SRC})
 ADD_LIBRARY(physfs-static STATIC ${PFS_SRC} ${PFSP_SRC})
 ADD_LIBRARY(lodepng-static STATIC ${PNG_SRC})
 
+IF(CMAKE_SIZEOF_VOID_P MATCHES "8")
+	SET(GIT_SRC ../third_party/libgit2/lib/x64/git2.lib)
+ELSE()
+	SET(GIT_SRC ../third_party/libgit2/lib/x86/git2.lib)
+ENDIF()
+
 # Static Dependencies
 TARGET_LINK_LIBRARIES(VVVVVV physfs-static tinyxml-static lodepng-static)
+target_link_libraries(VVVVVV ${GIT_SRC})
 
 # SDL2 Dependency (Detection pulled from FAudio)
 if (DEFINED SDL2_INCLUDE_DIRS AND DEFINED SDL2_LIBRARIES)
