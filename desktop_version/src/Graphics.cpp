@@ -2002,7 +2002,7 @@ void Graphics::drawbackground( int t, mapclass& map, const float deltatime )
             {
                 FillRect(backBuffer,stars[i], getRGB(0x55,0x55,0x55));
             }
-            stars[i].x -= Sint16(starsspeed[i]) / 30.f * deltatime;
+            stars[i].x -= Sint16(starsspeed[i]) * 1000.f / 34.f * deltatime;
             if (stars[i].x < -10)
             {
                 stars[i].x += 340;
@@ -2153,8 +2153,8 @@ void Graphics::drawbackground( int t, mapclass& map, const float deltatime )
             backboxrect.h = backboxes[i].h - 2;
             FillRect(backBuffer,backboxrect, bcol2);
 
-            backboxes[i].x += backboxvx[i] / 30.f * deltatime;
-            backboxes[i].y += backboxvy[i] / 30.f * deltatime;
+            backboxes[i].x += backboxvx[i] * 1000.f / 34.f * deltatime;
+            backboxes[i].y += backboxvy[i] * 1000.f / 34.f * deltatime;
             if (backboxes[i].x < -40)
             {
                 backboxes[i].x = 320;
@@ -2184,14 +2184,14 @@ void Graphics::drawbackground( int t, mapclass& map, const float deltatime )
 		// I decided not to, at least not for now. For now the entire background
 		// is rendered each time which is more laggy.
 
-        backoffset += 3.f / 30.f * deltatime;
+        backoffset += 3.f * 1000.f / 34.f * deltatime;
         if (backoffset >= 16.f) backoffset -= 16.f;
 
         //if (backgrounddrawn)
         //{
         //    //TODO Scroll?
         //    //towerbuffer.scroll( -3, 0);
-        //    ScrollSurface(towerbuffer, -3.f / 30.f * deltatime, 0.f );
+        //    ScrollSurface(towerbuffer, -3.f * 1000.f/34.f * deltatime, 0.f );
         //    for (int j = 0; j < 15; j++)
         //    {
         //        temp = 680 + (rcol * 3);
@@ -2225,14 +2225,14 @@ void Graphics::drawbackground( int t, mapclass& map, const float deltatime )
         BlitSurfaceStandard(towerbuffer, NULL, backBuffer, NULL);
         break;
     case 4: //Warp zone (vertical)
-        backoffset += 3.f / 30.f * deltatime;
+        backoffset += 3.f * 1000.f / 34.f * deltatime;
         if (backoffset >= 16.f) backoffset -= 16.f;
 
         //if (backgrounddrawn)
         //{
             //TODO scroll?!
             //towerbuffer.scroll(0, -3);
-			//ScrollSurface(towerbuffer, 0.f, -3.f / 30.f * deltatime);
+			//ScrollSurface(towerbuffer, 0.f, -3.f * 1000.f/34.f * deltatime);
         //    for (int i = 0; i < 21; i++)
         //    {
         //        temp = 760 + (rcol * 3);
@@ -2301,7 +2301,7 @@ void Graphics::drawbackground( int t, mapclass& map, const float deltatime )
 			warpfcol = RGBflip(0xFF, 0xFF, 0xFF);
         }
 
-        backoffset += 1.f / 30.f * deltatime;
+        backoffset += 1.f * 1000.f / 34.f * deltatime;
         if (backoffset >= 16.f)
         {
             backoffset -= 16.f;
@@ -2335,7 +2335,7 @@ void Graphics::drawbackground( int t, mapclass& map, const float deltatime )
             {
                 FillRect(backBuffer, stars[i], getRGB(0x55, 0x55, 0x55));
             }
-            stars[i].y -= starsspeed[i] / 30.f * deltatime;
+            stars[i].y -= starsspeed[i] * 1000.f / 34.f * deltatime;
             if (stars[i].y < -10)
             {
                 stars[i].y += 260;

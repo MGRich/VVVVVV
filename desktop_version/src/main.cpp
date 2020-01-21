@@ -501,7 +501,7 @@ int main(int argc, char *argv[])
 				gameScreen.FlipScreen();
 			}
 		}
-		const float deltatime = rawdeltatime * 34.f / game.gameframerate;
+		const float deltatime = (rawdeltatime/1000.f) * (34.f / game.gameframerate);
 		const float alpha = static_cast<float>(accumulator) / game.gameframerate;
 		if (game.gamestate == GAMEMODE) {
 			if (map.towermode) {
