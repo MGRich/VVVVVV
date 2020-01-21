@@ -15,6 +15,8 @@
 	//#define sprintf sprintf_s
 #endif
 
+//#include <format>
+
 #include "UtilityClass.h"
 #include "Game.h"
 #include "Graphics.h"
@@ -208,11 +210,12 @@ int main(int argc, char *argv[])
     graphics.tempBuffer = SDL_CreateRGBSurface(SDL_SWSURFACE, 427, 240, fmt->BitsPerPixel, fmt->Rmask, fmt->Gmask, fmt->Bmask, fmt->Amask);
     SDL_SetSurfaceBlendMode(graphics.tempBuffer, SDL_BLENDMODE_NONE);
 
-    graphics.yBuffer = SDL_CreateRGBSurface(SDL_SWSURFACE, 427, 240, fmt->BitsPerPixel, fmt->Rmask, fmt->Gmask, fmt->Bmask, fmt->Amask);
+    
+	/*graphics.yBuffer = SDL_CreateRGBSurface(SDL_SWSURFACE, 427, 240, fmt->BitsPerPixel, fmt->Rmask, fmt->Gmask, fmt->Bmask, fmt->Amask);
     SDL_SetSurfaceBlendMode(graphics.yBuffer, SDL_BLENDMODE_NONE);
 
     graphics.xBuffer = SDL_CreateRGBSurface(SDL_SWSURFACE, 427, 240, fmt->BitsPerPixel, fmt->Rmask, fmt->Gmask, fmt->Bmask, fmt->Amask);
-    SDL_SetSurfaceBlendMode(graphics.yBuffer, SDL_BLENDMODE_NONE);
+    SDL_SetSurfaceBlendMode(graphics.yBuffer, SDL_BLENDMODE_NONE);*/
 
     //Make a temporary rectangle to hold the offsets
     // SDL_Rect offset;
@@ -375,12 +378,12 @@ int main(int argc, char *argv[])
 			ramusage = pmc.WorkingSetSize / 1048576;
 #endif
 
-			char rambuf[100];
+		    char rambuf[100];
 			char titlebuf[7];
 			strncpy(titlebuf, SDL_GetWindowTitle(gameScreen.m_window), 6);
 			titlebuf[6] = 0;
 			sprintf(rambuf, "%s | %d FPS", titlebuf, int(1000.0f / rawdeltatime));
-			SDL_SetWindowTitle(gameScreen.m_window, rambuf);
+			SDL_SetWindowTitle(gameScreen.m_window, rambuf); //TODO: get std::format workin
 			if (showram) {
 				sprintf(rambuf, "%d MB", ramusage);
 				map.roomname = rambuf;

@@ -129,6 +129,9 @@ Graphics::Graphics()
     trinketb = 0;
     warprect = SDL_Rect();
 
+    xBuffer = NULL;
+    yBuffer = NULL;
+
 	inactiveteleportercolour = 0;
 	activeteleportercolour = 0;
 	teleporterinactioncolour = 0;
