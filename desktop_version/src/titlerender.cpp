@@ -1593,7 +1593,7 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
     }
 
     dwgfx.cutscenebars();
-    dwgfx.drawfade();
+    dwgfx.drawfade(alpha);
 	BlitSurfaceStandard(dwgfx.backBuffer, NULL, dwgfx.tempBuffer, NULL);
 
     dwgfx.drawgui(help);
@@ -2799,7 +2799,7 @@ void towerrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, U
         }
     }
 
-    dwgfx.drawfade();
+    dwgfx.drawfade(alpha);
 
     if (game.test)
     {

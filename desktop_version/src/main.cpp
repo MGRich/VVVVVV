@@ -495,14 +495,13 @@ int main(int argc, char *argv[])
 			}
 
 			music.processmusic();
-			//graphics.processfade();
+			graphics.processfade();
 			game.gameclock();
 			if (gamestateused != GAMEMODE) {
 				gameScreen.FlipScreen();
 			}
 		}
 		const float deltatime = rawdeltatime * 34.f / game.gameframerate;
-		graphics.processfade(deltatime);
 		const float alpha = static_cast<float>(accumulator) / game.gameframerate;
 		if (game.gamestate == GAMEMODE) {
 			if (map.towermode) {
