@@ -300,6 +300,9 @@ int main(int argc, char *argv[])
 				music.playef(2);
 			}*/
 
+			// gamestateused is set to gamestate, it is used when calling one flip screen functions to avoid 1 frame of blackness
+			int gamestateused = game.gamestate;
+
 			game.infocus = key.isActive;
 			if (!game.infocus) {
 				if (game.getGlobalSoundVol() > 0) {
@@ -494,7 +497,7 @@ int main(int argc, char *argv[])
 			music.processmusic();
 			//graphics.processfade();
 			game.gameclock();
-			if (game.gamestate != GAMEMODE) {
+			if (gamestateused != GAMEMODE) {
 				gameScreen.FlipScreen();
 			}
 		}
