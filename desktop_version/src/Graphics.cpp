@@ -2245,7 +2245,7 @@ void Graphics::drawbackground( int t, mapclass& map, const float deltatime )
             //draw the whole thing for the first time!
             //backoffset = 0;
             //FillRect(towerbuffer,0x000000 );
-            for (j = 0; j < 15; j++)
+            for (j = 0; j < 16; j++)
             {
                 for (int i = 0; i < 21; i++)
                 {
