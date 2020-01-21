@@ -1,4 +1,4 @@
-VVVVVV over 30 FPS mod - Version 1.0
+VVVVVV over 30 FPS mod - Version 1.1
 -
 
 Why
@@ -33,9 +33,9 @@ Screen wrapping updates the old position so that the player doesn't very quickly
 
 The Tower "map" is interpolated
 
-The game logic function and the game fixed render functions have been swapped, meaning logic is now processed before rendering
+The game logic function and the game fixed render functions have been swapped, meaning logic is now processed before rendering, apart from variables related to onground and onroof so that edge-flipping can still be done.
 
-"Fade" transitions use deltatime
+"Fade" transitions use linear interpolation
 
 Deltatime is slowed down if playing on slowmode
 
