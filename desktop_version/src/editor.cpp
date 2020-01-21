@@ -3623,7 +3623,7 @@ void editorlogic( KeyPoll& key, Graphics& dwgfx, Game& game, entityclass& obj, m
         //Return to game
         map.nexttowercolour();
         map.colstate = 10;
-        game.gamestate = 1;
+        game.gamestate = TITLEMODE;
         dwgfx.fademode = 4;
         music.stopmusic();
         music.play(6);

@@ -70,7 +70,7 @@ void gamecompletelogic(Graphics& dwgfx, Game& game, entityclass& obj,  musicclas
         dwgfx.showcutscenebars = false;
         dwgfx.cutscenebarspos = 0;
         //Return to game
-        game.gamestate = 7;
+        game.gamestate = GAMECOMPLETE2;
         dwgfx.fademode = 4;
     }
 }
@@ -117,7 +117,7 @@ void gamecompletelogic2(Graphics& dwgfx, Game& game, entityclass& obj,  musiccla
         game.telegotoship();
         //Return to game
         map.colstate = 10;
-        game.gamestate = 1;
+        game.gamestate = TITLEMODE;
         dwgfx.fademode = 4;
         music.playef(18, 10);
         game.createmenu("gamecompletecontinue");

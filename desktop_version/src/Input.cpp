@@ -1962,7 +1962,7 @@ void gameinput(KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
                             else if (game.companion == 0)
                             {
                                 //Alright, normal teleporting
-                                game.gamestate = 5;
+                                game.gamestate = TELEPORTERMODE;
                                 dwgfx.menuoffset = 240; //actually this should count the roomname
                                 if (map.extrarow) dwgfx.menuoffset -= 10;
                                 //dwgfx.menubuffer.copyPixels(dwgfx.screenbuffer, dwgfx.screenbuffer.rect, dwgfx.tl, null, null, false);

@@ -1268,7 +1268,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 				if (words[1] == "teleporter")
 				{
 					//TODO this draw the teleporter screen. This is a problem. :(
-					game.gamestate = 5;
+					game.gamestate = TELEPORTERMODE;
 					dwgfx.menuoffset = 240; //actually this should count the roomname
 					if (map.extrarow) dwgfx.menuoffset -= 10;
 					//dwgfx.menubuffer.copyPixels(dwgfx.screenbuffer, dwgfx.screenbuffer.rect, dwgfx.tl, null, null, false);
@@ -1507,7 +1507,7 @@ void scriptclass::run( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map,
 			}
 			else if (words[0] == "rollcredits")
 			{
-				game.gamestate = 6;
+				game.gamestate = GAMECOMPLETE;
 				dwgfx.fademode = 4;
 				game.creditposition = 0;
 			}
