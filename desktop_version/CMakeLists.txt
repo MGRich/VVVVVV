@@ -3,7 +3,7 @@
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17) #switch to 20 at the end of feb?
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # CMake Options
