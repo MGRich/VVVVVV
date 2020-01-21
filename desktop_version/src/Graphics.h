@@ -299,6 +299,7 @@ public:
 	int camxoff = 0;
 	int camyoff = 0;
 	int camspeed = 5;
+
 	bool widescreen;
 	bool whatthefuck = false;
 };

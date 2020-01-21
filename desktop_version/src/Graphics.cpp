@@ -1613,8 +1613,9 @@ void Graphics::drawentities(mapclass& map, entityclass& obj, UtilityClass& help,
             else if (obj.entities[i].size == 1)
             {
                 // Tiles
-                tpoint.x = obj.entities[i].xp;
-                tpoint.y = obj.entities[i].yp;
+                // linearly interpolate between old position and current position
+                tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha);
+                tpoint.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha);
                 drawRect = tiles_rect;
                 drawRect.x += tpoint.x + 53;
                 drawRect.y += tpoint.y;
@@ -1650,9 +1651,9 @@ void Graphics::drawentities(mapclass& map, entityclass& obj, UtilityClass& help,
             }
             else if (obj.entities[i].size == 3)    // Big chunky pixels!
             {
-                prect.x = obj.entities[i].xp + 53;
-                prect.y = obj.entities[i].yp;
-                //A seperate index of colours, for simplicity
+                prect.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha) + 53;
+                prect.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha);
+            //A seperate index of colours, for simplicity
                 if (obj.entities[i].colour == 1)
                 {
                     //tBuffer.fillRect(prect, RGB(196 - (fRandom() * 64), 10, 10));
@@ -1747,24 +1748,24 @@ void Graphics::drawentities(mapclass& map, entityclass& obj, UtilityClass& help,
                     drawRect.y += tpoint.y;
                     BlitSurfaceColoured(flipsprites[obj.entities[i].drawframe], NULL, tBuffer, &drawRect, ct);
 
-                    tpoint.x = obj.entities[i].xp + 32;
-                    tpoint.y = obj.entities[i].yp;
+                    tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha) + 32;
+                    tpoint.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha);
                     //
                     drawRect = sprites_rect;
                     drawRect.x += tpoint.x + 53;
                     drawRect.y += tpoint.y;
                     BlitSurfaceColoured(flipsprites[obj.entities[i].drawframe + 1], NULL, tBuffer, &drawRect, ct);
 
-                    tpoint.x = obj.entities[i].xp;
-                    tpoint.y = obj.entities[i].yp + 32;
+                    tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha);
+                    tpoint.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha) + 32;
                     //
                     drawRect = sprites_rect;
                     drawRect.x += tpoint.x + 53;
                     drawRect.y += tpoint.y;
                     BlitSurfaceColoured(flipsprites[obj.entities[i].drawframe + 12], NULL, tBuffer, &drawRect, ct);
 
-                    tpoint.x = obj.entities[i].xp + 32;
-                    tpoint.y = obj.entities[i].yp + 32;
+                    tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha) + 32;
+                    tpoint.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha) + 32;
                     //
                     drawRect = sprites_rect;
                     drawRect.x += tpoint.x + 53;
@@ -1783,24 +1784,24 @@ void Graphics::drawentities(mapclass& map, entityclass& obj, UtilityClass& help,
                     drawRect.y += tpoint.y;
                     BlitSurfaceColoured(sprites[obj.entities[i].drawframe], NULL, tBuffer, &drawRect, ct);
 
-                    tpoint.x = obj.entities[i].xp + 32;
-                    tpoint.y = obj.entities[i].yp;
+                    tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha) + 32;
+                    tpoint.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha);
                     //
                     drawRect = sprites_rect;
                     drawRect.x += tpoint.x + 53;
                     drawRect.y += tpoint.y;
                     BlitSurfaceColoured(sprites[obj.entities[i].drawframe + 1], NULL, tBuffer, &drawRect, ct);
 
-                    tpoint.x = obj.entities[i].xp;
-                    tpoint.y = obj.entities[i].yp + 32;
+                    tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha);
+                    tpoint.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha) + 32;
                     //
                     drawRect = sprites_rect;
                     drawRect.x += tpoint.x + 53;
                     drawRect.y += tpoint.y;
                     BlitSurfaceColoured(sprites[obj.entities[i].drawframe + 12], NULL, tBuffer, &drawRect, ct);
 
-                    tpoint.x = obj.entities[i].xp + 32;
-                    tpoint.y = obj.entities[i].yp + 32;
+                    tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha) + 32;
+                    tpoint.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha) + 32;
                     //
                     drawRect = sprites_rect;
                     drawRect.x += tpoint.x + 53;
@@ -1822,8 +1823,8 @@ void Graphics::drawentities(mapclass& map, entityclass& obj, UtilityClass& help,
                     drawRect.y += tpoint.y;
                     BlitSurfaceColoured(flipsprites[obj.entities[i].drawframe], NULL, tBuffer, &drawRect, ct);
 
-                    tpoint.x = obj.entities[i].xp + 32;
-                    tpoint.y = obj.entities[i].yp;
+                    tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha) + 32;
+                    tpoint.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha);
                     //
                     drawRect = sprites_rect;
                     drawRect.x += tpoint.x + 53;
@@ -1842,8 +1843,8 @@ void Graphics::drawentities(mapclass& map, entityclass& obj, UtilityClass& help,
                     drawRect.y += tpoint.y;
                     BlitSurfaceColoured(sprites[obj.entities[i].drawframe], NULL, tBuffer, &drawRect, ct);
 
-                    tpoint.x = obj.entities[i].xp + 32;
-                    tpoint.y = obj.entities[i].yp;
+                    tpoint.x = lerp(obj.entities[i].oldxp, obj.entities[i].xp, alpha) + 32;
+                    tpoint.y = lerp(obj.entities[i].oldyp, obj.entities[i].yp, alpha);
                     //
                     drawRect = sprites_rect;
                     drawRect.x += tpoint.x + 53;

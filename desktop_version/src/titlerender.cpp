@@ -1600,18 +1600,19 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
             float camx = dwgfx.camxoff, camy = dwgfx.camyoff;
             if (dwgfx.camxoff > 0) camx -= 320 / ((dwgfx.camspeed * 2));
                 else if (dwgfx.camxoff < 0) camx += 320 / (dwgfx.camspeed * 2);
-                else if (dwgfx.yBuffer != NULL) { SDL_FreeSurface(dwgfx.xBuffer); dwgfx.xBuffer = NULL; }
+                else if (dwgfx.xBuffer != NULL) { SDL_FreeSurface(dwgfx.xBuffer); dwgfx.xBuffer = NULL; }
             if (dwgfx.camyoff > 0) camy -= 240 / (dwgfx.camspeed * 2);
                 else if (dwgfx.camyoff < 0) camy += 240 / (dwgfx.camspeed * 2);
                 else if (dwgfx.yBuffer != NULL) {SDL_FreeSurface(dwgfx.yBuffer); dwgfx.yBuffer = NULL;}
+
             dwgfx.camxoff = camx;
             dwgfx.camyoff = camy;
             //dwgfx.camxoff = dwgfx.lerp(dwgfx.camxoff, camx, alpha);
             //dwgfx.camyoff = dwgfx.lerp(dwgfx.camyoff, camy, alpha);
         } 
         else {
-            dwgfx.camxoff = -obj.entities[obj.getplayer()].xp + 148.5;
-            dwgfx.camyoff = -obj.entities[obj.getplayer()].yp + 120;
+            dwgfx.camxoff = -dwgfx.lerp(obj.entities[obj.getplayer()].oldxp, obj.entities[obj.getplayer()].xp, alpha) + 148.5;
+            dwgfx.camyoff = -dwgfx.lerp(obj.entities[obj.getplayer()].oldyp, obj.entities[obj.getplayer()].yp, alpha) + 120;
             FillRect(dwgfx.yBuffer, 0);
             FillRect(dwgfx.xBuffer, 0);
         }
@@ -1656,7 +1657,7 @@ void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, Ut
     rect = { dwgfx.camxoff - 320 + 53, dwgfx.camyoff, dwgfx.backBuffer->w, dwgfx.backBuffer->h };
     if (dwgfx.camxoff != 0 && dwgfx.xBuffer != NULL) {
         if (dwgfx.camxoff < 0) rect.x = dwgfx.camxoff + 320 + 53;
-        SDL_Rect srcrect = { 53, 0, 320, 240 };
+        SDL_Rect srcrect = { (dwgfx.camxoff < 0) ? 0 : 53, 0, 320, 240 };
         BlitSurfaceKeyed(dwgfx.xBuffer, &srcrect, dwgfx.backBuffer, &rect, 0xDEADBEEF);
     }
 

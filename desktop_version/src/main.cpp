@@ -93,7 +93,9 @@ int main(int argc, char *argv[])
     gameScreen.genny = inArgs("-genny");
 
 #ifdef WIN32
+#ifdef _DEBUG
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif
     if (inArgs("-console")) {
         AllocConsole();
         freopen("conin$", "r", stdin);
@@ -306,6 +308,8 @@ int main(int argc, char *argv[])
     game.infocus = true;
     key.isActive = true;
 
+	bool showram = inArgs("-ram");
+
 	int ramcheck = 0;
 	// > 30fps variables
 	Uint32 accumulator = 0;
@@ -375,10 +379,17 @@ int main(int argc, char *argv[])
 			char titlebuf[7];
 			strncpy(titlebuf, SDL_GetWindowTitle(gameScreen.m_window), 6);
 			titlebuf[6] = 0;
-			sprintf(rambuf, "%s | %d MB | %d FPS", titlebuf, ramusage, int(1000.0f / rawdeltatime));
+			sprintf(rambuf, "%s | %d FPS", titlebuf, int(1000.0f / rawdeltatime));
 			SDL_SetWindowTitle(gameScreen.m_window, rambuf);
-			ramcheck = 1;
+			if (showram) {
+				sprintf(rambuf, "%d MB", ramusage);
+				map.roomname = rambuf;
+			}
+			ramcheck = 5;
 			accumepeak = 1;
+
+			//delete[] rambuf;
+			//delete[] titlebuf;
 		}
 
 		while (accumulator >= game.gameframerate) {
