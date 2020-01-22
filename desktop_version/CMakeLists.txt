@@ -148,9 +148,9 @@ ADD_LIBRARY(physfs-static STATIC ${PFS_SRC} ${PFSP_SRC})
 ADD_LIBRARY(lodepng-static STATIC ${PNG_SRC})
 
 IF(CMAKE_SIZEOF_VOID_P MATCHES "8")
-	SET(GIT_SRC ../third_party/libgit2/lib/x64/git2.lib)
+	SET(GIT_SRC ../third_party/libgit2/lib/x64/git2)
 ELSE()
-	SET(GIT_SRC ../third_party/libgit2/lib/x86/git2.lib)
+	SET(GIT_SRC ../third_party/libgit2/lib/x86/git2)
 ENDIF()
 
 # Static Dependencies
