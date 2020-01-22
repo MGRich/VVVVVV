@@ -1351,7 +1351,7 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
             if(dwgfx.fademode == 1)	state++;
             break;
         case 81:
-            gamestate = 1;
+            gamestate = TITLEMODE;
             dwgfx.fademode = 4;
             music.play(6);
             dwgfx.backgrounddrawn = false;
@@ -1408,7 +1408,7 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
             break;
         case 84:
             dwgfx.flipmode = false;
-            gamestate = 1;
+            gamestate = TITLEMODE;
             dwgfx.fademode = 4;
             dwgfx.backgrounddrawn = true;
             map.tdrawback = true;
@@ -1488,7 +1488,7 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
             if(dwgfx.fademode == 1)	state++;
             break;
         case 97:
-            gamestate = 0;
+            gamestate = GAMEMODE;
             dwgfx.fademode = 4;
             startscript = true;
             newscript="returntolab";
@@ -3050,7 +3050,7 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
             break;
         case 3101:
             dwgfx.flipmode = false;
-            gamestate = 1;
+            gamestate = TITLEMODE;
             dwgfx.fademode = 4;
             dwgfx.backgrounddrawn = true;
             map.tdrawback = true;
@@ -3371,7 +3371,7 @@ void Game::updatestate( Graphics& dwgfx, mapclass& map, entityclass& obj, Utilit
             break;
         case 3522:
             dwgfx.flipmode = false;
-            gamestate = 1;
+            gamestate = TITLEMODE;
             dwgfx.fademode = 4;
             dwgfx.backgrounddrawn = true;
             map.tdrawback = true;

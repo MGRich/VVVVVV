@@ -2380,15 +2380,15 @@ void editorrender( KeyPoll& key, Graphics& dwgfx, Game& game, mapclass& map, ent
         {
         case 1:
             dwgfx.rcol=ed.getwarpbackground(ed.levx, ed.levy);
-            dwgfx.drawbackground(3, map, 1.f/game.gameframerate);
+            dwgfx.drawbackground(3, map, game.gameframerate / 1000.f);
             break;
         case 2:
             dwgfx.rcol=ed.getwarpbackground(ed.levx, ed.levy);
-            dwgfx.drawbackground(4, map, 1.f / game.gameframerate);
+            dwgfx.drawbackground(4, map, game.gameframerate / 1000.f);
             break;
         case 3:
             dwgfx.rcol=ed.getwarpbackground(ed.levx, ed.levy);
-            dwgfx.drawbackground(5, map, 1.f / game.gameframerate);
+            dwgfx.drawbackground(5, map, game.gameframerate / 1000.f);
             break;
         default:
             break;
@@ -3638,7 +3638,7 @@ void editorlogic( KeyPoll& key, Graphics& dwgfx, Game& game, entityclass& obj, m
         //Return to game
         map.nexttowercolour();
         map.colstate = 10;
-        game.gamestate = 1;
+        game.gamestate = TITLEMODE;
         dwgfx.fademode = 4;
         music.stopmusic();
         music.play(6);

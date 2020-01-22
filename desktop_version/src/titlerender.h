@@ -20,10 +20,12 @@ extern int temp;
 
 void titlerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help, musicclass& music);
 
-void towerrenderfixed(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, UtilityClass& help);
+void towerrenderfixedpre(Game& game, mapclass& map, entityclass& obj);
+void towerrenderfixedpost(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, UtilityClass& help);
 void towerrender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, UtilityClass& help, const float alpha);
 
-void gamerenderfixed(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help);
+void gamerenderfixedpre(mapclass& map, Game& game, entityclass& obj);
+void gamerenderfixedpost(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help);
 void gamerender(Graphics& dwgfx, mapclass& map, Game& game, entityclass& obj, UtilityClass& help, const float alpha, const float deltatime);
 
 void maprender(Graphics& dwgfx, Game& game, mapclass& map, entityclass& obj, UtilityClass& help);

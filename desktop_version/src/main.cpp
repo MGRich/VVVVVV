@@ -435,6 +435,10 @@ int main(int argc, char *argv[])
 			{
 				music.playef(2);
 			}*/
+
+			// gamestateused is set to gamestate, it is used when calling one flip screen functions to avoid 1 frame of blackness
+			int gamestateused = game.gamestate;
+
 			gameScreen.sfps = true;
 			game.infocus = key.isActive;
 			if (!game.infocus) {
@@ -491,8 +495,9 @@ int main(int argc, char *argv[])
 						//else
 						//{
 						//}
+						towerrenderfixedpre(game, map, obj);
 						towerlogic(graphics, game, obj, music, map, help);
-						towerrenderfixed(graphics, game, map, obj, help);
+						towerrenderfixedpost(graphics, game, map, obj, help);
 
 					}
 					else {
@@ -512,10 +517,11 @@ int main(int argc, char *argv[])
 							obj.entities[i].oldyp = obj.entities[i].yp;
 						}
 
-                        gameinput(key, graphics, game, map, obj, help, music);
-                        //}
-                        gamelogic(graphics, game,obj, music, map,  help);
-						gamerenderfixed(graphics, map, game, obj, help);
+							gameinput(key, graphics, game, map, obj, help, music);
+							//}
+							gamerenderfixedpre(map, game, obj);
+							gamelogic(graphics, game, obj, music, map, help);
+							gamerenderfixedpost(graphics, map, game, obj, help);
 
                     }
                     break;
@@ -637,14 +643,13 @@ int main(int argc, char *argv[])
 			}
 
 			music.processmusic();
-			//graphics.processfade();
+			graphics.processfade();
 			game.gameclock();
-			if (game.gamestate != GAMEMODE) {
+			if (gamestateused != GAMEMODE) {
 				gameScreen.FlipScreen();
 			}
 		}
-		const float deltatime = rawdeltatime * 34.f / game.gameframerate;
-		graphics.processfade(deltatime);
+		const float deltatime = (rawdeltatime/1000.f) * (34.f / game.gameframerate);
 		const float alpha = static_cast<float>(accumulator) / game.gameframerate;
 		if (game.gamestate == GAMEMODE) {
 			if (map.towermode) {

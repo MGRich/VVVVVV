@@ -101,7 +101,7 @@ Graphics::Graphics()
     //Fading stuff
     fadebars.resize(15);
 
-    fadeamount = 0.f;
+    oldfadeamount = fadeamount = 0;
     fademode = 0;
 
     // initialize everything else to zero
@@ -1083,7 +1083,7 @@ void Graphics::createtextbox(std::string t, int xp, int yp, int r/*= 255*/, int 
     }
 }
 
-void Graphics::drawfade()
+void Graphics::drawfade(const float alpha)
 {
     if ((fademode == 1) || (fademode == 4))
     {
@@ -1094,7 +1094,7 @@ void Graphics::drawfade()
     {
         for (int i = 0; i < 15; i++)
         {
-            FillRect(backBuffer, fadebars[i], i * 16, fadeamount, 16, 0x000000);
+            FillRect(backBuffer, fadebars[i], i * 16, lerp(oldfadeamount, fadeamount, alpha), 16, 0x000000 );
             //backbuffer.fillRect(new Rectangle(, , , 16), 0x000000);
         }
     }
@@ -1102,14 +1102,14 @@ void Graphics::drawfade()
     {
         for (int i = 0; i < 15; i++)
         {
-            FillRect(backBuffer, fadebars[i] - fadeamount, i * 16, 607, 16, 0x000000);
+            FillRect(backBuffer, fadebars[i]-lerp(oldfadeamount, fadeamount, alpha), i * 16, 500, 16, 0x000000 );
             //backbuffer.fillRect(new Rectangle(fadebars[i]-fadeamount, i * 16, 500, 16), 0x000000);
         }
     }
 
 }
 
-void Graphics::processfade(const float deltatime)
+void Graphics::processfade()
 {
     if (fademode > 1)
     {
@@ -1120,13 +1120,14 @@ void Graphics::processfade(const float deltatime)
             {
                 fadebars[i] = -int(fRandom() * 12) * 8;
             }
-            fadeamount = 0.f;
+            oldfadeamount = fadeamount = 0;
             fademode = 3;
         }
         else if (fademode == 3)
         {
-            fadeamount += 30.f / 30.f * deltatime;
-            if (fadeamount > 523.f)
+			oldfadeamount = fadeamount;
+            fadeamount += 30;
+            if (fadeamount > 523)
             {
                 fademode = 1; //faded
             }
@@ -1138,12 +1139,13 @@ void Graphics::processfade(const float deltatime)
             {
                 fadebars[i] = 427 + int(fRandom() * 12) * 8;
             }
-            fadeamount = 523.f;
+            oldfadeamount = fadeamount = 523;
             fademode = 5;
         }
         else if (fademode == 5)
         {
-            fadeamount -= 30.f / 30.f * deltatime;
+			oldfadeamount = fadeamount;
+            fadeamount -= 30;
             if (fadeamount <= 0)
             {
                 fademode = 0; //normal
@@ -2078,7 +2080,7 @@ void Graphics::drawbackground( int t, mapclass& map, const float deltatime )
             {
                 FillRect(backBuffer, stars[i], getRGB(0x55, 0x55, 0x55));
             }
-            stars[i].x -= Sint16(starsspeed[i]) / 30.f * deltatime;
+            stars[i].x -= Sint16(starsspeed[i]) * 1000.f / 34.f * deltatime;
             if (stars[i].x < -10)
             {
                 stars[i].x += 427;
@@ -2229,8 +2231,8 @@ void Graphics::drawbackground( int t, mapclass& map, const float deltatime )
             backboxrect.h = backboxes[i].h - 2;
             FillRect(backBuffer, backboxrect, bcol2);
 
-            backboxes[i].x += backboxvx[i] / 30.f * deltatime;
-            backboxes[i].y += backboxvy[i] / 30.f * deltatime;
+            backboxes[i].x += backboxvx[i] * 1000.f / 34.f * deltatime;
+            backboxes[i].y += backboxvy[i] * 1000.f / 34.f * deltatime;
             if (backboxes[i].x < -40)
             {
                 backboxes[i].x = 427;
@@ -2260,14 +2262,14 @@ void Graphics::drawbackground( int t, mapclass& map, const float deltatime )
 		// I decided not to, at least not for now. For now the entire background
 		// is rendered each time which is more laggy.
 
-        backoffset += 3.f / 30.f * deltatime;
+        backoffset += 3.f * 1000.f / 34.f * deltatime;
         if (backoffset >= 16.f) backoffset -= 16.f;
 
         //if (backgrounddrawn)
         //{
         //    //TODO Scroll?
         //    //towerbuffer.scroll( -3, 0);
-        //    ScrollSurface(towerbuffer, -3.f / 30.f * deltatime, 0.f );
+        //    ScrollSurface(towerbuffer, -3.f * 1000.f/34.f * deltatime, 0.f );
         //    for (int j = 0; j < 15; j++)
         //    {
         //        temp = 680 + (rcol * 3);
@@ -2301,14 +2303,14 @@ void Graphics::drawbackground( int t, mapclass& map, const float deltatime )
         BlitSurfaceStandard(towerbuffer, NULL, backBuffer, NULL);
         break;
     case 4: //Warp zone (vertical)
-        backoffset += 3.f / 30.f * deltatime;
+        backoffset += 3.f * 1000.f / 34.f * deltatime;
         if (backoffset >= 16.f) backoffset -= 16.f;
 
         //if (backgrounddrawn)
         //{
             //TODO scroll?!
             //towerbuffer.scroll(0, -3);
-			//ScrollSurface(towerbuffer, 0.f, -3.f / 30.f * deltatime);
+			//ScrollSurface(towerbuffer, 0.f, -3.f * 1000.f/34.f * deltatime);
         //    for (int i = 0; i < 21; i++)
         //    {
         //        temp = 760 + (rcol * 3);
@@ -2323,7 +2325,7 @@ void Graphics::drawbackground( int t, mapclass& map, const float deltatime )
             //draw the whole thing for the first time!
             //backoffset = 0;
             //FillRect(towerbuffer,0x000000 );
-            for (j = 0; j < 15; j++)
+            for (j = 0; j < 16; j++)
             {
                 for (int i = 0; i < 27; i++)
                 {
@@ -2377,7 +2379,7 @@ void Graphics::drawbackground( int t, mapclass& map, const float deltatime )
             warpfcol = RGBflip(0xFF, 0xFF, 0xFF);
         }
 
-        backoffset += 1.f / 30.f * deltatime;
+        backoffset += 1.f * 1000.f / 34.f * deltatime;
         if (backoffset >= 16.f)
         {
             backoffset -= 16.f;
@@ -2411,7 +2413,7 @@ void Graphics::drawbackground( int t, mapclass& map, const float deltatime )
             {
                 FillRect(backBuffer, stars[i], getRGB(0x55, 0x55, 0x55));
             }
-            stars[i].y -= starsspeed[i] / 30.f * deltatime;
+            stars[i].y -= starsspeed[i] * 1000.f / 34.f * deltatime;
             if (stars[i].y < -10)
             {
                 stars[i].y += 260;
