@@ -147,15 +147,15 @@ ADD_LIBRARY(tinyxml-static STATIC ${XML_SRC})
 ADD_LIBRARY(physfs-static STATIC ${PFS_SRC} ${PFSP_SRC})
 ADD_LIBRARY(lodepng-static STATIC ${PNG_SRC})
 
-IF(CMAKE_SIZEOF_VOID_P MATCHES "8")
-	SET(GIT_SRC ../third_party/libgit2/lib/x64/git2)
-ELSE()
-	SET(GIT_SRC ../third_party/libgit2/lib/x86/git2)
-ENDIF()
+#IF(CMAKE_SIZEOF_VOID_P MATCHES "8")
+#	SET(GIT_SRC ../third_party/libgit2/lib/x64/git2)
+#ELSE()
+#	SET(GIT_SRC ../third_party/libgit2/lib/x86/git2)
+#ENDIF()
 
 # Static Dependencies
 TARGET_LINK_LIBRARIES(VVVVVV physfs-static tinyxml-static lodepng-static)
-target_link_libraries(VVVVVV ${GIT_SRC})
+#target_link_libraries(VVVVVV ${GIT_SRC}) lets not do this for now
 
 # SDL2 Dependency (Detection pulled from FAudio)
 if (DEFINED SDL2_INCLUDE_DIRS AND DEFINED SDL2_LIBRARIES)
