@@ -2480,13 +2480,13 @@ void Graphics::drawmap(mapclass& map, int k, bool c)
     mapoff = -267 + (k * 320);
     if (c) {
         foregrounddrawn = false;
-        FillRect(foregroundBuffer, 0xDEADBEEF);
     }
     if ((k == 2 && camxoff < 0) || (k == 0 && camxoff > 0) && !whatthefuck) return;
     ///TODO forground once;
     if (!foregrounddrawn)
     {
-        if (map.tileset == 0)
+        if (c) FillRect(foregroundBuffer, 0x00000000);
+        if(map.tileset==0)
         {
             for (j = 0; j < 29 + map.extrarow; j++)
             {
@@ -2519,7 +2519,7 @@ void Graphics::drawmap(mapclass& map, int k, bool c)
         if (k == 2 && (!camxoff && !whatthefuck)) foregrounddrawn = true;
     }
     SDL_Rect rect = {camxoff, camyoff, backBuffer->w, backBuffer->h};
-    BlitSurfaceKeyed(foregroundBuffer, NULL, backBuffer, &rect, 0xDEADBEEF);
+    BlitSurfaceKeyed(foregroundBuffer, NULL, backBuffer, &rect, 0x00000000);
     //SDL_BlitSurface(foregroundBuffer, NULL, backBuffer, NULL);
 
 }
@@ -2560,7 +2560,7 @@ void Graphics::drawfinalmap(mapclass& map, int k, bool c)
 
     if (!foregrounddrawn) {
         if (c)
-            FillRect(foregroundBuffer, 0xDEADBEEF);
+            FillRect(foregroundBuffer, 0x00000000);
         if (map.tileset == 0) {
             for (int j = 0; j < 29 + map.extrarow; j++) {
                 for (int i = 0; i < 40; i++) {
@@ -2580,7 +2580,7 @@ void Graphics::drawfinalmap(mapclass& map, int k, bool c)
         if (k == 2) foregrounddrawn = true;
     }
     SDL_Rect rect = { camxoff, camyoff, backBuffer->w, backBuffer->h };
-    BlitSurfaceKeyed(foregroundBuffer, NULL, backBuffer, &rect, 0xDEADBEEF);
+    BlitSurfaceKeyed(foregroundBuffer, NULL, backBuffer, &rect, 0x00000000);
 }
 
 void Graphics::setcolourtoteleportercolour(int colour) {
